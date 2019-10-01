@@ -11,5 +11,5 @@ En la carpeta docs/ se colocan todos los archivos de soporte que necesite para l
 ### firmware/
 En la carpeta firmware/ deben colocarse los archivos relevantes del código que debe ejecutarse en el microcontrolador. Si el IDE utilizado para el desarrollo del firmware genera un árbol de carpetas asociadas al proyecto, incluya todos los directorios necesarios. Procure solo incluir los archivos y directorios necesarios para compilar correctamente el firmware y no incluya los archivos intermedios que se generan durante la compilación. 
 ### Software/
-En el caso de que el proyecto incluya desarrollo de software para PC (MATLAB, Python, LabVIEW, etc) el código/proyecto respectivo debe ir dentro de este directorio.
+En el caso de que el proyecto incluya desarrollo de software para PC (MATLAB, Python, LabVIEW, etc) el código/proyecto respectivo debe ir dentro de este directorio
 
