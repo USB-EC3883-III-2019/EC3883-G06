@@ -1,3 +1,5 @@
+import sys
 
+from solindar_lib import ComDriver, SolindarGUI
 
-import solindar_lib
+#Implementation
