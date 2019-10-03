@@ -16,64 +16,43 @@ class ComDriver(serial.Serial):
         #Port init
         self.close()
         self.open()
-        self.data_read=[0] * 4
+        self.set_buffer_size(rx_size = 15000, tx_size = 0)
+
+        #Internal variables
         self.len_fifo=len_fifo
-        self.data_fifo=np.zeros([len_fifo,4], dtype=np.float)
-        self.scale_factor=scale_factor
         self.n=n_block
+        self.position_fifo = np.zeros(len_fifo, dtype=np.float)
+        self.sonar_fifo = np.zeros(len_fifo, dtype=np.float)
+        self.lidar_fifo = np.zeros(len_fifo, dtype=np.float)
 
-    def get(self): #Reads four byte convetions & stores it in self.data_read
+    def update_fifos(self): #Updates data in fifos
         while True:
-            r=ord(self.read(1))
-            if r < 128:
+            ro=ord(self.read(1))
+            if ro < 128:
                 break
-        self.data_read=[r]
-        r=  self.read(3)
-        for i in r:
-            self.data_read.append(i)
-
-    def get_block(self): #Reads four byte convetions & stores it in self.data_read
-        while True:
-            r=ord(self.read(1))
-            if r < 128:
-                break
-        self.data_read=[r]
         r=self.read(4*self.n-1)
-        for i in r:
-            self.data_read.append(i)
-
-    def decode(self,data): #Returns array with four decoded channels from data in self.data_read
-        #Check for error
-        is_err= (data[0] & 0xC0) != 0 or (data[1] & 0x80) == 0 or (data[2] & 0x80) == 0 or (data[3] & 0x80) == 0
-        if(is_err):
-            return 0, 0, 100, 100 #identify error
-        else:
-            #analog channels
-            analogCh1= ((0x3F & data[0]) << 6) | (data[1] & 0x3F)
-            analogCh2= ((0x3F & data[2]) << 6) | (data[3] & 0x3F)
-
-            #digital channels
-            digitalCh1, digitalCh2 = 0, 0
-            if (data[2] & 0x40) != 0:
-                digitalCh1=1
-            if (data[3] & 0x40) != 0:
-                digitalCh2=1
-
-
-            analogCh1, analogCh2 = self.angles(self.scale_factor*analogCh1, self.scale_factor*analogCh2 )
-
-            return [analogCh1, analogCh2, digitalCh1, digitalCh2]
-
-    def update_all(self): #Updata self.data_read, decode such data and stores it in self.data_fifo
-        self.get()
-        self.data_fifo=np.vstack((self.decode(self.data_read),self.data_fifo[:-1]))
-
-    def update_all_block(self):
-        self.get_block()
+        data=[[ro,*r[:3]]]
         for i in range(self.n):
-            r=self.decode(self.data_read[4*i:4*i+4])
-            self.data_fifo=np.vstack((r,self.data_fifo[:-1]))
+            data.append(r[3+4*i:3+4*(i+1)])
+        #Convert to np
+        data=np.array(data, dtype=np.int16)
+        #Check for error
+        is_err= ((data[:,0] & 0xC0) != 0) | ((data[:,1] & 0x80) == 0) | ((data[:,2] & 0x80) == 0) | ((data[:,3] & 0x80) == 0)
+        #Decode
+        position = (0x3F & data[:,0]) << 6
+        sonar = ((0x7F & data[:,0]) << 1) | ((data[:,1] & 0x20) >> 6)
+        lidar = ((0x1F & data[:,2]) << 6) | (data[:,3] & 0x7F)
+        #Mark errors
+        position[is_err] = 0
+        sonar[is_err] = 0
+        lidar[is_err] = 0
+        #Update fifos
+        self.position_fifo=np.vstack((position,self.position_fifo[:-self.n]))
+        self.sonar_fifo=np.vstack((position,self.position_fifo[:-self.n]))
+        self.lidar_fifo=np.vstack((position,self.position_fifo[:-self.n]))
 
     def set_fifo_len(self,len_fifo):  #Change fifo size
         self.len_fifo=len_fifo
-        self.data_fifo=np.zeros([len_fifo,4], dtype=np.float)
+        self.position_fifo=np.zeros(len_fifo, dtype=np.float)
+        self.sonar_fifo=np.zeros(len_fifo, dtype=np.float)
+        self.lidar_fifo=np.zeros(len_fifo, dtype=np.float)
