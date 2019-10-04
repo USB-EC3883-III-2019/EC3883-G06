@@ -4,7 +4,7 @@ from solindar_lib import ComDriver, SolindarGUI
 
 #Implementation
 
-#The following lines opens the gui app
+#The following lines open the gui app
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
     window = SolindarGUI()
