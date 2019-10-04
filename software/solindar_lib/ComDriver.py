@@ -31,7 +31,7 @@ class ComDriver(serial.Serial):
             if ro < 128:
                 break
         r=self.read(4*self.n-1)
-        data=[[ro,r[:3]]]
+        data=[[ro,*r[:3]]]
         for i in range(self.n):
             data.append(r[3+4*i:3+4*(i+1)])
         #Convert to np
@@ -40,8 +40,8 @@ class ComDriver(serial.Serial):
         is_err= ((data[:,0] & 0xC0) != 0) | ((data[:,1] & 0x80) == 0) | ((data[:,2] & 0x80) == 0) | ((data[:,3] & 0x80) == 0)
         #Decode
         position = (0x3F & data[:,0]) << 6
-        sonar = ((0x7F & data[:,0]) << 1) | ((data[:,1] & 0x20) >> 6)
-        lidar = ((0x1F & data[:,2]) << 6) | (data[:,3] & 0x7F)
+        sonar = ((0x7F & data[:,1]) << 2) | ((data[:,2] & 0x60) >> 5)
+        lidar = ((0x1F & data[:,2]) << 7) | (data[:,3] & 0x7F)
         #Mark errors
         position[is_err] = 0
         sonar[is_err] = 0
