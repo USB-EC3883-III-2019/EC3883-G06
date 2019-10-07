@@ -19,11 +19,11 @@
 ** @brief
 **         Main module.
 **         This module contains user's application code.
-*/         
+*/
 /*!
 **  @addtogroup main_module main module documentation
 **  @{
-*/         
+*/
 /* MODULE main */
 
 
@@ -37,17 +37,42 @@
 #include "IO_Map.h"
 
 /* User includes (#include below this line is not maintained by Processor Expert) */
+#include "ComDriver.h"
+#include "functions.h"
 
 void main(void)
 {
   /* Write your local variable definition here */
+
+  //Motor variables-------------------------------------------------------------
+  bool dir = true;
+  int counter = 0;
+  int max = 63;
+  int seq_index = 0;
+  bool sequence[8][4] = { {true,false,true,false},
+                          {true,false,false,false},
+                          {true,false,false,true},
+                          {false,false,false,true},
+                          {false,true,false,true},
+                          {false,true,false,false},
+                          {false,true,true,false},
+                          {false,false,true,false}};
+
+  //End of motor variables-------------------------------------------------------------
 
   /*** Processor Expert internal initialization. DON'T REMOVE THIS CODE!!! ***/
   PE_low_level_init();
   /*** End of Processor Expert internal initialization.                    ***/
 
   /* Write your code here */
-  while(true){}
+  while(true){
+
+    //Get motor index sequence
+    seq_index=motor_run(&dir,&counter,&max);
+
+
+
+  }
   /* For example: for(;;) { } */
 
   /*** Don't write any code pass this line, or it will be deleted during code generation. ***/
