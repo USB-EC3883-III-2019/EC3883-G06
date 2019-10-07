@@ -5,7 +5,7 @@
 **     Component   : Events
 **     Version     : Driver 01.02
 **     Compiler    : CodeWarrior HCS08 C Compiler
-**     Date/Time   : 2019-10-02, 22:57, # CodeGen: 0
+**     Date/Time   : 2019-10-06, 22:41, # CodeGen: 0
 **     Abstract    :
 **         This is user's event module.
 **         Put your event handler code here.
@@ -32,6 +32,25 @@
 #include "Events.h"
 
 /* User includes (#include below this line is not maintained by Processor Expert) */
+
+/*
+** ===================================================================
+**     Event       :  TI1_OnInterrupt (module Events)
+**
+**     Component   :  TI1 [TimerInt]
+**     Description :
+**         When a timer interrupt occurs this event is called (only
+**         when the component is enabled - <Enable> and the events are
+**         enabled - <EnableEvent>). This event is enabled only if a
+**         <interrupt service/event> is enabled.
+**     Parameters  : None
+**     Returns     : Nothing
+** ===================================================================
+*/
+extern bool tick;
+void TI1_OnInterrupt(void){
+	tick=1;	
+}
 
 /* END Events */
 

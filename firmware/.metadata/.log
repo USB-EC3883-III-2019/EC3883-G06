@@ -1,41 +1,116 @@
-!SESSION 2019-10-02 22:47:51.359 -----------------------------------------------
+!SESSION 2019-10-06 22:37:03.673 -----------------------------------------------
 eclipse.buildId=I20070613-1755
 java.version=1.6.0_15
 java.vendor=Sun Microsystems Inc.
 BootLoader constants: OS=win32, ARCH=x86, WS=win32, NL=en
-Command-line arguments:  -os win32 -ws win32 -arch x86 -data G:\All_files\USB\trimestres\trimestre_sep_dic_2019\proyectos_3\repos\EC3883-G06\firmware
+Command-line arguments:  -os win32 -ws win32 -arch x86 -data G:\All_files\USB\trimestres\trimestre_sep_dic_2019\materias\proyectos_3\repos\EC3883-G06\firmware
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:48:06.224
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:37:05.864
 !MESSAGE NLS missing message: ContentTypes_errorDialogAlreadyExists in: org.eclipse.ui.internal.messages
 
-!ENTRY com.freescale.core.ide.wizard.ui 2 0 2019-10-02 22:49:00.672
+!ENTRY com.freescale.core.ide.wizard.ui 2 0 2019-10-06 22:37:13.037
 !MESSAGE External elements location 'C:\Freescale\CW MCU v10.6\eclipse\../MCU/lib/wizard_data/mqx/4.0/arm' does not exist
 
-!ENTRY com.freescale.core.ide.wizard.ui 2 0 2019-10-02 22:49:00.682
+!ENTRY com.freescale.core.ide.wizard.ui 2 0 2019-10-06 22:37:13.049
 !MESSAGE External elements location 'C:\Freescale\CW MCU v10.6\eclipse\../MCU/lib/wizard_data/mqx/4.0/cf' does not exist
 
-!ENTRY com.freescale.core.ide.wizard.ui 2 0 2019-10-02 22:49:00.689
+!ENTRY com.freescale.core.ide.wizard.ui 2 0 2019-10-06 22:37:13.053
 !MESSAGE External elements location 'C:\Freescale\CW MCU v10.6\eclipse\../MCU/lib/wizard_data/mqx/4.0/ppc' does not exist
 
-!ENTRY com.freescale.core.ide.wizard.ui 2 0 2019-10-02 22:49:00.694
+!ENTRY com.freescale.core.ide.wizard.ui 2 0 2019-10-06 22:37:13.061
 !MESSAGE External elements location 'C:\Freescale\CW MCU v10.6\eclipse\../MCU/lib/wizard_data/mqx/4.0/patches' does not exist
 
-!ENTRY com.freescale.core.ide.wizard.ui 2 0 2019-10-02 22:49:04.066
+!ENTRY com.freescale.core.ide.wizard.ui 2 0 2019-10-06 22:37:13.301
 !MESSAGE External elements location 'C:\Freescale\CW MCU v10.6\eclipse\../MCU/lib/wizard_data/mqx/4.1/arm' does not exist
 
-!ENTRY com.freescale.core.ide.wizard.ui 2 0 2019-10-02 22:49:04.072
+!ENTRY com.freescale.core.ide.wizard.ui 2 0 2019-10-06 22:37:13.309
 !MESSAGE External elements location 'C:\Freescale\CW MCU v10.6\eclipse\../MCU/lib/wizard_data/mqx/4.1/cf' does not exist
 
-!ENTRY com.freescale.core.ide.wizard.ui 2 0 2019-10-02 22:49:04.078
+!ENTRY com.freescale.core.ide.wizard.ui 2 0 2019-10-06 22:37:13.313
 !MESSAGE External elements location 'C:\Freescale\CW MCU v10.6\eclipse\../MCU/lib/wizard_data/mqx/4.1/ppc' does not exist
 
-!ENTRY com.freescale.core.ide.wizard.ui 2 0 2019-10-02 22:49:04.084
+!ENTRY com.freescale.core.ide.wizard.ui 2 0 2019-10-06 22:37:13.321
 !MESSAGE External elements location 'C:\Freescale\CW MCU v10.6\eclipse\../MCU/lib/wizard_data/mqx/4.1/patches' does not exist
 
-!ENTRY com.freescale.processorexpert.core 1 0 2019-10-02 22:49:16.407
+!ENTRY com.freescale.processorexpert.core 1 0 2019-10-06 22:37:14.430
 !MESSAGE Plugin com.freescale.processorexpert.core.service ProcessorExpertServiceProvider
 
-!ENTRY org.eclipse.equinox.p2.transport.ecf 2 0 2019-10-02 22:49:26.859
+!ENTRY org.eclipse.equinox.p2.transport.ecf 2 0 2019-10-06 22:37:25.361
+!MESSAGE Connection to http://freescale.com/lgfiles/updates/Eclipse/MCU10_6/com.freescale.mcu.updatesite/p2.index failed on Received fatal alert: protocol_version. Retry attempt 0 started
+!STACK 0
+javax.net.ssl.SSLException: Received fatal alert: protocol_version
+	at com.sun.net.ssl.internal.ssl.Alerts.getSSLException(Unknown Source)
+	at com.sun.net.ssl.internal.ssl.Alerts.getSSLException(Unknown Source)
+	at com.sun.net.ssl.internal.ssl.SSLSocketImpl.recvAlert(Unknown Source)
+	at com.sun.net.ssl.internal.ssl.SSLSocketImpl.readRecord(Unknown Source)
+	at com.sun.net.ssl.internal.ssl.SSLSocketImpl.performInitialHandshake(Unknown Source)
+	at com.sun.net.ssl.internal.ssl.SSLSocketImpl.writeRecord(Unknown Source)
+	at com.sun.net.ssl.internal.ssl.AppOutputStream.write(Unknown Source)
+	at java.io.BufferedOutputStream.flushBuffer(Unknown Source)
+	at java.io.BufferedOutputStream.flush(Unknown Source)
+	at org.apache.commons.httpclient.HttpConnection.flushRequestOutputStream(HttpConnection.java:828)
+	at org.apache.commons.httpclient.MultiThreadedHttpConnectionManager$HttpConnectionAdapter.flushRequestOutputStream(MultiThreadedHttpConnectionManager.java:1565)
+	at org.apache.commons.httpclient.HttpMethodBase.writeRequest(HttpMethodBase.java:2116)
+	at org.apache.commons.httpclient.HttpMethodBase.execute(HttpMethodBase.java:1096)
+	at org.eclipse.ecf.provider.filetransfer.httpclient.HttpClientRetrieveFileTransfer$GzipGetMethod.execute(HttpClientRetrieveFileTransfer.java:120)
+	at org.apache.commons.httpclient.HttpMethodDirector.executeWithRetry(HttpMethodDirector.java:398)
+	at org.apache.commons.httpclient.HttpMethodDirector.executeMethod(HttpMethodDirector.java:171)
+	at org.apache.commons.httpclient.HttpClient.executeMethod(HttpClient.java:397)
+	at org.apache.commons.httpclient.HttpClient.executeMethod(HttpClient.java:346)
+	at org.eclipse.ecf.provider.filetransfer.httpclient.HttpClientRetrieveFileTransfer.performConnect(HttpClientRetrieveFileTransfer.java:1129)
+	at org.eclipse.ecf.provider.filetransfer.httpclient.HttpClientRetrieveFileTransfer.openStreams(HttpClientRetrieveFileTransfer.java:699)
+	at org.eclipse.ecf.provider.filetransfer.retrieve.AbstractRetrieveFileTransfer.sendRetrieveRequest(AbstractRetrieveFileTransfer.java:879)
+	at org.eclipse.ecf.provider.filetransfer.retrieve.AbstractRetrieveFileTransfer.sendRetrieveRequest(AbstractRetrieveFileTransfer.java:570)
+	at org.eclipse.ecf.provider.filetransfer.retrieve.MultiProtocolRetrieveAdapter.sendRetrieveRequest(MultiProtocolRetrieveAdapter.java:106)
+	at org.eclipse.equinox.internal.p2.transport.ecf.FileReader.sendRetrieveRequest(FileReader.java:422)
+	at org.eclipse.equinox.internal.p2.transport.ecf.FileReader.readInto(FileReader.java:355)
+	at org.eclipse.equinox.internal.p2.transport.ecf.RepositoryTransport.download(RepositoryTransport.java:101)
+	at org.eclipse.equinox.internal.p2.transport.ecf.RepositoryTransport.download(RepositoryTransport.java:156)
+	at org.eclipse.equinox.internal.p2.repository.helpers.AbstractRepositoryManager.loadIndexFile(AbstractRepositoryManager.java:721)
+	at org.eclipse.equinox.internal.p2.repository.helpers.AbstractRepositoryManager.loadRepository(AbstractRepositoryManager.java:640)
+	at org.eclipse.equinox.internal.p2.metadata.repository.MetadataRepositoryManager.loadRepository(MetadataRepositoryManager.java:96)
+	at org.eclipse.equinox.internal.p2.metadata.repository.MetadataRepositoryManager.loadRepository(MetadataRepositoryManager.java:92)
+	at org.eclipse.equinox.internal.p2.updatechecker.UpdateChecker.getAvailableRepositories(UpdateChecker.java:150)
+	at org.eclipse.equinox.internal.p2.updatechecker.UpdateChecker.checkForUpdates(UpdateChecker.java:128)
+	at org.eclipse.equinox.internal.p2.updatechecker.UpdateChecker$UpdateCheckThread.run(UpdateChecker.java:72)
+!SESSION 2019-10-06 22:38:21.347 -----------------------------------------------
+eclipse.buildId=I20070613-1755
+java.version=1.6.0_15
+java.vendor=Sun Microsystems Inc.
+BootLoader constants: OS=win32, ARCH=x86, WS=win32, NL=en
+Command-line arguments:  -os win32 -ws win32 -arch x86 -data G:\All_files\USB\trimestres\trimestre_sep_dic_2019\materias\proyectos_3\repos\EC3883-G06\firmware
+
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:38:24.204
+!MESSAGE NLS missing message: ContentTypes_errorDialogAlreadyExists in: org.eclipse.ui.internal.messages
+
+!ENTRY com.freescale.core.ide.wizard.ui 2 0 2019-10-06 22:38:30.026
+!MESSAGE External elements location 'C:\Freescale\CW MCU v10.6\eclipse\../MCU/lib/wizard_data/mqx/4.0/arm' does not exist
+
+!ENTRY com.freescale.core.ide.wizard.ui 2 0 2019-10-06 22:38:30.042
+!MESSAGE External elements location 'C:\Freescale\CW MCU v10.6\eclipse\../MCU/lib/wizard_data/mqx/4.0/cf' does not exist
+
+!ENTRY com.freescale.core.ide.wizard.ui 2 0 2019-10-06 22:38:30.050
+!MESSAGE External elements location 'C:\Freescale\CW MCU v10.6\eclipse\../MCU/lib/wizard_data/mqx/4.0/ppc' does not exist
+
+!ENTRY com.freescale.core.ide.wizard.ui 2 0 2019-10-06 22:38:30.063
+!MESSAGE External elements location 'C:\Freescale\CW MCU v10.6\eclipse\../MCU/lib/wizard_data/mqx/4.0/patches' does not exist
+
+!ENTRY com.freescale.core.ide.wizard.ui 2 0 2019-10-06 22:38:30.382
+!MESSAGE External elements location 'C:\Freescale\CW MCU v10.6\eclipse\../MCU/lib/wizard_data/mqx/4.1/arm' does not exist
+
+!ENTRY com.freescale.core.ide.wizard.ui 2 0 2019-10-06 22:38:30.390
+!MESSAGE External elements location 'C:\Freescale\CW MCU v10.6\eclipse\../MCU/lib/wizard_data/mqx/4.1/cf' does not exist
+
+!ENTRY com.freescale.core.ide.wizard.ui 2 0 2019-10-06 22:38:30.398
+!MESSAGE External elements location 'C:\Freescale\CW MCU v10.6\eclipse\../MCU/lib/wizard_data/mqx/4.1/ppc' does not exist
+
+!ENTRY com.freescale.core.ide.wizard.ui 2 0 2019-10-06 22:38:30.410
+!MESSAGE External elements location 'C:\Freescale\CW MCU v10.6\eclipse\../MCU/lib/wizard_data/mqx/4.1/patches' does not exist
+
+!ENTRY com.freescale.processorexpert.core 1 0 2019-10-06 22:38:31.499
+!MESSAGE Plugin com.freescale.processorexpert.core.service ProcessorExpertServiceProvider
+
+!ENTRY org.eclipse.equinox.p2.transport.ecf 2 0 2019-10-06 22:38:40.721
 !MESSAGE Connection to http://freescale.com/lgfiles/updates/Eclipse/MCU10_6/com.freescale.mcu.updatesite/p2.index failed on Received fatal alert: protocol_version. Retry attempt 0 started
 !STACK 0
 javax.net.ssl.SSLException: Received fatal alert: protocol_version
@@ -74,568 +149,397 @@ javax.net.ssl.SSLException: Received fatal alert: protocol_version
 	at org.eclipse.equinox.internal.p2.updatechecker.UpdateChecker.checkForUpdates(UpdateChecker.java:128)
 	at org.eclipse.equinox.internal.p2.updatechecker.UpdateChecker$UpdateCheckThread.run(UpdateChecker.java:72)
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:51:22.769
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:38:48.049
 !MESSAGE NLS unused message: NewProjectCreator_coreException1 in: com.freescale.core.ide.newprojectwizard.messages
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:51:22.780
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:38:48.065
 !MESSAGE NLS unused message: NewProjectCreator_coreException2 in: com.freescale.core.ide.newprojectwizard.messages
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:51:22.789
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:38:48.077
 !MESSAGE NLS unused message: NewProjectCreator_coreException3 in: com.freescale.core.ide.newprojectwizard.messages
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:51:22.798
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:38:48.089
 !MESSAGE NLS unused message: NewProjectCreator_exception1 in: com.freescale.core.ide.newprojectwizard.messages
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:51:22.807
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:38:48.105
 !MESSAGE NLS unused message: NewProjectCreator_wizardException1 in: com.freescale.core.ide.newprojectwizard.messages
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:51:22.816
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:38:48.116
 !MESSAGE NLS unused message: NewProjectCreator_wizardException2 in: com.freescale.core.ide.newprojectwizard.messages
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:51:22.824
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:38:48.124
 !MESSAGE NLS unused message: NewProjectCreator_wizardException3 in: com.freescale.core.ide.newprojectwizard.messages
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:51:22.833
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:38:48.136
 !MESSAGE NLS unused message: NewProjectCreator_wizardException4 in: com.freescale.core.ide.newprojectwizard.messages
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:51:22.842
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:38:48.144
 !MESSAGE NLS unused message: NewProjectCreator_wizardException5 in: com.freescale.core.ide.newprojectwizard.messages
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:51:22.850
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:38:48.156
 !MESSAGE NLS unused message: NewProjectCreator_wizardException6 in: com.freescale.core.ide.newprojectwizard.messages
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:51:22.858
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:38:48.172
 !MESSAGE NLS unused message: NewProjectCreator_wizardException7 in: com.freescale.core.ide.newprojectwizard.messages
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:51:22.866
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:38:48.184
 !MESSAGE NLS unused message: NewProjectCreator_wizardException8 in: com.freescale.core.ide.newprojectwizard.messages
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:51:22.873
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:38:48.196
 !MESSAGE NLS unused message: NewProjectCreator_wizardException9 in: com.freescale.core.ide.newprojectwizard.messages
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:51:22.880
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:38:48.213
 !MESSAGE NLS unused message: NewProjectCreator_logError1 in: com.freescale.core.ide.newprojectwizard.messages
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:51:22.887
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:38:48.225
 !MESSAGE NLS unused message: NewProjectCreator_logError2 in: com.freescale.core.ide.newprojectwizard.messages
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:51:22.895
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:38:48.233
 !MESSAGE NLS unused message: NewProjectCreator_logError3 in: com.freescale.core.ide.newprojectwizard.messages
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:51:22.901
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:38:48.241
 !MESSAGE NLS unused message: NewProjectCreator_logError4 in: com.freescale.core.ide.newprojectwizard.messages
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:51:22.908
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:38:48.253
 !MESSAGE NLS unused message: NewProjectCreator_multiProjType in: com.freescale.core.ide.newprojectwizard.messages
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:51:22.916
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:38:48.265
 !MESSAGE NLS unused message: NewProjectCreator_typeNotFound in: com.freescale.core.ide.newprojectwizard.messages
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:51:22.923
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:38:48.273
 !MESSAGE NLS unused message: NewProjectCreator_saveOptions in: com.freescale.core.ide.newprojectwizard.messages
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:51:22.930
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:38:48.281
 !MESSAGE NLS unused message: NewProjectCreator_cantLocateType in: com.freescale.core.ide.newprojectwizard.messages
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:51:22.937
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:38:48.289
 !MESSAGE NLS unused message: NewProjectCreator_addNature in: com.freescale.core.ide.newprojectwizard.messages
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:51:22.945
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:38:48.297
 !MESSAGE NLS unused message: NewProjectCreator_addBuilder in: com.freescale.core.ide.newprojectwizard.messages
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:51:22.952
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:38:48.305
 !MESSAGE NLS unused message: NewProjectCreator_settingNotFound in: com.freescale.core.ide.newprojectwizard.messages
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:51:22.959
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:38:48.325
 !MESSAGE NLS unused message: NewProjectCreator_optionNotFound in: com.freescale.core.ide.newprojectwizard.messages
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:51:22.966
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:38:48.341
 !MESSAGE NLS unused message: NewProjectCreator_unknownOption in: com.freescale.core.ide.newprojectwizard.messages
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:51:22.973
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:38:48.357
 !MESSAGE NLS unused message: NewProjectCreator_configNotFound in: com.freescale.core.ide.newprojectwizard.messages
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:51:22.980
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:38:48.365
 !MESSAGE NLS unused message: NewProjectCreator_varContainsOpenBrace in: com.freescale.core.ide.newprojectwizard.messages
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:51:22.987
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:38:48.373
 !MESSAGE NLS unused message: NewProjectCreator_endlessVarLoop in: com.freescale.core.ide.newprojectwizard.messages
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:51:22.994
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:38:48.381
 !MESSAGE NLS unused message: NewProjectCreator_userFilesNotFound in: com.freescale.core.ide.newprojectwizard.messages
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:51:23.002
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:38:48.389
 !MESSAGE NLS unused message: NewProjectCreator_warningTitleFilesNotFound in: com.freescale.core.ide.newprojectwizard.messages
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:51:23.009
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:38:48.401
 !MESSAGE NLS unused message: ExtensionLoader_loadexception in: com.freescale.core.ide.newprojectwizard.messages
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:51:23.016
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:38:48.409
 !MESSAGE NLS unused message: ExtensionLoader_wizardException in: com.freescale.core.ide.newprojectwizard.messages
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:51:23.023
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:38:48.417
 !MESSAGE NLS unused message: ExtensionLoader_unknown in: com.freescale.core.ide.newprojectwizard.messages
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:51:23.030
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:38:48.425
 !MESSAGE NLS unused message: ExtensionLoader_illElement in: com.freescale.core.ide.newprojectwizard.messages
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:51:23.038
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:38:48.437
 !MESSAGE NLS unused message: CWWizard_windowTitle in: com.freescale.core.ide.newprojectwizard.messages
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:51:23.045
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:38:48.445
 !MESSAGE NLS unused message: CWWizard_description in: com.freescale.core.ide.newprojectwizard.messages
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:51:23.052
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:38:48.453
 !MESSAGE NLS unused message: CWWizard_pageTitle in: com.freescale.core.ide.newprojectwizard.messages
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:51:23.059
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:38:48.457
 !MESSAGE NLS unused message: CWWizard_pageDescription in: com.freescale.core.ide.newprojectwizard.messages
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:51:23.066
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:38:48.469
 !MESSAGE NLS unused message: CWWizard_errorTitle in: com.freescale.core.ide.newprojectwizard.messages
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:51:23.073
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:38:48.477
 !MESSAGE NLS unused message: CWWizard_errorMsg in: com.freescale.core.ide.newprojectwizard.messages
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:51:23.081
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:38:48.497
 !MESSAGE NLS unused message: CWWizard_classicImporter_pageTitle in: com.freescale.core.ide.newprojectwizard.messages
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:51:23.089
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:38:48.509
 !MESSAGE NLS unused message: CWWizard_classicImporter_pageDescription in: com.freescale.core.ide.newprojectwizard.messages
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:51:23.096
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:38:48.521
 !MESSAGE NLS unused message: WizardInfo_wizardException0 in: com.freescale.core.ide.newprojectwizard.messages
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:51:23.103
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:38:48.529
 !MESSAGE NLS unused message: WizardInfo_wizardException1 in: com.freescale.core.ide.newprojectwizard.messages
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:51:23.110
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:38:48.537
 !MESSAGE NLS unused message: ApplySetting_noChildFound in: com.freescale.core.ide.newprojectwizard.messages
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:51:23.118
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:38:48.545
 !MESSAGE NLS unused message: ApplySetting_attrNotAllowed in: com.freescale.core.ide.newprojectwizard.messages
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:51:23.125
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:38:48.557
 !MESSAGE NLS unused message: ApplySetting_childNotAllowed in: com.freescale.core.ide.newprojectwizard.messages
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:51:23.132
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:38:48.565
 !MESSAGE NLS unused message: ApplySetting_attrNotSpecified in: com.freescale.core.ide.newprojectwizard.messages
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:51:23.139
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:38:48.573
 !MESSAGE NLS unused message: ApplySetting_errValueType in: com.freescale.core.ide.newprojectwizard.messages
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:51:23.146
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:38:48.585
 !MESSAGE NLS unused message: ApplySetting_illSettingType in: com.freescale.core.ide.newprojectwizard.messages
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:51:23.153
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:38:48.593
 !MESSAGE NLS unused message: ApplySetting_illSettingMode in: com.freescale.core.ide.newprojectwizard.messages
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:51:23.161
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:38:48.605
 !MESSAGE NLS unused message: ProjectNamePage_stepFormat in: com.freescale.core.ide.newprojectwizard.messages
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:51:23.168
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:38:48.612
 !MESSAGE NLS unused message: ProjectNamePage_collisionWarn in: com.freescale.core.ide.newprojectwizard.messages
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:51:23.175
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:38:48.620
 !MESSAGE NLS unused message: ProjectName_error in: com.freescale.core.ide.newprojectwizard.messages
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:51:23.182
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:38:48.628
 !MESSAGE NLS unused message: ProjectLocation_error in: com.freescale.core.ide.newprojectwizard.messages
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:51:25.063
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:38:49.954
 !MESSAGE Unknown UI Element ID: mcu.projectwizard.chip.architecture.kinetis_k
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:51:25.070
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:38:49.966
 !MESSAGE Unknown UI Element ID: mcu.projectwizard.chip.architecture.kinetis_l
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:51:25.077
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:38:49.974
 !MESSAGE Unknown UI Element ID: mcu.projectwizard.chip.architecture.kinetis_e
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:51:25.084
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:38:49.986
 !MESSAGE Unknown UI Element ID: mcu.projectwizard.chip.architecture.kinetis_m
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:51:25.092
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:38:49.994
 !MESSAGE Unknown UI Element ID: mcu.projectwizard.chip.family.s12z
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:51:25.099
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:38:50.006
 !MESSAGE Unknown UI Element ID: mcu.projectwizard.chip.family.dsc
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:51:25.106
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:38:50.018
 !MESSAGE Unknown UI Element ID: mcu.projectwizard.chip.family.mpc56xx
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:51:25.114
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:38:50.030
 !MESSAGE Unknown UI Element ID: mcu.projectwizard.chip.family.px
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:51:25.121
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:38:50.046
 !MESSAGE Unknown UI Element ID: mcu.projectwizard.chip.family.cfv1
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:51:25.129
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:38:50.058
 !MESSAGE Unknown UI Element ID: mcu.projectwizard.chip.family.cfv1+
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:51:25.136
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:38:50.070
 !MESSAGE Unknown UI Element ID: mcu.projectwizard.chip.family.v2
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:51:25.143
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:38:50.082
 !MESSAGE Unknown UI Element ID: mcu.projectwizard.chip.family.v3
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:51:25.150
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:38:50.090
 !MESSAGE Unknown UI Element ID: mcu.projectwizard.chip.family.v4
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:51:25.157
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:38:50.102
 !MESSAGE Unknown UI Element ID: mcu.projectwizard.chip.family.v4e
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:51:25.165
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:38:50.122
 !MESSAGE Unknown UI Element ID: mcu.projectwizard.board.family.v2
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:51:25.172
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:38:50.130
 !MESSAGE Unknown UI Element ID: mcu.projectwizard.board.family.v3
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:51:25.179
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:38:50.142
 !MESSAGE Unknown UI Element ID: mcu.projectwizard.board.family.v4
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:51:25.186
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:38:50.154
 !MESSAGE Unknown UI Element ID: mcu.projectwizard.board.family.v4e
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:51:25.193
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:38:50.162
 !MESSAGE Unknown UI Element ID: mcu.projectwizard.twrboard.family.v2
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:51:25.201
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:38:50.174
 !MESSAGE Unknown UI Element ID: mcu.projectwizard.twrboard.family.v3
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:51:25.208
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:38:50.186
 !MESSAGE Unknown UI Element ID: mcu.projectwizard.twrboard.family.v4
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:51:25.216
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:38:50.194
 !MESSAGE Unknown UI Element ID: mcu.projectwizard.twrboard.family.v4e
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:57:11.161
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:41:09.402
 !MESSAGE Unknown condition ID: mcu.projectwizard.condition.cf_v2v4.ID_SIZE_LIB_YES
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:57:11.172
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:41:09.411
 !MESSAGE Unknown condition ID: mcu.projectwizard.condition.pa.hasPermanent.dualCore.homogeneous.config
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:57:11.180
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:41:09.419
 !MESSAGE Unknown condition ID: mcu.projectwizard.condition.cf_v2v4.ID_SOFTWARE_FPU
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:57:11.187
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:41:09.427
 !MESSAGE Unknown condition ID: mcu.projectwizard.condition.cf_v2v4.ID_HARDWARE_FPU
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:57:11.194
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:41:09.435
 !MESSAGE Unknown condition ID: mcu.projectwizard.condition.cf_v2v4.ID_SIZE_LIB_NO
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:57:11.202
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:41:09.447
 !MESSAGE Unknown condition ID: com.processorexpert.condition.device.pinsettings.present
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:57:11.210
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:41:09.455
 !MESSAGE Unknown UI Element ID: mcu.projectwizard.chip.family.hc08
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:57:11.220
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:41:09.463
 !MESSAGE Unknown condition ID: com.processorexpert.configuration.3
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:57:11.227
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:41:09.471
 !MESSAGE Unknown condition ID: com.processorexpert.configuration.4
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:57:11.234
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:41:09.479
 !MESSAGE Unknown condition ID: com.processorexpert.configuration.5
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:57:11.241
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:41:09.487
 !MESSAGE Unknown condition ID: com.processorexpert.configuration.6
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:57:11.950
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:41:10.119
 !MESSAGE Unknown condition ID: mcu.projectwizard.condition.isColdFire.v1.ID_TARGET_BOOTFLASH
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:57:11.960
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:41:10.143
 !MESSAGE Unknown condition ID: mcu.projectwizard.condition.cf_v2v4.ID_TARGET_INTRAM
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:57:11.969
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:41:10.167
 !MESSAGE Unknown condition ID: mcu.projectwizard.condition.cf_v2v4.ID_TARGET_CONSOLE_INTRAM
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:57:11.978
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:41:10.191
 !MESSAGE Unknown condition ID: mcu.projectwizard.condition.cf_v2v4.ID_TARGET_EXTRAM
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:57:11.985
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:41:10.215
 !MESSAGE Unknown condition ID: mcu.projectwizard.condition.cf_v2v4.ID_TARGET_CONSOLE_EXTRAM
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:57:11.992
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:41:10.235
 !MESSAGE Unknown condition ID: mcu.projectwizard.condition.cf_v2v4.ID_TARGET_INTFLASH
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:57:11.999
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:41:10.259
 !MESSAGE Unknown condition ID: mcu.projectwizard.condition.cf_v2v4.ID_TARGET_EXTFLASH
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:57:12.006
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:41:10.283
 !MESSAGE Unknown condition ID: mcu.projectwizard.condition.arm.ID_TARGET_RAM
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:57:12.013
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:41:10.303
 !MESSAGE Unknown condition ID: mcu.projectwizard.condition.arm.ID_TARGET_FLASH
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:57:12.020
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:41:10.319
 !MESSAGE Unknown condition ID: mcu.projectwizard.condition.dsc.ID_TARGET_INTERNAL_FLASH_SDM
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:57:12.027
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:41:10.339
 !MESSAGE Unknown condition ID: mcu.projectwizard.condition.dsc.ID_TARGET_INTERNAL_FLASH_LDM
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:57:12.034
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:41:10.351
 !MESSAGE Unknown condition ID: mcu.projectwizard.condition.dsc.ID_TARGET_EXTERNAL_RAM_SDM
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:57:12.041
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:41:10.363
 !MESSAGE Unknown condition ID: mcu.projectwizard.condition.dsc.ID_TARGET_EXTERNAL_RAM_LDM
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:57:12.048
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:41:10.375
 !MESSAGE Unknown condition ID: mcu.projectwizard.condition.dsc.ID_TARGET_SIMULATOR
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:57:12.056
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:41:10.387
 !MESSAGE Unknown condition ID: mcu.projectwizard.condition.pa.ID_TARGET_INTERNAL_RAM
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:57:12.063
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:41:10.399
 !MESSAGE Unknown condition ID: mcu.projectwizard.condition.pa.ID_TARGET_INTERNAL_FLASH
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:57:13.899
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:41:13.029
 !MESSAGE Unknown condition ID: mcu.elfimporter.condition.copytoproject.cfv1
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:57:13.906
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:41:13.041
 !MESSAGE Unknown condition ID: mcu.elfimporter.condition.dontcopytoproject
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:57:13.913
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:41:13.049
 !MESSAGE Unknown condition ID: mcu.elfimporter.condition.copy.abs
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:57:13.920
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:41:13.057
 !MESSAGE Unknown condition ID: mcu.elfimporter.condition.copyelf.pa
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:57:13.926
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:41:13.065
 !MESSAGE Unknown condition ID: mcu.elfimporter.condition.copy.elf.arm
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:57:13.933
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:41:13.069
 !MESSAGE Unknown condition ID: mcu.elfimporter.condition.copy.elf.dsc
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:57:13.940
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:41:13.077
 !MESSAGE Unknown condition ID: mcu.elfimporter.condition.copy.elf.s12z
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:57:13.947
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:41:13.089
 !MESSAGE Unknown condition ID: mcu.elfimporter.condition.copy.bb.elf
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:57:13.954
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:41:13.097
 !MESSAGE Unknown condition ID: mcu.elfimporter.condition.copy.kd.elf
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:57:13.961
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:41:13.105
 !MESSAGE Unknown condition ID: mcu.elfimporter.condition.copy.app.elf
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:57:13.968
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:41:13.113
 !MESSAGE Unknown condition ID: mcu.elfimporter.condition.copy.flt
 
-!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-02 22:57:15.939
+!ENTRY com.freescale.core.ide.wizard.ui 4 0 2019-10-06 22:41:14.409
 !MESSAGE Unknown condition ID: mcu.projectwizard.chip.family.cfv1+
 
-!ENTRY org.eclipse.cdt.core 1 0 2019-10-02 22:57:19.865
-!MESSAGE Indexed 'SOLINDAR' (1 sources, 5 headers) in 0.76 sec: 62 declarations; 98 references; 0 unresolved inclusions; 0 syntax errors; 0 unresolved names (0.00%)
-
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:58:12.629
-!MESSAGE NLS unused message: trace_trigger_dv_error_title in: com.freescale.sa.mcu.analysispoints.nls.ui
-
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 22:58:12.637
-!MESSAGE NLS unused message: trace_trigger_dv_error_message in: com.freescale.sa.mcu.analysispoints.nls.ui
-
-!ENTRY org.eclipse.jface 2 0 2019-10-02 22:58:13.512
-!MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
-!SUBENTRY 1 org.eclipse.jface 2 0 2019-10-02 22:58:13.512
-!MESSAGE A conflict occurred for ALT+CTRL+I:
-Binding(ALT+CTRL+I,
-	ParameterizedCommand(Command(org.eclipse.cdt.ui.edit.open.include.browser,Open Include Browser,
-		Open an include browser on the selected element,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.MakeHandlersGo@7454cc,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.cdt.ui.cEditorScope,,,system)
-Binding(ALT+CTRL+I,
-	ParameterizedCommand(Command(org.eclipse.cdt.ui.edit.open.include.browser,Open Include Browser,
-		Open an include browser on the selected element,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.MakeHandlersGo@7454cc,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.cdt.ui.cViewScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2019-10-02 22:58:13.512
-!MESSAGE A conflict occurred for ALT+SHIFT+R:
-Binding(ALT+SHIFT+R,
-	ParameterizedCommand(Command(org.eclipse.cdt.ui.edit.text.rename.element,Rename - Refactoring ,
-		Rename the selected element,
-		Category(org.eclipse.cdt.ui.category.refactoring,Refactor - C++,C/C++ Refactorings,true),
-		org.eclipse.ui.internal.MakeHandlersGo@16b5df0,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.cdt.ui.cEditorScope,,,system)
-Binding(ALT+SHIFT+R,
-	ParameterizedCommand(Command(org.eclipse.cdt.ui.edit.text.rename.element,Rename - Refactoring ,
-		Rename the selected element,
-		Category(org.eclipse.cdt.ui.category.refactoring,Refactor - C++,C/C++ Refactorings,true),
-		org.eclipse.ui.internal.MakeHandlersGo@16b5df0,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.cdt.ui.cViewScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2019-10-02 22:58:13.512
-!MESSAGE A conflict occurred for F4:
-Binding(F4,
-	ParameterizedCommand(Command(org.eclipse.cdt.ui.edit.open.type.hierarchy,Open Type Hierarchy,
-		Open a type hierarchy on the selected element,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.MakeHandlersGo@1e43b5e,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.cdt.ui.cEditorScope,,,system)
-Binding(F4,
-	ParameterizedCommand(Command(org.eclipse.cdt.ui.edit.open.type.hierarchy,Open Type Hierarchy,
-		Open a type hierarchy on the selected element,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.MakeHandlersGo@1e43b5e,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.cdt.ui.cViewScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2019-10-02 22:58:13.512
-!MESSAGE A conflict occurred for CTRL+SHIFT+T:
-Binding(CTRL+SHIFT+T,
-	ParameterizedCommand(Command(org.eclipse.cdt.ui.navigate.opentype,Open Element,
-		Open an element in an Editor,
-		Category(org.eclipse.cdt.ui.category.source,C/C++ Source,C/C++ Source Actions,true),
-		org.eclipse.ui.internal.MakeHandlersGo@f5a599,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.cdt.ui.cEditorScope,,,system)
-Binding(CTRL+SHIFT+T,
-	ParameterizedCommand(Command(org.eclipse.cdt.ui.navigate.opentype,Open Element,
-		Open an element in an Editor,
-		Category(org.eclipse.cdt.ui.category.source,C/C++ Source,C/C++ Source Actions,true),
-		org.eclipse.ui.internal.MakeHandlersGo@f5a599,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.cdt.ui.cViewScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2019-10-02 22:58:13.512
-!MESSAGE A conflict occurred for F3:
-Binding(F3,
-	ParameterizedCommand(Command(org.eclipse.cdt.ui.edit.opendecl,Open Declaration,
-		Open an editor on the selected element's declaration(s),
-		Category(org.eclipse.cdt.ui.category.source,C/C++ Source,C/C++ Source Actions,true),
-		org.eclipse.ui.internal.MakeHandlersGo@14b0c69,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.cdt.ui.cEditorScope,,,system)
-Binding(F3,
-	ParameterizedCommand(Command(org.eclipse.cdt.ui.edit.opendecl,Open Declaration,
-		Open an editor on the selected element's declaration(s),
-		Category(org.eclipse.cdt.ui.category.source,C/C++ Source,C/C++ Source Actions,true),
-		org.eclipse.ui.internal.MakeHandlersGo@14b0c69,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.cdt.ui.cViewScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2019-10-02 22:58:13.512
-!MESSAGE A conflict occurred for CTRL+G:
-Binding(CTRL+G,
-	ParameterizedCommand(Command(org.eclipse.cdt.ui.search.finddecl,Declaration,
-		Search for declarations of the selected element in the workspace,
-		Category(org.eclipse.cdt.ui.category.source,C/C++ Source,C/C++ Source Actions,true),
-		org.eclipse.ui.internal.MakeHandlersGo@1bce78,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.cdt.ui.cEditorScope,,,system)
-Binding(CTRL+G,
-	ParameterizedCommand(Command(org.eclipse.cdt.ui.search.finddecl,Declaration,
-		Search for declarations of the selected element in the workspace,
-		Category(org.eclipse.cdt.ui.category.source,C/C++ Source,C/C++ Source Actions,true),
-		org.eclipse.ui.internal.MakeHandlersGo@1bce78,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.cdt.ui.cViewScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2019-10-02 22:58:13.512
-!MESSAGE A conflict occurred for CTRL+SHIFT+G:
-Binding(CTRL+SHIFT+G,
-	ParameterizedCommand(Command(org.eclipse.cdt.ui.search.findrefs,References,
-		Search for references to the selected element in the workspace,
-		Category(org.eclipse.cdt.ui.category.source,C/C++ Source,C/C++ Source Actions,true),
-		org.eclipse.ui.internal.MakeHandlersGo@1902f84,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.cdt.ui.cEditorScope,,,system)
-Binding(CTRL+SHIFT+G,
-	ParameterizedCommand(Command(org.eclipse.cdt.ui.search.findrefs,References,
-		Search for references to the selected element in the workspace,
-		Category(org.eclipse.cdt.ui.category.source,C/C++ Source,C/C++ Source Actions,true),
-		org.eclipse.ui.internal.MakeHandlersGo@1902f84,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.cdt.ui.cViewScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2019-10-02 22:58:13.512
-!MESSAGE A conflict occurred for ALT+CTRL+H:
-Binding(ALT+CTRL+H,
-	ParameterizedCommand(Command(org.eclipse.cdt.ui.edit.open.call.hierarchy,Open Call Hierarchy,
-		Open the call hierarchy for the selected element,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.MakeHandlersGo@11fa5c3,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.cdt.ui.cEditorScope,,,system)
-Binding(ALT+CTRL+H,
-	ParameterizedCommand(Command(org.eclipse.cdt.ui.edit.open.call.hierarchy,Open Call Hierarchy,
-		Open the call hierarchy for the selected element,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.MakeHandlersGo@11fa5c3,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.cdt.ui.cViewScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2019-10-02 22:58:13.512
-!MESSAGE A conflict occurred for CTRL+SHIFT+H:
-Binding(CTRL+SHIFT+H,
-	ParameterizedCommand(Command(org.eclipse.cdt.ui.navigate.open.type.in.hierarchy,Open Type in Hierarchy,
-		Open a type in the type hierarchy view,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.MakeHandlersGo@bbbd60,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.cdt.ui.cEditorScope,,,system)
-Binding(CTRL+SHIFT+H,
-	ParameterizedCommand(Command(org.eclipse.cdt.ui.navigate.open.type.in.hierarchy,Open Type in Hierarchy,
-		Open a type in the type hierarchy view,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.MakeHandlersGo@bbbd60,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.cdt.ui.cViewScope,,,system)
-!SESSION 2019-10-02 23:05:29.726 -----------------------------------------------
+!ENTRY org.eclipse.cdt.core 1 0 2019-10-06 22:41:16.773
+!MESSAGE Indexed 'SOLINDAR' (1 sources, 5 headers) in 0.55 sec: 62 declarations; 98 references; 0 unresolved inclusions; 0 syntax errors; 0 unresolved names (0.00%)
+!SESSION 2019-10-06 22:47:47.048 -----------------------------------------------
 eclipse.buildId=I20070613-1755
 java.version=1.6.0_15
 java.vendor=Sun Microsystems Inc.
 BootLoader constants: OS=win32, ARCH=x86, WS=win32, NL=en
 Command-line arguments:  -os win32 -ws win32 -arch x86
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 23:05:32.404
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:47:50.304
 !MESSAGE NLS missing message: ContentTypes_errorDialogAlreadyExists in: org.eclipse.ui.internal.messages
 
-!ENTRY com.freescale.processorexpert.core 1 0 2019-10-02 23:05:38.617
+!ENTRY com.freescale.processorexpert.core 1 0 2019-10-06 22:47:55.584
 !MESSAGE Plugin com.freescale.processorexpert.core.service ProcessorExpertServiceProvider
 
-!ENTRY com.freescale.core.ide.wizard.ui 2 0 2019-10-02 23:06:02.217
+!ENTRY com.freescale.core.ide.wizard.ui 2 0 2019-10-06 22:48:16.480
 !MESSAGE External elements location 'C:\Freescale\CW MCU v10.6\eclipse\../MCU/lib/wizard_data/mqx/4.0/arm' does not exist
 
-!ENTRY com.freescale.core.ide.wizard.ui 2 0 2019-10-02 23:06:02.224
+!ENTRY com.freescale.core.ide.wizard.ui 2 0 2019-10-06 22:48:16.496
 !MESSAGE External elements location 'C:\Freescale\CW MCU v10.6\eclipse\../MCU/lib/wizard_data/mqx/4.0/cf' does not exist
 
-!ENTRY com.freescale.core.ide.wizard.ui 2 0 2019-10-02 23:06:02.232
+!ENTRY com.freescale.core.ide.wizard.ui 2 0 2019-10-06 22:48:16.508
 !MESSAGE External elements location 'C:\Freescale\CW MCU v10.6\eclipse\../MCU/lib/wizard_data/mqx/4.0/ppc' does not exist
 
-!ENTRY com.freescale.core.ide.wizard.ui 2 0 2019-10-02 23:06:02.240
+!ENTRY com.freescale.core.ide.wizard.ui 2 0 2019-10-06 22:48:16.516
 !MESSAGE External elements location 'C:\Freescale\CW MCU v10.6\eclipse\../MCU/lib/wizard_data/mqx/4.0/patches' does not exist
 
-!ENTRY com.freescale.core.ide.wizard.ui 2 0 2019-10-02 23:06:04.724
+!ENTRY com.freescale.core.ide.wizard.ui 2 0 2019-10-06 22:48:16.840
 !MESSAGE External elements location 'C:\Freescale\CW MCU v10.6\eclipse\../MCU/lib/wizard_data/mqx/4.1/arm' does not exist
 
-!ENTRY com.freescale.core.ide.wizard.ui 2 0 2019-10-02 23:06:04.737
+!ENTRY com.freescale.core.ide.wizard.ui 2 0 2019-10-06 22:48:16.848
 !MESSAGE External elements location 'C:\Freescale\CW MCU v10.6\eclipse\../MCU/lib/wizard_data/mqx/4.1/cf' does not exist
 
-!ENTRY com.freescale.core.ide.wizard.ui 2 0 2019-10-02 23:06:04.749
+!ENTRY com.freescale.core.ide.wizard.ui 2 0 2019-10-06 22:48:16.856
 !MESSAGE External elements location 'C:\Freescale\CW MCU v10.6\eclipse\../MCU/lib/wizard_data/mqx/4.1/ppc' does not exist
 
-!ENTRY com.freescale.core.ide.wizard.ui 2 0 2019-10-02 23:06:04.761
+!ENTRY com.freescale.core.ide.wizard.ui 2 0 2019-10-06 22:48:16.868
 !MESSAGE External elements location 'C:\Freescale\CW MCU v10.6\eclipse\../MCU/lib/wizard_data/mqx/4.1/patches' does not exist
 
-!ENTRY org.eclipse.equinox.p2.transport.ecf 2 0 2019-10-02 23:06:19.198
+!ENTRY org.eclipse.equinox.p2.transport.ecf 2 0 2019-10-06 22:48:26.063
 !MESSAGE Connection to http://freescale.com/lgfiles/updates/Eclipse/MCU10_6/com.freescale.mcu.updatesite/p2.index failed on Received fatal alert: protocol_version. Retry attempt 0 started
 !STACK 0
 javax.net.ssl.SSLException: Received fatal alert: protocol_version
@@ -674,21 +578,21 @@ javax.net.ssl.SSLException: Received fatal alert: protocol_version
 	at org.eclipse.equinox.internal.p2.updatechecker.UpdateChecker.checkForUpdates(UpdateChecker.java:128)
 	at org.eclipse.equinox.internal.p2.updatechecker.UpdateChecker$UpdateCheckThread.run(UpdateChecker.java:72)
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 23:06:19.367
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:49:27.267
 !MESSAGE NLS unused message: trace_trigger_dv_error_title in: com.freescale.sa.mcu.analysispoints.nls.ui
 
-!ENTRY org.eclipse.osgi 2 1 2019-10-02 23:06:19.377
+!ENTRY org.eclipse.osgi 2 1 2019-10-06 22:49:27.279
 !MESSAGE NLS unused message: trace_trigger_dv_error_message in: com.freescale.sa.mcu.analysispoints.nls.ui
 
-!ENTRY org.eclipse.jface 2 0 2019-10-02 23:06:29.257
+!ENTRY org.eclipse.jface 2 0 2019-10-06 22:49:27.695
 !MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
-!SUBENTRY 1 org.eclipse.jface 2 0 2019-10-02 23:06:29.258
+!SUBENTRY 1 org.eclipse.jface 2 0 2019-10-06 22:49:27.695
 !MESSAGE A conflict occurred for ALT+CTRL+I:
 Binding(ALT+CTRL+I,
 	ParameterizedCommand(Command(org.eclipse.cdt.ui.edit.open.include.browser,Open Include Browser,
 		Open an include browser on the selected element,
 		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.MakeHandlersGo@c6a013,
+		org.eclipse.ui.internal.MakeHandlersGo@af908f,
 		,,true),null),
 	org.eclipse.ui.defaultAcceleratorConfiguration,
 	org.eclipse.cdt.ui.cEditorScope,,,system)
@@ -696,17 +600,17 @@ Binding(ALT+CTRL+I,
 	ParameterizedCommand(Command(org.eclipse.cdt.ui.edit.open.include.browser,Open Include Browser,
 		Open an include browser on the selected element,
 		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.MakeHandlersGo@c6a013,
+		org.eclipse.ui.internal.MakeHandlersGo@af908f,
 		,,true),null),
 	org.eclipse.ui.defaultAcceleratorConfiguration,
 	org.eclipse.cdt.ui.cViewScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2019-10-02 23:06:29.258
+!SUBENTRY 1 org.eclipse.jface 2 0 2019-10-06 22:49:27.695
 !MESSAGE A conflict occurred for ALT+SHIFT+R:
 Binding(ALT+SHIFT+R,
 	ParameterizedCommand(Command(org.eclipse.cdt.ui.edit.text.rename.element,Rename - Refactoring ,
 		Rename the selected element,
 		Category(org.eclipse.cdt.ui.category.refactoring,Refactor - C++,C/C++ Refactorings,true),
-		org.eclipse.ui.internal.MakeHandlersGo@37806b,
+		org.eclipse.ui.internal.MakeHandlersGo@3bbf83,
 		,,true),null),
 	org.eclipse.ui.defaultAcceleratorConfiguration,
 	org.eclipse.cdt.ui.cEditorScope,,,system)
@@ -714,17 +618,17 @@ Binding(ALT+SHIFT+R,
 	ParameterizedCommand(Command(org.eclipse.cdt.ui.edit.text.rename.element,Rename - Refactoring ,
 		Rename the selected element,
 		Category(org.eclipse.cdt.ui.category.refactoring,Refactor - C++,C/C++ Refactorings,true),
-		org.eclipse.ui.internal.MakeHandlersGo@37806b,
+		org.eclipse.ui.internal.MakeHandlersGo@3bbf83,
 		,,true),null),
 	org.eclipse.ui.defaultAcceleratorConfiguration,
 	org.eclipse.cdt.ui.cViewScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2019-10-02 23:06:29.258
+!SUBENTRY 1 org.eclipse.jface 2 0 2019-10-06 22:49:27.695
 !MESSAGE A conflict occurred for F4:
 Binding(F4,
 	ParameterizedCommand(Command(org.eclipse.cdt.ui.edit.open.type.hierarchy,Open Type Hierarchy,
 		Open a type hierarchy on the selected element,
 		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.MakeHandlersGo@1d00259,
+		org.eclipse.ui.internal.MakeHandlersGo@9a63d7,
 		,,true),null),
 	org.eclipse.ui.defaultAcceleratorConfiguration,
 	org.eclipse.cdt.ui.cEditorScope,,,system)
@@ -732,17 +636,17 @@ Binding(F4,
 	ParameterizedCommand(Command(org.eclipse.cdt.ui.edit.open.type.hierarchy,Open Type Hierarchy,
 		Open a type hierarchy on the selected element,
 		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.MakeHandlersGo@1d00259,
+		org.eclipse.ui.internal.MakeHandlersGo@9a63d7,
 		,,true),null),
 	org.eclipse.ui.defaultAcceleratorConfiguration,
 	org.eclipse.cdt.ui.cViewScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2019-10-02 23:06:29.258
+!SUBENTRY 1 org.eclipse.jface 2 0 2019-10-06 22:49:27.695
 !MESSAGE A conflict occurred for CTRL+SHIFT+T:
 Binding(CTRL+SHIFT+T,
 	ParameterizedCommand(Command(org.eclipse.cdt.ui.navigate.opentype,Open Element,
 		Open an element in an Editor,
 		Category(org.eclipse.cdt.ui.category.source,C/C++ Source,C/C++ Source Actions,true),
-		org.eclipse.ui.internal.MakeHandlersGo@14a5754,
+		org.eclipse.ui.internal.MakeHandlersGo@10d963,
 		,,true),null),
 	org.eclipse.ui.defaultAcceleratorConfiguration,
 	org.eclipse.cdt.ui.cEditorScope,,,system)
@@ -750,17 +654,17 @@ Binding(CTRL+SHIFT+T,
 	ParameterizedCommand(Command(org.eclipse.cdt.ui.navigate.opentype,Open Element,
 		Open an element in an Editor,
 		Category(org.eclipse.cdt.ui.category.source,C/C++ Source,C/C++ Source Actions,true),
-		org.eclipse.ui.internal.MakeHandlersGo@14a5754,
+		org.eclipse.ui.internal.MakeHandlersGo@10d963,
 		,,true),null),
 	org.eclipse.ui.defaultAcceleratorConfiguration,
 	org.eclipse.cdt.ui.cViewScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2019-10-02 23:06:29.258
+!SUBENTRY 1 org.eclipse.jface 2 0 2019-10-06 22:49:27.695
 !MESSAGE A conflict occurred for F3:
 Binding(F3,
 	ParameterizedCommand(Command(org.eclipse.cdt.ui.edit.opendecl,Open Declaration,
 		Open an editor on the selected element's declaration(s),
 		Category(org.eclipse.cdt.ui.category.source,C/C++ Source,C/C++ Source Actions,true),
-		org.eclipse.ui.internal.MakeHandlersGo@1ab7891,
+		org.eclipse.ui.internal.MakeHandlersGo@301fc0,
 		,,true),null),
 	org.eclipse.ui.defaultAcceleratorConfiguration,
 	org.eclipse.cdt.ui.cEditorScope,,,system)
@@ -768,17 +672,17 @@ Binding(F3,
 	ParameterizedCommand(Command(org.eclipse.cdt.ui.edit.opendecl,Open Declaration,
 		Open an editor on the selected element's declaration(s),
 		Category(org.eclipse.cdt.ui.category.source,C/C++ Source,C/C++ Source Actions,true),
-		org.eclipse.ui.internal.MakeHandlersGo@1ab7891,
+		org.eclipse.ui.internal.MakeHandlersGo@301fc0,
 		,,true),null),
 	org.eclipse.ui.defaultAcceleratorConfiguration,
 	org.eclipse.cdt.ui.cViewScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2019-10-02 23:06:29.258
+!SUBENTRY 1 org.eclipse.jface 2 0 2019-10-06 22:49:27.695
 !MESSAGE A conflict occurred for CTRL+G:
 Binding(CTRL+G,
 	ParameterizedCommand(Command(org.eclipse.cdt.ui.search.finddecl,Declaration,
 		Search for declarations of the selected element in the workspace,
 		Category(org.eclipse.cdt.ui.category.source,C/C++ Source,C/C++ Source Actions,true),
-		org.eclipse.ui.internal.MakeHandlersGo@78a17a,
+		org.eclipse.ui.internal.MakeHandlersGo@1749418,
 		,,true),null),
 	org.eclipse.ui.defaultAcceleratorConfiguration,
 	org.eclipse.cdt.ui.cEditorScope,,,system)
@@ -786,17 +690,17 @@ Binding(CTRL+G,
 	ParameterizedCommand(Command(org.eclipse.cdt.ui.search.finddecl,Declaration,
 		Search for declarations of the selected element in the workspace,
 		Category(org.eclipse.cdt.ui.category.source,C/C++ Source,C/C++ Source Actions,true),
-		org.eclipse.ui.internal.MakeHandlersGo@78a17a,
+		org.eclipse.ui.internal.MakeHandlersGo@1749418,
 		,,true),null),
 	org.eclipse.ui.defaultAcceleratorConfiguration,
 	org.eclipse.cdt.ui.cViewScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2019-10-02 23:06:29.258
+!SUBENTRY 1 org.eclipse.jface 2 0 2019-10-06 22:49:27.695
 !MESSAGE A conflict occurred for CTRL+SHIFT+G:
 Binding(CTRL+SHIFT+G,
 	ParameterizedCommand(Command(org.eclipse.cdt.ui.search.findrefs,References,
 		Search for references to the selected element in the workspace,
 		Category(org.eclipse.cdt.ui.category.source,C/C++ Source,C/C++ Source Actions,true),
-		org.eclipse.ui.internal.MakeHandlersGo@1b179dc,
+		org.eclipse.ui.internal.MakeHandlersGo@a6caf8,
 		,,true),null),
 	org.eclipse.ui.defaultAcceleratorConfiguration,
 	org.eclipse.cdt.ui.cEditorScope,,,system)
@@ -804,17 +708,17 @@ Binding(CTRL+SHIFT+G,
 	ParameterizedCommand(Command(org.eclipse.cdt.ui.search.findrefs,References,
 		Search for references to the selected element in the workspace,
 		Category(org.eclipse.cdt.ui.category.source,C/C++ Source,C/C++ Source Actions,true),
-		org.eclipse.ui.internal.MakeHandlersGo@1b179dc,
+		org.eclipse.ui.internal.MakeHandlersGo@a6caf8,
 		,,true),null),
 	org.eclipse.ui.defaultAcceleratorConfiguration,
 	org.eclipse.cdt.ui.cViewScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2019-10-02 23:06:29.258
+!SUBENTRY 1 org.eclipse.jface 2 0 2019-10-06 22:49:27.695
 !MESSAGE A conflict occurred for ALT+CTRL+H:
 Binding(ALT+CTRL+H,
 	ParameterizedCommand(Command(org.eclipse.cdt.ui.edit.open.call.hierarchy,Open Call Hierarchy,
 		Open the call hierarchy for the selected element,
 		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.MakeHandlersGo@b76ac5,
+		org.eclipse.ui.internal.MakeHandlersGo@5780f1,
 		,,true),null),
 	org.eclipse.ui.defaultAcceleratorConfiguration,
 	org.eclipse.cdt.ui.cEditorScope,,,system)
@@ -822,17 +726,17 @@ Binding(ALT+CTRL+H,
 	ParameterizedCommand(Command(org.eclipse.cdt.ui.edit.open.call.hierarchy,Open Call Hierarchy,
 		Open the call hierarchy for the selected element,
 		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.MakeHandlersGo@b76ac5,
+		org.eclipse.ui.internal.MakeHandlersGo@5780f1,
 		,,true),null),
 	org.eclipse.ui.defaultAcceleratorConfiguration,
 	org.eclipse.cdt.ui.cViewScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2019-10-02 23:06:29.258
+!SUBENTRY 1 org.eclipse.jface 2 0 2019-10-06 22:49:27.695
 !MESSAGE A conflict occurred for CTRL+SHIFT+H:
 Binding(CTRL+SHIFT+H,
 	ParameterizedCommand(Command(org.eclipse.cdt.ui.navigate.open.type.in.hierarchy,Open Type in Hierarchy,
 		Open a type in the type hierarchy view,
 		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.MakeHandlersGo@1c2caa7,
+		org.eclipse.ui.internal.MakeHandlersGo@d25177,
 		,,true),null),
 	org.eclipse.ui.defaultAcceleratorConfiguration,
 	org.eclipse.cdt.ui.cEditorScope,,,system)
@@ -840,7 +744,7 @@ Binding(CTRL+SHIFT+H,
 	ParameterizedCommand(Command(org.eclipse.cdt.ui.navigate.open.type.in.hierarchy,Open Type in Hierarchy,
 		Open a type in the type hierarchy view,
 		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.MakeHandlersGo@1c2caa7,
+		org.eclipse.ui.internal.MakeHandlersGo@d25177,
 		,,true),null),
 	org.eclipse.ui.defaultAcceleratorConfiguration,
 	org.eclipse.cdt.ui.cViewScope,,,system)

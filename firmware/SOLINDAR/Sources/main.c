@@ -30,6 +30,7 @@
 /* Including needed modules to compile this module/procedure */
 #include "Cpu.h"
 #include "Events.h"
+#include "TI1.h"
 /* Include shared modules, which are used for whole project */
 #include "PE_Types.h"
 #include "PE_Error.h"
@@ -45,33 +46,35 @@ void main(void)
   /* Write your local variable definition here */
 
   //Motor variables-------------------------------------------------------------
-  bool dir = true;
+  bool dir = 1;
   int counter = 0;
   int max = 63;
   int seq_index = 0;
-  bool sequence[8][4] = { {true,false,true,false},
-                          {true,false,false,false},
-                          {true,false,false,true},
-                          {false,false,false,true},
-                          {false,true,false,true},
-                          {false,true,false,false},
-                          {false,true,true,false},
-                          {false,false,true,false}};
+  bool sequence[8][4] = { {1,0,1,0},
+                          {1,0,0,0},
+                          {1,0,0,1},
+                          {0,0,0,1},
+                          {0,1,0,1},
+                          {0,1,0,0},
+                          {0,1,1,0},
+                          {0,0,1,0}};
 
   //End of motor variables-------------------------------------------------------------
+  bool tick = 1;
 
   /*** Processor Expert internal initialization. DON'T REMOVE THIS CODE!!! ***/
   PE_low_level_init();
   /*** End of Processor Expert internal initialization.                    ***/
 
   /* Write your code here */
-  while(true){
-
-    //Get motor index sequence
-    seq_index=motor_run(&dir,&counter,&max);
-
-
-
+  while(1){
+	  if(tick){
+		  tick=0; 
+		  //Get motor index sequence
+		  seq_index=motor_run(&dir,&counter,&max);
+    
+    
+	  }
   }
   /* For example: for(;;) { } */
 

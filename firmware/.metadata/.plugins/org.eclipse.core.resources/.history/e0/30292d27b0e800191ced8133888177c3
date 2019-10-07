@@ -2,7 +2,7 @@
 <GenerationInfo_G_C>
   <Options>
     <ProjectName>SOLINDAR</ProjectName>
-    <ProjectDirectory>G:\All_files\USB\trimestres\trimestre_sep_dic_2019\proyectos_3\repos\EC3883-G06\firmware\SOLINDAR\</ProjectDirectory>
+    <ProjectDirectory>G:\All_files\USB\trimestres\trimestre_sep_dic_2019\materias\proyectos_3\repos\EC3883-G06\firmware\SOLINDAR\</ProjectDirectory>
     <ProjectMainModuleName>main</ProjectMainModuleName>
     <DestEventsDirectory>Sources\</DestEventsDirectory>
     <DestDriversSubDirectory>..\Generated_Code\</DestDriversSubDirectory>
@@ -19,23 +19,23 @@
         <Line>PE_Const</Line>
         <Line>IO_Map</Line>
       </GenSharedModules>
-      <ShrdHeaderAge0>1329772336</ShrdHeaderAge0>
+      <ShrdHeaderAge0>1330033965</ShrdHeaderAge0>
       <ShrdCodeAge0>-1</ShrdCodeAge0>
       <ShrdAsemblAge0>-1</ShrdAsemblAge0>
-      <ShrdHeaderAge1>1329772336</ShrdHeaderAge1>
+      <ShrdHeaderAge1>1330033965</ShrdHeaderAge1>
       <ShrdCodeAge1>-1</ShrdCodeAge1>
       <ShrdAsemblAge1>-1</ShrdAsemblAge1>
-      <ShrdHeaderAge2>1329772336</ShrdHeaderAge2>
+      <ShrdHeaderAge2>1330033965</ShrdHeaderAge2>
       <ShrdCodeAge2>-1</ShrdCodeAge2>
       <ShrdAsemblAge2>-1</ShrdAsemblAge2>
-      <ShrdHeaderAge3>1329772336</ShrdHeaderAge3>
-      <ShrdCodeAge3>1329772336</ShrdCodeAge3>
+      <ShrdHeaderAge3>1330033965</ShrdHeaderAge3>
+      <ShrdCodeAge3>1330033965</ShrdCodeAge3>
       <ShrdAsemblAge3>-1</ShrdAsemblAge3>
       <GenExtraFiles lines_count="2">
         <Line>Project_Settings\Linker_Files\ProcessorExpert.prm</Line>
         <Line>Generated_Code\Vectors.c</Line>
       </GenExtraFiles>
-      <XtraAge1>1329772336</XtraAge1>
+      <XtraAge1>1330033965</XtraAge1>
       <GenExtraFileType1>4</GenExtraFileType1>
       <GenLinkedFiles lines_count="0" />
       <GenEventModules lines_count="1">
@@ -111,8 +111,8 @@
     <GenComponentVersion>01.003</GenComponentVersion>
     <GenDriverVersion>01.40</GenDriverVersion>
     <GenEventModule>Events</GenEventModule>
-    <HeaderAge>1329772336</HeaderAge>
-    <CodeAge>1329772336</CodeAge>
+    <HeaderAge>1330033965</HeaderAge>
+    <CodeAge>1330033965</CodeAge>
     <AsemblAge>-1</AsemblAge>
     <GenNumMethods>20</GenNumMethods>
     <SetHighSpeed>false</SetHighSpeed>
