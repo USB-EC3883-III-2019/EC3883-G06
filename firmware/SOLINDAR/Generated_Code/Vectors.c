@@ -5,7 +5,7 @@
 **     Processor   : MC9S08QE128CLK
 **     Version     : Component 01.003, Driver 01.40, CPU db: 3.00.067
 **     Compiler    : CodeWarrior HCS08 C Compiler
-**     Date/Time   : 2019-10-09, 12:51, # CodeGen: 33
+**     Date/Time   : 2019-10-09, 22:50, # CodeGen: 18
 **     Abstract    :
 **         This component "MC9S08QE128_80" contains initialization 
 **         of the CPU and provides basic methods and events for 
@@ -59,15 +59,14 @@
 
 
 #include "Cpu.h"
-#include "TI1.h"
-#include "Bits1.h"
 #include "AS1.h"
-#include "TI2.h"
+#include "TI1.h"
 #include "AD1.h"
 #include "Cap1.h"
 #include "FC81.h"
+#include "Bits1.h"
+#include "TI2.h"
 #include "Bit1.h"
-#include "Bit2.h"
 
 /*lint -save  -e950 Disable MISRA rule (1.1) checking. */
 static void (* near const _vect[])(void) @0xFFC0 = { /* Interrupt vector table */
@@ -95,11 +94,11 @@ static void (* near const _vect[])(void) @0xFFC0 = { /* Interrupt vector table *
          Cpu_Interrupt,                /* Int.no. 11 Vtpm2ovf (at FFE8)              Unassigned */
          Cpu_Interrupt,                /* Int.no. 10 Vtpm2ch2 (at FFEA)              Unassigned */
          Cpu_Interrupt,                /* Int.no.  9 Vtpm2ch1 (at FFEC)              Unassigned */
-         FC81_Interrupt,               /* Int.no.  8 Vtpm2ch0 (at FFEE)              Used */
+         Cpu_Interrupt,                /* Int.no.  8 Vtpm2ch0 (at FFEE)              Unassigned */
          Cpu_Interrupt,                /* Int.no.  7 Vtpm1ovf (at FFF0)              Unassigned */
-         Cap1_Interrupt,               /* Int.no.  6 Vtpm1ch2 (at FFF2)              Used */
-         Cpu_Interrupt,                /* Int.no.  5 Vtpm1ch1 (at FFF4)              Unassigned */
-         TI2_Interrupt,                /* Int.no.  4 Vtpm1ch0 (at FFF6)              Used */
+         TI2_Interrupt,                /* Int.no.  6 Vtpm1ch2 (at FFF2)              Used */
+         FC81_Interrupt,               /* Int.no.  5 Vtpm1ch1 (at FFF4)              Used */
+         Cap1_Interrupt,               /* Int.no.  4 Vtpm1ch0 (at FFF6)              Used */
          Cpu_Interrupt,                /* Int.no.  3 Vlvd (at FFF8)                  Unassigned */
          Cpu_Interrupt,                /* Int.no.  2 Virq (at FFFA)                  Unassigned */
          Cpu_Interrupt,                /* Int.no.  1 Vswi (at FFFC)                  Unassigned */

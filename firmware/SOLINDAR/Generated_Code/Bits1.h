@@ -6,7 +6,7 @@
 **     Component   : BitsIO
 **     Version     : Component 02.108, Driver 03.28, CPU db: 3.00.067
 **     Compiler    : CodeWarrior HCS08 C Compiler
-**     Date/Time   : 2019-10-07, 09:07, # CodeGen: 3
+**     Date/Time   : 2019-10-09, 22:22, # CodeGen: 12
 **     Abstract    :
 **         This component "BitsIO" implements a multi-bit input/output.
 **         It uses selected pins of one 1-bit to 8-bit port.
@@ -14,10 +14,10 @@
 **     Settings    :
 **         Port name                   : PTA
 **
-**         Bit mask of the port        : $000F
-**         Number of bits/pins         : 4
-**         Single bit numbers          : 0 to 3
-**         Values range                : 0 to 15
+**         Bit mask of the port        : $0002
+**         Number of bits/pins         : 1
+**         Single bit numbers          : 0 to 0
+**         Values range                : 0 to 1
 **
 **         Initial direction           : Output (direction cannot be changed)
 **         Initial output value        : 0 = 000H
@@ -29,10 +29,7 @@
 **             ----------------------------------------------------
 **                   Bit     |   Pin   |   Name
 **             ----------------------------------------------------
-**                    0      |    62   |   PTA0_KBI1P0_TPM1CH0_ADP0_ACMP1PLUS
-**                    1      |    61   |   PTA1_KBI1P1_TPM2CH0_ADP1_ACMP1MINUS
-**                    2      |    60   |   PTA2_KBI1P2_SDA1_ADP2
-**                    3      |    59   |   PTA3_KBI1P3_SCL1_ADP3
+**                    0      |    61   |   PTA1_KBI1P1_TPM2CH0_ADP1_ACMP1MINUS
 **             ----------------------------------------------------
 **
 **         Optimization for            : speed
@@ -100,6 +97,7 @@
 #include "PE_Error.h"
 #include "PE_Const.h"
 #include "IO_Map.h"
+#include "PE_Timer.h"
 #include "Cpu.h"
 
 
@@ -114,7 +112,7 @@
 **         Note: This component is set to work in Output direction only.
 **     Parameters  : None
 **     Returns     :
-**         ---        - Input value (0 to 15)
+**         ---        - Input value (0 to 1)
 ** ===================================================================
 */
 byte Bits1_GetVal(void);
@@ -126,7 +124,7 @@ byte Bits1_GetVal(void);
 **         This method writes the new output value.
 **     Parameters  :
 **         NAME       - DESCRIPTION
-**         Val        - Output value (0 to 15)
+**         Val        - Output value (0 to 1)
 **     Returns     : Nothing
 ** ===================================================================
 */
@@ -144,7 +142,7 @@ void Bits1_PutVal(byte Val);
 **         Note: This component is set to work in Output direction only.
 **     Parameters  :
 **         NAME       - DESCRIPTION
-**         Bit        - Number of the bit to read (0 to 3)
+**         Bit        - Number of the bit to read (0 to 0)
 **     Returns     :
 **         ---        - Value of the specified bit (FALSE or TRUE)
 **                      FALSE = "0" or "Low", TRUE = "1" or "High"
@@ -160,7 +158,7 @@ bool Bits1_GetBit(byte Bit);
 **         of the output value.
 **     Parameters  :
 **         NAME       - DESCRIPTION
-**         Bit        - Number of the bit (0 to 3)
+**         Bit        - Number of the bit (0 to 0)
 **         Val        - New value of the bit (FALSE or TRUE)
 **                      FALSE = "0" or "Low", TRUE = "1" or "High"
 **     Returns     : Nothing
@@ -177,7 +175,7 @@ void Bits1_PutBit(byte Bit, bool Val);
 **         [ It is the same as "PutBit(Bit,FALSE);" ]
 **     Parameters  :
 **         NAME       - DESCRIPTION
-**         Bit        - Number of the bit to clear (0 to 3)
+**         Bit        - Number of the bit to clear (0 to 0)
 **     Returns     : Nothing
 ** ===================================================================
 */
@@ -192,7 +190,7 @@ void Bits1_ClrBit(byte Bit);
 **         [ It is the same as "PutBit(Bit,TRUE);" ]
 **     Parameters  :
 **         NAME       - DESCRIPTION
-**         Bit        - Number of the bit to set (0 to 3)
+**         Bit        - Number of the bit to set (0 to 0)
 **     Returns     : Nothing
 ** ===================================================================
 */

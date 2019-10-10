@@ -6,7 +6,7 @@
 **     Component   : PE_Timer
 **     Version     : Driver 01.04
 **     Compiler    : CodeWarrior HCS08 C Compiler
-**     Date/Time   : 2019-10-07, 14:06, # CodeGen: 9
+**     Date/Time   : 2019-10-09, 22:22, # CodeGen: 12
 **     Abstract    :
 **         This module "PE_Timer" implements internal methods and definitions
 **         used by components working with timers.
@@ -127,6 +127,33 @@ void PE_Timer_LngMul(dword va1, dword va2, dlong *var)
 
 /*
 ** ===================================================================
+**     Method      :  PE_Timer_LngHi2 (component PE_Timer)
+**
+**     Description :
+**         The method transfers 64 bit result to 16 bit ratio value and 
+**         returns overflow flag.
+**         This method is internal. It is used by Processor Expert only.
+** ===================================================================
+*/
+bool PE_Timer_LngHi2(dword High, dword Low, word *Out)
+{
+  if (High == 0x00UL) {
+    if ((Low & 0x8000UL) != 0x00U) {
+      if ((Low >> 0x10UL) < 0xFFFFUL) {
+        *Out = (word)(((word)(Low >> 0x10UL)) + 1U);
+        return FALSE;
+      }
+    } else {
+      *Out = (word)(Low >> 0x10UL);
+      return FALSE;
+    }
+  }
+  *Out = (word)(Low >> 0x10UL);
+  return TRUE;
+}
+
+/*
+** ===================================================================
 **     Method      :  PE_Timer_LngHi3 (component PE_Timer)
 **
 **     Description :
@@ -149,33 +176,6 @@ bool PE_Timer_LngHi3(dword High, dword Low, word *Out)
     }
   }
   *Out = (word)((Low >> 0x18UL) | (High << 8UL));
-  return TRUE;
-}
-
-/*
-** ===================================================================
-**     Method      :  PE_Timer_LngHi5 (component PE_Timer)
-**
-**     Description :
-**         The method transfers 64 bit result to 16 bit ratio value and 
-**         returns overflow flag.
-**         This method is internal. It is used by Processor Expert only.
-** ===================================================================
-*/
-bool PE_Timer_LngHi_5(dword High, word *Out)
-{
-  if ((High >> 0x18UL) == 0x00U) {
-    if ((High & 0x80U) != 0x00U) {
-      if ((High >> 0x08UL) < 0xFFFFUL) {
-        *Out = (word)(((word)(High >> 0x08UL)) + 1U);
-        return FALSE;
-      }
-    } else {
-      *Out = (word)(High >> 0x08UL);
-      return FALSE;
-    }
-  }
-  *Out = (word)(High >> 0x08UL);
   return TRUE;
 }
 

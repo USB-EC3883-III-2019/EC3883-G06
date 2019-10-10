@@ -6,35 +6,35 @@
 **     Component   : FreeCntr8
 **     Version     : Component 02.079, Driver 01.22, CPU db: 3.00.067
 **     Compiler    : CodeWarrior HCS08 C Compiler
-**     Date/Time   : 2019-10-07, 14:06, # CodeGen: 9
+**     Date/Time   : 2019-10-09, 22:23, # CodeGen: 13
 **     Abstract    :
 **         This device "FreeCntr8" implements 8-bit Free Running Counter
 **     Settings    :
-**         Timer name                  : TPM2 (16-bit)
-**         Compare name                : TPM20
-**         Counter shared              : No
+**         Timer name                  : TPM1 (16-bit)
+**         Compare name                : TPM11
+**         Counter shared              : Yes
 **
 **         High speed mode
-**             Prescaler               : divide-by-1
-**             Clock                   : 14942208 Hz
+**             Prescaler               : divide-by-16
+**             Clock                   : 1048576 Hz
 **           Resolution of timer
-**             microseconds            : 1
-**             seconds (real)          : 0.000001003868
-**             Hz                      : 996147
-**             kHz                     : 996
-**             MHz                     : 1
+**             Xtal ticks              : 128
+**             microseconds            : 3906
+**             milliseconds            : 4
+**             seconds (real)          : 0.00390625
+**             Hz                      : 256
 **
 **         Initialization:
 **              Timer                  : Enabled
 **
 **         Timer registers
-**              Counter                : TPM2CNT   [$0051]
-**              Mode                   : TPM2SC    [$0050]
-**              Run                    : TPM2SC    [$0050]
-**              Prescaler              : TPM2SC    [$0050]
+**              Counter                : TPM1CNT   [$0041]
+**              Mode                   : TPM1SC    [$0040]
+**              Run                    : TPM1SC    [$0040]
+**              Prescaler              : TPM1SC    [$0040]
 **
 **         Compare registers
-**              Compare                : TPM2C0V   [$0056]
+**              Compare                : TPM1C1V   [$0049]
 **     Contents    :
 **         Reset     - byte FC81_Reset(void);
 **         GetTimeUS - byte FC81_GetTimeUS(word *Time);
@@ -95,6 +95,7 @@ static byte TTicks;                    /* Counter of timer ticks */
 static byte LTicks;                    /* Working copy of variable TTicks */
 static bool TOvf;                      /* Counter overflow flag */
 static bool LOvf;                      /* Working copy of variable TOvf */
+static word CmpVal;                    /* Value added to compare register in ISR */
 
 /*** Internal macros and method prototypes ***/
 
@@ -109,7 +110,7 @@ static bool LOvf;                      /* Working copy of variable TOvf */
 ** ===================================================================
 */
 #define FC81_SetCV(_Val) ( \
-  TPM2MOD = (TPM2C0V = (word)(_Val)) )
+  TPM1C1V = (CmpVal = (word)(_Val)) )
 
 /*
 ** ===================================================================
@@ -122,6 +123,18 @@ static bool LOvf;                      /* Working copy of variable TOvf */
 ** ===================================================================
 */
 static void LoadTicks(void);
+/*
+** ===================================================================
+**     Method      :  HWEnDi (component FreeCntr8)
+**
+**     Description :
+**         Enables or disables the peripheral(s) associated with the 
+**         component. The method is called automatically as a part of the 
+**         Enable and Disable methods and several internal methods.
+**         This method is internal. It is used by Processor Expert only.
+** ===================================================================
+*/
+static void HWEnDi(void);
 
 /*** End of Internal methods declarations ***/
 
@@ -145,6 +158,30 @@ static void LoadTicks(void)
 
 /*
 ** ===================================================================
+**     Method      :  HWEnDi (component FreeCntr8)
+**
+**     Description :
+**         Enables or disables the peripheral(s) associated with the 
+**         component. The method is called automatically as a part of the 
+**         Enable and Disable methods and several internal methods.
+**         This method is internal. It is used by Processor Expert only.
+** ===================================================================
+*/
+static void HWEnDi(void)
+{
+  word TmpCmpVal;                      /* Temporary variable for new compare value */
+
+  TmpCmpVal = (word)(TPM1CNT + CmpVal); /* Count current value for the compare register */
+  TPM1C1V = TmpCmpVal;                 /* Set compare register */
+  while (TPM1C1V != TmpCmpVal) {}      /* Wait for register update (because of Latching mechanism) */
+  /* TPM1C1SC: CH1F=0 */
+  clrReg8Bits(TPM1C1SC, 0x80U);        /* Reset request flag */ 
+  /* TPM1C1SC: CH1IE=1 */
+  setReg8Bits(TPM1C1SC, 0x40U);        /* Enable compare interrupt */ 
+}
+
+/*
+** ===================================================================
 **     Method      :  FC81_Reset (component FreeCntr8)
 */
 /*!
@@ -159,7 +196,7 @@ static void LoadTicks(void)
 /* ===================================================================*/
 byte FC81_Reset(void)
 {
-  TPM2CNTH = 0x00U;                    /* Reset HW counter */
+  HWEnDi();                            /* Reset compare settings */
   TTicks =  0x00U;                     /* Reset counter of timer ticks */
   TOvf = FALSE;                        /* Reset counter overflow flag */
   return ERR_OK;                       /* OK */
@@ -192,8 +229,8 @@ byte FC81_GetTimeUS(word *Time)
   if (LOvf) {                          /* Testing counter overflow */
     return ERR_OVERFLOW;               /* If yes then error */
   }
-  PE_Timer_LngMul((dword)LTicks, 0x0100FD79UL, &RtVal); /* Multiply timer ticks and High speed CPU mode coefficient */
-  if (PE_Timer_LngHi3(RtVal[0], RtVal[1], Time)) { /* Get result value into word variable */
+  PE_Timer_LngMul((dword)LTicks, 0x0F424000UL, &RtVal); /* Multiply timer ticks and High speed CPU mode coefficient */
+  if (PE_Timer_LngHi2(RtVal[0], RtVal[1], Time)) { /* Get result value into word variable */
     return ERR_MATH;                   /* Overflow, value too big */
   } else {
     return ERR_OK;                     /* OK: Value calculated */
@@ -227,8 +264,8 @@ byte FC81_GetTimeMS(word *Time)
   if (LOvf) {                          /* Testing counter overflow */
     return ERR_OVERFLOW;               /* If yes then error */
   }
-  PE_Timer_LngMul((dword)LTicks, 0x41CA1AF3UL, &RtVal); /* Multiply timer ticks and High speed CPU mode coefficient */
-  if (PE_Timer_LngHi5(RtVal[0], RtVal[1], Time)) { /* Get result value into word variable */
+  PE_Timer_LngMul((dword)LTicks, 0x03E80000UL, &RtVal); /* Multiply timer ticks and High speed CPU mode coefficient */
+  if (PE_Timer_LngHi3(RtVal[0], RtVal[1], Time)) { /* Get result value into word variable */
     return ERR_MATH;                   /* Overflow, value too big */
   } else {
     return ERR_OK;                     /* OK: Value calculated */
@@ -248,17 +285,12 @@ byte FC81_GetTimeMS(word *Time)
 */
 void FC81_Init(void)
 {
-  /* TPM2SC: TOF=0,TOIE=0,CPWMS=0,CLKSB=0,CLKSA=0,PS2=0,PS1=0,PS0=0 */
-  setReg8(TPM2SC, 0x00U);              /* Stop HW; disable overflow interrupt and set prescaler to 0 */ 
-  /* TPM2C0SC: CH0F=0,CH0IE=1,MS0B=0,MS0A=1,ELS0B=0,ELS0A=0,??=0,??=0 */
-  setReg8(TPM2C0SC, 0x50U);            /* Set output compare mode and enable compare interrupt */ 
+  /* TPM1C1SC: CH1F=0,CH1IE=0,MS1B=0,MS1A=1,ELS1B=0,ELS1A=0,??=0,??=0 */
+  setReg8(TPM1C1SC, 0x10U);            /* Set output compare mode and disable compare interrupt */ 
   TTicks = 0U;                         /* Counter of timer ticks */
   TOvf = FALSE;                        /* Counter overflow flag */
-  FC81_SetCV(0x0EU);                   /* Initialize appropriate value to the compare/modulo/reload register */
-  /* TPM2CNTH: BIT15=0,BIT14=0,BIT13=0,BIT12=0,BIT11=0,BIT10=0,BIT9=0,BIT8=0 */
-  setReg8(TPM2CNTH, 0x00U);            /* Reset HW Counter */ 
-  /* TPM2SC: TOF=0,TOIE=0,CPWMS=0,CLKSB=0,CLKSA=1,PS2=0,PS1=0,PS0=0 */
-  setReg8(TPM2SC, 0x08U);              /* Set prescaler and run counter */ 
+  FC81_SetCV(0x1000U);                 /* Initialize appropriate value to the compare/modulo/reload register */
+  HWEnDi();
 }
 
 /*
@@ -273,8 +305,9 @@ void FC81_Init(void)
 */
 ISR(FC81_Interrupt)
 {
-  /* TPM2C0SC: CH0F=0 */
-  clrReg8Bits(TPM2C0SC, 0x80U);        /* Reset compare interrupt request flag */ 
+  /* TPM1C1SC: CH1F=0 */
+  clrReg8Bits(TPM1C1SC, 0x80U);        /* Reset compare interrupt request flag */ 
+  TPM1C1V += CmpVal;                   /* Count and save new value to the compare register (counter is shared)*/
   if (++TTicks == 0x00U) {             /* Increment #ticks, check overflow */
     TOvf = TRUE;                       /* If yes then set overflow flag */
   }

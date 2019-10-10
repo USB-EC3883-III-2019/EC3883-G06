@@ -5,7 +5,7 @@
 **     Component   : Events
 **     Version     : Driver 01.02
 **     Compiler    : CodeWarrior HCS08 C Compiler
-**     Date/Time   : 2019-10-06, 22:41, # CodeGen: 0
+**     Date/Time   : 2019-10-09, 18:06, # CodeGen: 0
 **     Abstract    :
 **         This is user's event module.
 **         Put your event handler code here.
@@ -32,29 +32,7 @@
 #include "Events.h"
 
 /* User includes (#include below this line is not maintained by Processor Expert) */
-extern bool tick_sensors;
-extern bool tick_motor;
-
-/*
-** ===================================================================
-**     Event       :  TI1_OnInterrupt (module Events)
-**
-**     Component   :  TI1 [TimerInt]
-**     Description :
-**         When a timer interrupt occurs this event is called (only
-**         when the component is enabled - <Enable> and the events are
-**         enabled - <EnableEvent>). This event is enabled only if a
-**         <interrupt service/event> is enabled.
-**     Parameters  : None
-**     Returns     : Nothing
-** ===================================================================
-*/
 byte err;
-
-
-void TI1_OnInterrupt(void){
-	tick_motor=0;	
-}
 
 /*
 ** ===================================================================
@@ -72,6 +50,26 @@ void TI1_OnInterrupt(void){
 ** ===================================================================
 */
 void  AS1_OnError(void)
+{
+  /* Write your code here ... */
+}
+
+/*
+** ===================================================================
+**     Event       :  AS1_OnRxChar (module Events)
+**
+**     Component   :  AS1 [AsynchroSerial]
+**     Description :
+**         This event is called after a correct character is received.
+**         The event is available only when the <Interrupt
+**         service/event> property is enabled and either the <Receiver>
+**         property is enabled or the <SCI output mode> property (if
+**         supported) is set to Single-wire mode.
+**     Parameters  : None
+**     Returns     : Nothing
+** ===================================================================
+*/
+void  AS1_OnRxChar(void)
 {
   /* Write your code here ... */
 }
@@ -111,9 +109,9 @@ void  AS1_OnFreeTxBuf(void)
 
 /*
 ** ===================================================================
-**     Event       :  TI2_OnInterrupt (module Events)
+**     Event       :  TI1_OnInterrupt (module Events)
 **
-**     Component   :  TI2 [TimerInt]
+**     Component   :  TI1 [TimerInt]
 **     Description :
 **         When a timer interrupt occurs this event is called (only
 **         when the component is enabled - <Enable> and the events are
@@ -123,9 +121,10 @@ void  AS1_OnFreeTxBuf(void)
 **     Returns     : Nothing
 ** ===================================================================
 */
+extern bool tick_motor;
+void TI1_OnInterrupt(void){
+  tick_motor=1;
 
-void TI2_OnInterrupt(void){
-	tick_sensors=1;
 }
 
 /*
@@ -142,15 +141,35 @@ void TI2_OnInterrupt(void){
 **     Returns     : Nothing
 ** ===================================================================
 */
-unsigned short lidar_measure;
-void AD1_OnEnd(void)
-{
+extern unsigned short lidar_measure;
+void AD1_OnEnd(void){
 	do		
-	err=AD1_GetChanValue(0,&lidar_measure);
+		err=AD1_GetChanValue(0,&lidar_measure);
 	while(err!=ERR_OK);
 }
 
 
+
+/*
+** ===================================================================
+**     Event       :  TI2_OnInterrupt (module Events)
+**
+**     Component   :  TI2 [TimerInt]
+**     Description :
+**         When a timer interrupt occurs this event is called (only
+**         when the component is enabled - <Enable> and the events are
+**         enabled - <EnableEvent>). This event is enabled only if a
+**         <interrupt service/event> is enabled.
+**     Parameters  : None
+**     Returns     : Nothing
+** ===================================================================
+*/
+extern bool tick_sensors;
+void TI2_OnInterrupt(void)
+{
+  tick_sensors=1;
+
+}
 
 /*
 ** ===================================================================
@@ -167,44 +186,6 @@ void AD1_OnEnd(void)
 ** ===================================================================
 */
 void Cap1_OnCapture(void)
-{
-  /* Write your code here ... */
-}
-
-/*
-** ===================================================================
-**     Event       :  AS1_OnRxChar (module Events)
-**
-**     Component   :  AS1 [AsynchroSerial]
-**     Description :
-**         This event is called after a correct character is received.
-**         The event is available only when the <Interrupt
-**         service/event> property is enabled and either the <Receiver>
-**         property is enabled or the <SCI output mode> property (if
-**         supported) is set to Single-wire mode.
-**     Parameters  : None
-**     Returns     : Nothing
-** ===================================================================
-*/
-void  AS1_OnRxChar(void)
-{
-  /* Write your code here ... */
-}
-
-/*
-** ===================================================================
-**     Event       :  AS1_OnFullRxBuf (module Events)
-**
-**     Component   :  AS1 [AsynchroSerial]
-**     Description :
-**         This event is called when the input buffer is full;
-**         i.e. after reception of the last character 
-**         that was successfully placed into input buffer.
-**     Parameters  : None
-**     Returns     : Nothing
-** ===================================================================
-*/
-void  AS1_OnFullRxBuf(void)
 {
   /* Write your code here ... */
 }

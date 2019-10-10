@@ -6,7 +6,7 @@
 **     Component   : AsynchroSerial
 **     Version     : Component 02.611, Driver 01.33, CPU db: 3.00.067
 **     Compiler    : CodeWarrior HCS08 C Compiler
-**     Date/Time   : 2019-10-09, 12:32, # CodeGen: 32
+**     Date/Time   : 2019-10-09, 20:31, # CodeGen: 8
 **     Abstract    :
 **         This component "AsynchroSerial" implements an asynchronous serial
 **         communication. The component supports different settings of
@@ -23,8 +23,8 @@
 **             Stop bits               : 1
 **             Parity                  : none
 **             Breaks                  : Disabled
-**             Input buffer size       : 4
-**             Output buffer size      : 4
+**             Input buffer size       : 0
+**             Output buffer size      : 8
 **
 **         Registers
 **             Input buffer            : SCI1D     [$0027]
@@ -53,14 +53,9 @@
 **
 **
 **     Contents    :
-**         Enable          - byte AS1_Enable(void);
-**         EnableEvent     - byte AS1_EnableEvent(void);
-**         DisableEvent    - byte AS1_DisableEvent(void);
 **         RecvChar        - byte AS1_RecvChar(AS1_TComData *Chr);
 **         SendChar        - byte AS1_SendChar(AS1_TComData Chr);
-**         RecvBlock       - byte AS1_RecvBlock(AS1_TComData *Ptr, word Size, word *Rcv);
 **         SendBlock       - byte AS1_SendBlock(AS1_TComData *Ptr, word Size, word *Snd);
-**         ClearRxBuf      - byte AS1_ClearRxBuf(void);
 **         ClearTxBuf      - byte AS1_ClearTxBuf(void);
 **         GetCharsInRxBuf - word AS1_GetCharsInRxBuf(void);
 **         GetCharsInTxBuf - word AS1_GetCharsInTxBuf(void);
@@ -148,65 +143,9 @@
   typedef byte AS1_TComData ;          /* User type for communication. Size of this type depends on the communication data width. */
 #endif
 
-#define AS1_INP_BUF_SIZE 0x04U         /* Input buffer size */
-#define AS1_OUT_BUF_SIZE 0x04U         /* Output buffer size */
-
-extern volatile bool AS1_EnEvent;      /* Enable/Disable events */
+#define AS1_OUT_BUF_SIZE 0x08U         /* Output buffer size */
 
 extern byte AS1_OutLen;                /* Length of the output buffer content */
-extern byte AS1_InpLen;                /* Length of the input buffer content */
-
-byte AS1_Enable(void);
-/*
-** ===================================================================
-**     Method      :  AS1_Enable (component AsynchroSerial)
-**     Description :
-**         Enables the component - it starts the send and receive
-**         functions. Events may be generated
-**         ("DisableEvent"/"EnableEvent").
-**     Parameters  : None
-**     Returns     :
-**         ---             - Error code, possible codes:
-**                           ERR_OK - OK
-**                           ERR_SPEED - This device does not work in
-**                           the active speed mode
-** ===================================================================
-*/
-
-#define AS1_EnableEvent()\
-  (AS1_EnEvent = TRUE, (byte)ERR_OK)   /* Set the flag "events enabled" */
-/*
-** ===================================================================
-**     Method      :  AS1_EnableEvent (component AsynchroSerial)
-**     Description :
-**         Enables the events. This method is available if the
-**         interrupt service/event property is enabled and at least one
-**         event is enabled.
-**     Parameters  : None
-**     Returns     :
-**         ---             - Error code, possible codes:
-**                           ERR_OK - OK
-**                           ERR_SPEED - This device does not work in
-**                           the active speed mode
-** ===================================================================
-*/
-
-#define AS1_DisableEvent() (AS1_EnEvent = FALSE, (byte)ERR_OK) /* Set the flag "events disabled" */
-/*
-** ===================================================================
-**     Method      :  AS1_DisableEvent (component AsynchroSerial)
-**     Description :
-**         Disables the events. This method is available if the
-**         interrupt service/event property is enabled and at least one
-**         event is enabled.
-**     Parameters  : None
-**     Returns     :
-**         ---             - Error code, possible codes:
-**                           ERR_OK - OK
-**                           ERR_SPEED - This device does not work in
-**                           the active speed mode
-** ===================================================================
-*/
 
 byte AS1_RecvChar(AS1_TComData *Chr);
 /*
@@ -266,40 +205,6 @@ byte AS1_SendChar(AS1_TComData Chr);
 ** ===================================================================
 */
 
-byte AS1_RecvBlock(AS1_TComData *Ptr,word Size,word *Rcv);
-/*
-** ===================================================================
-**     Method      :  AS1_RecvBlock (component AsynchroSerial)
-**     Description :
-**         If any data is received, this method returns the block of
-**         the data and its length (and incidental error), otherwise it
-**         returns an error code (it does not wait for data).
-**         This method is available only if non-zero length of the
-**         input buffer is defined and the receiver property is enabled.
-**         If less than requested number of characters is received only
-**         the available data is copied from the receive buffer to the
-**         user specified destination. The value ERR_EXEMPTY is
-**         returned and the value of variable pointed by the Rcv
-**         parameter is set to the number of received characters.
-**     Parameters  :
-**         NAME            - DESCRIPTION
-**       * Ptr             - Pointer to the block of received data
-**         Size            - Size of the block
-**       * Rcv             - Pointer to real number of the received data
-**     Returns     :
-**         ---             - Error code, possible codes:
-**                           ERR_OK - OK
-**                           ERR_SPEED - This device does not work in
-**                           the active speed mode
-**                           ERR_RXEMPTY - The receive buffer didn't
-**                           contain the requested number of data. Only
-**                           available data has been returned.
-**                           ERR_COMMON - common error occurred (the
-**                           GetError method can be used for error
-**                           specification)
-** ===================================================================
-*/
-
 byte AS1_SendBlock(const AS1_TComData * Ptr,word Size,word *Snd);
 /*
 ** ===================================================================
@@ -325,23 +230,6 @@ byte AS1_SendBlock(const AS1_TComData * Ptr,word Size,word *Snd);
 ** ===================================================================
 */
 
-byte AS1_ClearRxBuf(void);
-/*
-** ===================================================================
-**     Method      :  AS1_ClearRxBuf (component AsynchroSerial)
-**     Description :
-**         Clears the receive buffer.
-**         This method is available only if non-zero length of the
-**         input buffer is defined and the receiver property is enabled.
-**     Parameters  : None
-**     Returns     :
-**         ---             - Error code, possible codes:
-**                           ERR_OK - OK
-**                           ERR_SPEED - This device does not work in
-**                           the active speed mode
-** ===================================================================
-*/
-
 byte AS1_ClearTxBuf(void);
 /*
 ** ===================================================================
@@ -360,8 +248,7 @@ byte AS1_ClearTxBuf(void);
 ** ===================================================================
 */
 
-#define AS1_GetCharsInRxBuf() \
-((word) AS1_InpLen)                    /* Return number of chars in receive buffer */
+word AS1_GetCharsInRxBuf(void);
 /*
 ** ===================================================================
 **     Method      :  AS1_GetCharsInRxBuf (component AsynchroSerial)

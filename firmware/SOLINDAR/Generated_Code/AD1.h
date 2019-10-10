@@ -6,7 +6,7 @@
 **     Component   : ADC
 **     Version     : Component 01.690, Driver 01.30, CPU db: 3.00.067
 **     Compiler    : CodeWarrior HCS08 C Compiler
-**     Date/Time   : 2019-10-07, 20:40, # CodeGen: 18
+**     Date/Time   : 2019-10-09, 22:49, # CodeGen: 17
 **     Abstract    :
 **         This device "ADC" implements an A/D converter,
 **         its control methods and interrupt/event handling procedure.
@@ -19,10 +19,10 @@
 **            A/D interrupt priority                       : medium priority
 **          A/D channels                                   : 1
 **            Channel0                                     : 
-**              A/D channel (pin)                          : PTF7_ADP17
+**              A/D channel (pin)                          : PTF0_ADP10
 **              A/D channel (pin) signal                   : 
 **          A/D resolution                                 : Autoselect
-**          Conversion time                                : 46 µs
+**          Conversion time                                : 5.75 µs
 **          Low-power mode                                 : Disabled
 **          Sample time                                    : short
 **          Internal trigger                               : Disabled
@@ -39,12 +39,6 @@
 **          Get value directly                             : yes
 **          Wait for result                                : yes
 **     Contents    :
-**         Enable       - byte AD1_Enable(void);
-**         Disable      - byte AD1_Disable(void);
-**         EnableEvent  - byte AD1_EnableEvent(void);
-**         DisableEvent - byte AD1_DisableEvent(void);
-**         Start        - byte AD1_Start(void);
-**         Stop         - byte AD1_Stop(void);
 **         Measure      - byte AD1_Measure(bool WaitForResult);
 **         MeasureChan  - byte AD1_MeasureChan(bool WaitForResult, byte Channel);
 **         GetChanValue - byte AD1_GetChanValue(byte Channel, void* Value);
@@ -109,7 +103,6 @@
 
 
 
-extern volatile bool AD1_EnEvent;      /* Enable/Disable events */
 __interrupt void AD1_Interrupt(void);
 /*
 ** ===================================================================
@@ -135,128 +128,6 @@ void AD1_HWEnDi(void);
 ** ===================================================================
 */
 
-
-byte AD1_Enable(void);
-/*
-** ===================================================================
-**     Method      :  AD1_Enable (component ADC)
-*/
-/*!
-**     @brief
-**         Enables A/D converter component. [Events] may be generated
-**         ([DisableEvent]/[EnableEvent]). If possible, this method
-**         switches on A/D converter device, voltage reference, etc.
-**     @return
-**                         - Error code, possible codes:
-**                           ERR_OK - OK
-**                           ERR_SPEED - This device does not work in
-**                           the active speed mode
-*/
-/* ===================================================================*/
-
-byte AD1_Disable(void);
-/*
-** ===================================================================
-**     Method      :  AD1_Disable (component ADC)
-*/
-/*!
-**     @brief
-**         Disables A/D converter component. No [events] will be
-**         generated. If possible, this method switches off A/D
-**         converter device, voltage reference, etc.
-**     @return
-**                         - Error code, possible codes:
-**                           ERR_OK - OK
-**                           ERR_SPEED - This device does not work in
-**                           the active speed mode
-*/
-/* ===================================================================*/
-
-#define AD1_EnableEvent()\
-  (AD1_EnEvent = TRUE, (byte)ERR_OK)   /* Set the flag "events enabled" */
-/*
-** ===================================================================
-**     Method      :  AD1_EnableEvent (component ADC)
-**     Description :
-**         Enables the <events>.
-**     Parameters  : None
-**     Returns     :
-**         ---             - Error code, possible codes:
-**                           ERR_OK - OK
-**                           ERR_SPEED - This device does not work in
-**                           the active speed mode
-** ===================================================================
-*/
-
-#define AD1_DisableEvent() (AD1_EnEvent = FALSE, (byte)ERR_OK) /* Set the flag "events enabled" */
-/*
-** ===================================================================
-**     Method      :  AD1_DisableEvent (component ADC)
-**     Description :
-**         Disables the <events>.
-**     Parameters  : None
-**     Returns     :
-**         ---             - Error code, possible codes:
-**                           ERR_OK - OK
-**                           ERR_SPEED - This device does not work in
-**                           the active speed mode
-** ===================================================================
-*/
-
-byte AD1_Start(void);
-/*
-** ===================================================================
-**     Method      :  AD1_Start (component ADC)
-*/
-/*!
-**     @brief
-**         This method starts continuous conversion on all channels
-**         that are set in the component inspector. When each
-**         measurement on all channels has finished the [OnEnd ] event
-**         may be invoked. This method is not available if the
-**         [interrupt service] is disabled and the device doesn't
-**         support the continuous mode. Note: If time of measurement is
-**         too short and the instruction clock is too slow then the
-**         conversion complete interrupt and its handler may cause a
-**         system overflow.
-**     @return
-**                         - Error code, possible codes:
-**                           ERR_OK - OK
-**                           ERR_SPEED - This device does not work in
-**                           the active speed mode
-**                           ERR_DISABLED - Device is disabled
-**                           ERR_BUSY - A conversion is already running
-*/
-/* ===================================================================*/
-
-byte AD1_Stop(void);
-/*
-** ===================================================================
-**     Method      :  AD1_Stop (component ADC)
-**     Description :
-**         This method stops the continuous measurement or disables
-**         a trigger mode (if supported by HW), which has been
-**         started by one of the following methods:
-**         Version specific information for Freescale HCS08 and HC08
-**         derivatives ] 
-**         - <Start> 
-**         - <EnableIntChanTrigger>
-**         - <EnableExtChanTrigger>
-**         The Stop method is available if one of the previously
-**         mentioned methods is supported by A/D converter device
-**         and is enabled to be generated.
-**     Parameters  : None
-**     Returns     :
-**         ---             - Error code, possible codes:
-**                           ERR_OK - OK
-**                           ERR_SPEED - This device does not work in
-**                           the active speed mode
-**                           ERR_BUSY - No continuous measurement is
-**                           running. Neither internal trigger nor
-**                           external trigger have been enabled (if
-**                           these are supported by HW).
-** ===================================================================
-*/
 
 byte AD1_Measure(bool WaitForResult);
 /*

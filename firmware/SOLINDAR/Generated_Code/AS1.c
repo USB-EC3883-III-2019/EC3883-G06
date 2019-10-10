@@ -6,7 +6,7 @@
 **     Component   : AsynchroSerial
 **     Version     : Component 02.611, Driver 01.33, CPU db: 3.00.067
 **     Compiler    : CodeWarrior HCS08 C Compiler
-**     Date/Time   : 2019-10-09, 12:32, # CodeGen: 32
+**     Date/Time   : 2019-10-09, 20:31, # CodeGen: 8
 **     Abstract    :
 **         This component "AsynchroSerial" implements an asynchronous serial
 **         communication. The component supports different settings of
@@ -23,8 +23,8 @@
 **             Stop bits               : 1
 **             Parity                  : none
 **             Breaks                  : Disabled
-**             Input buffer size       : 4
-**             Output buffer size      : 4
+**             Input buffer size       : 0
+**             Output buffer size      : 8
 **
 **         Registers
 **             Input buffer            : SCI1D     [$0027]
@@ -53,14 +53,9 @@
 **
 **
 **     Contents    :
-**         Enable          - byte AS1_Enable(void);
-**         EnableEvent     - byte AS1_EnableEvent(void);
-**         DisableEvent    - byte AS1_DisableEvent(void);
 **         RecvChar        - byte AS1_RecvChar(AS1_TComData *Chr);
 **         SendChar        - byte AS1_SendChar(AS1_TComData Chr);
-**         RecvBlock       - byte AS1_RecvBlock(AS1_TComData *Ptr, word Size, word *Rcv);
 **         SendBlock       - byte AS1_SendBlock(AS1_TComData *Ptr, word Size, word *Snd);
-**         ClearRxBuf      - byte AS1_ClearRxBuf(void);
 **         ClearTxBuf      - byte AS1_ClearTxBuf(void);
 **         GetCharsInRxBuf - word AS1_GetCharsInRxBuf(void);
 **         GetCharsInTxBuf - word AS1_GetCharsInTxBuf(void);
@@ -127,61 +122,18 @@
 #define COMMON_ERR       0x02U         /* Common error of RX       */
 #define CHAR_IN_RX       0x04U         /* Char is in RX buffer     */
 #define RUNINT_FROM_TX   0x08U         /* Interrupt is in progress */
-#define FULL_RX          0x10U         /* Full receive buffer      */
 
 static volatile byte SerFlag;          /* Flags for serial communication */
                                        /* Bit 0 - Overrun error */
                                        /* Bit 1 - Common error of RX */
                                        /* Bit 2 - Char in RX buffer */
                                        /* Bit 3 - Interrupt is in progress */
-                                       /* Bit 4 - Full RX buffer */
-volatile bool AS1_EnEvent;             /* Enable/Disable events */
-byte AS1_InpLen;                       /* Length of the input buffer content */
-static byte InpIndxR;                  /* Index for reading from input buffer */
-static byte InpIndxW;                  /* Index for writing to input buffer */
-static AS1_TComData InpBuffer[AS1_INP_BUF_SIZE]; /* Input buffer for SCI commmunication */
+static AS1_TComData BufferRead;        /* Input char for SCI commmunication */
 byte AS1_OutLen;                       /* Length of the output buffer content */
 static byte OutIndxR;                  /* Index for reading from output buffer */
 static byte OutIndxW;                  /* Index for writing to output buffer */
 static AS1_TComData OutBuffer[AS1_OUT_BUF_SIZE]; /* Output buffer for SCI commmunication */
 static bool OnFreeTxBuf_semaphore;     /* Disable the false calling of the OnFreeTxBuf event */
-
-/*
-** ===================================================================
-**     Method      :  AS1_Enable (component AsynchroSerial)
-**     Description :
-**         Enables the component - it starts the send and receive
-**         functions. Events may be generated
-**         ("DisableEvent"/"EnableEvent").
-**     Parameters  : None
-**     Returns     :
-**         ---             - Error code, possible codes:
-**                           ERR_OK - OK
-**                           ERR_SPEED - This device does not work in
-**                           the active speed mode
-** ===================================================================
-*/
-byte AS1_Enable(void)
-{
-  SCI1BDH = 0x00U;                     /* Set high divisor register (enable device) */
-  SCI1BDL = 0x08U;                     /* Set low divisor register (enable device) */
-      /* SCI1C3: ORIE=1,NEIE=1,FEIE=1,PEIE=1 */
-  SCI1C3 |= 0x0FU;                     /* Enable error interrupts */
-  SCI1C2 |= (SCI1C2_TE_MASK | SCI1C2_RE_MASK | SCI1C2_RIE_MASK); /*  Enable transmitter, Enable receiver, Enable receiver interrupt */
-  return ERR_OK;                       /* OK */
-}
-
-/*
-byte AS1_EnableEvent(void)
-
-**      This method is implemented as a macro. See header module. **
-*/
-
-/*
-byte AS1_DisableEvent(void)
-
-**      This method is implemented as a macro. See header module. **
-*/
 
 /*
 ** ===================================================================
@@ -219,17 +171,14 @@ byte AS1_RecvChar(AS1_TComData *Chr)
 {
   byte Result = ERR_OK;                /* Prepare default error code */
 
-  if (AS1_InpLen > 0U) {               /* Is number of received chars greater than 0? */
-    EnterCritical();                   /* Save the PS register */
-    AS1_InpLen--;                      /* Decrease number of received chars */
-    *Chr = InpBuffer[InpIndxR];        /* Received char */
-    InpIndxR = (byte)((InpIndxR + 1U) & (AS1_INP_BUF_SIZE - 1U)); /* Update index */
-    Result = (byte)((SerFlag & (OVERRUN_ERR|COMMON_ERR|FULL_RX)) ? ERR_COMMON : ERR_OK);
-    SerFlag &= (byte)(~(byte)(OVERRUN_ERR|COMMON_ERR|FULL_RX|CHAR_IN_RX)); /* Clear all errors in the status variable */
-    ExitCritical();                    /* Restore the PS register */
-  } else {
-    return ERR_RXEMPTY;                /* Receiver is empty */
+  if ((SerFlag & CHAR_IN_RX) == 0U) {  /* Is any char in RX buffer? */
+    return ERR_RXEMPTY;                /* If no then error */
   }
+  EnterCritical();                     /* Save the PS register */
+  *Chr = BufferRead;                   /* Received char */
+  Result = (byte)((SerFlag & (OVERRUN_ERR|COMMON_ERR)) ? ERR_COMMON : ERR_OK);
+  SerFlag &= (byte)(~(byte)(OVERRUN_ERR|COMMON_ERR|CHAR_IN_RX)); /* Clear all errors in the status variable */
+  ExitCritical();                      /* Restore the PS register */
   return Result;                       /* Return error code */
 }
 
@@ -269,62 +218,6 @@ byte AS1_SendChar(AS1_TComData Chr)
   }
   ExitCritical();                      /* Restore the PS register */
   return ERR_OK;                       /* OK */
-}
-
-/*
-** ===================================================================
-**     Method      :  AS1_RecvBlock (component AsynchroSerial)
-**     Description :
-**         If any data is received, this method returns the block of
-**         the data and its length (and incidental error), otherwise it
-**         returns an error code (it does not wait for data).
-**         This method is available only if non-zero length of the
-**         input buffer is defined and the receiver property is enabled.
-**         If less than requested number of characters is received only
-**         the available data is copied from the receive buffer to the
-**         user specified destination. The value ERR_EXEMPTY is
-**         returned and the value of variable pointed by the Rcv
-**         parameter is set to the number of received characters.
-**     Parameters  :
-**         NAME            - DESCRIPTION
-**       * Ptr             - Pointer to the block of received data
-**         Size            - Size of the block
-**       * Rcv             - Pointer to real number of the received data
-**     Returns     :
-**         ---             - Error code, possible codes:
-**                           ERR_OK - OK
-**                           ERR_SPEED - This device does not work in
-**                           the active speed mode
-**                           ERR_RXEMPTY - The receive buffer didn't
-**                           contain the requested number of data. Only
-**                           available data has been returned.
-**                           ERR_COMMON - common error occurred (the
-**                           GetError method can be used for error
-**                           specification)
-** ===================================================================
-*/
-byte AS1_RecvBlock(AS1_TComData *Ptr, word Size, word *Rcv)
-{
-  word count;                          /* Number of received chars */
-  byte result = ERR_OK;                /* Last error */
-
-  for (count = 0U; count < Size; count++) {
-    switch (AS1_RecvChar(Ptr++)) {     /* Receive data and test the return value*/
-    case ERR_RXEMPTY:                  /* No data in the buffer */
-      if (result == ERR_OK) {          /* If no receiver error reported */
-        result = ERR_RXEMPTY;          /* Return info that requested number of data is not available */
-      }
-     *Rcv = count;                     /* Return number of received chars */
-      return result;
-    case ERR_COMMON:                   /* Receiver error reported */
-      result = ERR_COMMON;             /* Return info that an error was detected */
-      break;
-    default:
-      break;
-    }
-  }
-  *Rcv = count;                        /* Return the number of received chars */
-  return result;                       /* Return the last error code*/
 }
 
 /*
@@ -381,32 +274,6 @@ byte AS1_SendBlock(const AS1_TComData * Ptr, word Size, word *Snd)
 
 /*
 ** ===================================================================
-**     Method      :  AS1_ClearRxBuf (component AsynchroSerial)
-**     Description :
-**         Clears the receive buffer.
-**         This method is available only if non-zero length of the
-**         input buffer is defined and the receiver property is enabled.
-**     Parameters  : None
-**     Returns     :
-**         ---             - Error code, possible codes:
-**                           ERR_OK - OK
-**                           ERR_SPEED - This device does not work in
-**                           the active speed mode
-** ===================================================================
-*/
-byte AS1_ClearRxBuf(void)
-{
-  EnterCritical();                     /* Save the PS register */
-  AS1_InpLen = 0x00U;                  /* Set number of chars in the receive buffer to 0 */
-  InpIndxR = 0x00U;                    /* Reset read index to the receive buffer */
-  InpIndxW = 0x00U;                    /* Reset write index to the receive buffer */
-  SerFlag &= (byte)(~(byte)(CHAR_IN_RX | FULL_RX)); /* Clear the flags indicating a char in buffer */
-  ExitCritical();                      /* Restore the PS register */
-  return ERR_OK;                       /* OK */
-}
-
-/*
-** ===================================================================
 **     Method      :  AS1_ClearTxBuf (component AsynchroSerial)
 **     Description :
 **         Clears the transmit buffer.
@@ -443,11 +310,10 @@ byte AS1_ClearTxBuf(void)
 **                           buffer.
 ** ===================================================================
 */
-/*
 word AS1_GetCharsInRxBuf(void)
-
-**      This method is implemented as a macro. See header module. **
-*/
+{
+  return ((SerFlag & CHAR_IN_RX) ? (word)1U : (word)0U); /* Return number of chars in the receive buffer */
+}
 
 /*
 ** ===================================================================
@@ -489,29 +355,20 @@ ISR(AS1_InterruptRx)
   byte StatReg = SCI1S1;               /* Temporary variable for status flags */
   AS1_TComData Data = SCI1D;           /* Read data from the receiver into temporary variable for data */
 
-  if (AS1_InpLen < AS1_INP_BUF_SIZE) { /* Is number of bytes in the receive buffer lower than size of buffer? */
-    AS1_InpLen++;                      /* Increse number of chars in the receive buffer */
-    InpBuffer[InpIndxW] = Data;        /* Save received char to the receive buffer */
-    InpIndxW = (byte)((InpIndxW + 1U) & (AS1_INP_BUF_SIZE - 1U)); /* Update index */
-    OnFlags |= ON_RX_CHAR;             /* Set flag "OnRXChar" */
-    if (AS1_InpLen== AS1_INP_BUF_SIZE) { /* Is number of bytes in the receive buffer equal as a size of buffer? */
-      OnFlags |= ON_FULL_RX;           /* If yes then set flag "OnFullRxBuff" */
-    }
-  } else {
-    SerFlag |= FULL_RX;                /* If yes then set flag buffer overflow */
+  if (SerFlag & CHAR_IN_RX) {          /* Is any char already present in the receive buffer? */
+    SerFlag |= OVERRUN_ERR;            /* If yes then set flag OVERRUN_ERR */
     OnFlags |= ON_ERROR;               /* Set flag "OnError" */
+  } else {
+    BufferRead = Data;                 /* Copy data into global buffer variable */
+    SerFlag |= CHAR_IN_RX;             /* Set flag "char in RX buffer" */
+    OnFlags |= ON_RX_CHAR;             /* Set flag "OnRxChar" */
   }
-  if (AS1_EnEvent) {                   /* Are the events enabled? */
-    if (OnFlags & ON_ERROR) {          /* Is OnError flag set? */
-      AS1_OnError();                   /* If yes then invoke user event */
-    }
-    else {
-      if (OnFlags & ON_RX_CHAR) {      /* Is OnRxChar flag set? */
-        AS1_OnRxChar();                /* If yes then invoke user event */
-      }
-      if (OnFlags & ON_FULL_RX) {      /* Is OnFullRxBuf flag set? */
-        AS1_OnFullRxBuf();             /* If yes then invoke user event */
-      }
+  if (OnFlags & ON_ERROR) {            /* Is OnError flag set? */
+    AS1_OnError();                     /* If yes then invoke user event */
+  }
+  else {
+    if (OnFlags & ON_RX_CHAR) {        /* Is OnRxChar flag set? */
+      AS1_OnRxChar();                  /* If yes then invoke user event */
     }
   }
 }
@@ -548,13 +405,11 @@ ISR(AS1_InterruptTx)
     }
     SCI1C2_TIE = 0x00U;                /* Disable transmit interrupt */
   }
-  if (AS1_EnEvent) {                   /* Are the events enabled? */
-    if (OnFlags & ON_TX_CHAR) {        /* Is flag "OnTxChar" set? */
-      AS1_OnTxChar();                  /* If yes then invoke user event */
-    }
-    if (OnFlags & ON_FREE_TX) {        /* Is flag "OnFreeTxBuf" set? */
-      AS1_OnFreeTxBuf();               /* If yes then invoke user event */
-    }
+  if (OnFlags & ON_TX_CHAR) {          /* Is flag "OnTxChar" set? */
+    AS1_OnTxChar();                    /* If yes then invoke user event */
+  }
+  if (OnFlags & ON_FREE_TX) {          /* Is flag "OnFreeTxBuf" set? */
+    AS1_OnFreeTxBuf();                 /* If yes then invoke user event */
   }
 }
 
@@ -574,9 +429,7 @@ ISR(AS1_InterruptError)
 
   (void)SCI1D;                         /* Dummy read of data register - clear error bits */
   SerFlag |= COMMON_ERR;               /* If yes then set an internal flag */
-  if (AS1_EnEvent) {                   /* Are the events enabled? */
-    AS1_OnError();                     /* Invoke user event */
-  }
+  AS1_OnError();                       /* Invoke user event */
 }
 
 /*
@@ -594,10 +447,6 @@ void AS1_Init(void)
 {
   SerFlag = 0x00U;                     /* Reset flags */
   OnFreeTxBuf_semaphore = FALSE;       /* Clear the OnFreeTxBuf_semaphore */
-  AS1_EnEvent = TRUE;                  /* Enable events */
-  AS1_InpLen = 0x00U;                  /* No char in the receive buffer */
-  InpIndxR = 0x00U;                    /* Reset read index to the receive buffer */
-  InpIndxW = 0x00U;                    /* Reset write index to the receive buffer */
   AS1_OutLen = 0x00U;                  /* No char in the transmit buffer */
   OutIndxR = 0x00U;                    /* Reset read index to the transmit buffer */
   OutIndxW = 0x00U;                    /* Reset write index to the transmit buffer */
@@ -610,7 +459,7 @@ void AS1_Init(void)
   /* SCI1S2: LBKDIF=0,RXEDGIF=0,??=0,RXINV=0,RWUID=0,BRK13=0,LBKDE=0,RAF=0 */
   setReg8(SCI1S2, 0x00U);               
   SCI1BDH = 0x00U;                     /* Set high divisor register (enable device) */
-  SCI1BDL = 0x08U;                     /* Set low divisor register (enable device) */
+  SCI1BDL = 0x09U;                     /* Set low divisor register (enable device) */
       /* SCI1C3: ORIE=1,NEIE=1,FEIE=1,PEIE=1 */
   SCI1C3 |= 0x0FU;                     /* Enable error interrupts */
   SCI1C2 |= (SCI1C2_TE_MASK | SCI1C2_RE_MASK | SCI1C2_RIE_MASK); /*  Enable transmitter, Enable receiver, Enable receiver interrupt */

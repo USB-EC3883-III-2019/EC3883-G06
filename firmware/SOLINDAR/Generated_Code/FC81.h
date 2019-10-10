@@ -6,35 +6,35 @@
 **     Component   : FreeCntr8
 **     Version     : Component 02.079, Driver 01.22, CPU db: 3.00.067
 **     Compiler    : CodeWarrior HCS08 C Compiler
-**     Date/Time   : 2019-10-07, 14:06, # CodeGen: 9
+**     Date/Time   : 2019-10-09, 22:23, # CodeGen: 13
 **     Abstract    :
 **         This device "FreeCntr8" implements 8-bit Free Running Counter
 **     Settings    :
-**         Timer name                  : TPM2 (16-bit)
-**         Compare name                : TPM20
-**         Counter shared              : No
+**         Timer name                  : TPM1 (16-bit)
+**         Compare name                : TPM11
+**         Counter shared              : Yes
 **
 **         High speed mode
-**             Prescaler               : divide-by-1
-**             Clock                   : 14942208 Hz
+**             Prescaler               : divide-by-16
+**             Clock                   : 1048576 Hz
 **           Resolution of timer
-**             microseconds            : 1
-**             seconds (real)          : 0.000001003868
-**             Hz                      : 996147
-**             kHz                     : 996
-**             MHz                     : 1
+**             Xtal ticks              : 128
+**             microseconds            : 3906
+**             milliseconds            : 4
+**             seconds (real)          : 0.00390625
+**             Hz                      : 256
 **
 **         Initialization:
 **              Timer                  : Enabled
 **
 **         Timer registers
-**              Counter                : TPM2CNT   [$0051]
-**              Mode                   : TPM2SC    [$0050]
-**              Run                    : TPM2SC    [$0050]
-**              Prescaler              : TPM2SC    [$0050]
+**              Counter                : TPM1CNT   [$0041]
+**              Mode                   : TPM1SC    [$0040]
+**              Run                    : TPM1SC    [$0040]
+**              Prescaler              : TPM1SC    [$0040]
 **
 **         Compare registers
-**              Compare                : TPM2C0V   [$0056]
+**              Compare                : TPM1C1V   [$0049]
 **     Contents    :
 **         Reset     - byte FC81_Reset(void);
 **         GetTimeUS - byte FC81_GetTimeUS(word *Time);

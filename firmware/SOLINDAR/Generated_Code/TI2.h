@@ -6,7 +6,7 @@
 **     Component   : TimerInt
 **     Version     : Component 02.161, Driver 01.23, CPU db: 3.00.067
 **     Compiler    : CodeWarrior HCS08 C Compiler
-**     Date/Time   : 2019-10-07, 14:48, # CodeGen: 11
+**     Date/Time   : 2019-10-09, 22:23, # CodeGen: 13
 **     Abstract    :
 **         This component "TimerInt" implements a periodic interrupt.
 **         When the component and its events are enabled, the "OnInterrupt"
@@ -16,18 +16,18 @@
 **         register or timer-overflow interrupt (of free running counter).
 **     Settings    :
 **         Timer name                  : TPM1 (16-bit)
-**         Compare name                : TPM10
+**         Compare name                : TPM12
 **         Counter shared              : Yes
 **
 **         High speed mode
-**             Prescaler               : divide-by-32
-**             Clock                   : 466944 Hz
+**             Prescaler               : divide-by-16
+**             Clock                   : 1048576 Hz
 **           Initial period/frequency
-**             Xtal ticks              : 655
-**             microseconds            : 20000
-**             milliseconds            : 20
-**             seconds (real)          : 0.02000025699
-**             Hz                      : 50
+**             Xtal ticks              : 1638
+**             microseconds            : 50000
+**             milliseconds            : 50
+**             seconds (real)          : 0.050000190735
+**             Hz                      : 20
 **
 **         Runtime setting             : none
 **
@@ -42,10 +42,10 @@
 **              Prescaler              : TPM1SC    [$0040]
 **
 **         Compare registers
-**              Compare                : TPM1C0V   [$0046]
+**              Compare                : TPM1C2V   [$004C]
 **
 **         Flip-flop registers
-**              Mode                   : TPM1C0SC  [$0045]
+**              Mode                   : TPM1C2SC  [$004B]
 **     Contents    :
 **         No public methods
 **
@@ -106,6 +106,7 @@
 #include "PE_Error.h"
 #include "PE_Const.h"
 #include "IO_Map.h"
+#include "PE_Timer.h"
 #include "Cpu.h"
 
 __interrupt void TI2_Interrupt(void);

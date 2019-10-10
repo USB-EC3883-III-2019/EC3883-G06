@@ -6,7 +6,7 @@
 **     Component   : TimerInt
 **     Version     : Component 02.161, Driver 01.23, CPU db: 3.00.067
 **     Compiler    : CodeWarrior HCS08 C Compiler
-**     Date/Time   : 2019-10-07, 14:48, # CodeGen: 11
+**     Date/Time   : 2019-10-09, 22:23, # CodeGen: 13
 **     Abstract    :
 **         This component "TimerInt" implements a periodic interrupt.
 **         When the component and its events are enabled, the "OnInterrupt"
@@ -16,18 +16,18 @@
 **         register or timer-overflow interrupt (of free running counter).
 **     Settings    :
 **         Timer name                  : TPM1 (16-bit)
-**         Compare name                : TPM10
+**         Compare name                : TPM12
 **         Counter shared              : Yes
 **
 **         High speed mode
-**             Prescaler               : divide-by-32
-**             Clock                   : 466944 Hz
+**             Prescaler               : divide-by-16
+**             Clock                   : 1048576 Hz
 **           Initial period/frequency
-**             Xtal ticks              : 655
-**             microseconds            : 20000
-**             milliseconds            : 20
-**             seconds (real)          : 0.02000025699
-**             Hz                      : 50
+**             Xtal ticks              : 1638
+**             microseconds            : 50000
+**             milliseconds            : 50
+**             seconds (real)          : 0.050000190735
+**             Hz                      : 20
 **
 **         Runtime setting             : none
 **
@@ -42,10 +42,10 @@
 **              Prescaler              : TPM1SC    [$0040]
 **
 **         Compare registers
-**              Compare                : TPM1C0V   [$0046]
+**              Compare                : TPM1C2V   [$004C]
 **
 **         Flip-flop registers
-**              Mode                   : TPM1C0SC  [$0045]
+**              Mode                   : TPM1C2SC  [$004B]
 **     Contents    :
 **         No public methods
 **
@@ -120,7 +120,7 @@ static word CmpVal;                    /* Value added to compare register in ISR
 ** ===================================================================
 */
 #define TI2_SetCV(_Val) ( \
-  ((TPM1C0V = (word)(TPM1CNT + (_Val)),((CmpVal = (_Val))))))
+  ((TPM1C2V = (word)(TPM1CNT + (_Val)),((CmpVal = (_Val))))))
 
 
 /*** End of internal method prototypes ***/
@@ -138,17 +138,11 @@ static word CmpVal;                    /* Value added to compare register in ISR
 */
 void TI2_Init(void)
 {
-  /* TPM1SC: TOF=0,TOIE=0,CPWMS=0,CLKSB=0,CLKSA=0,PS2=0,PS1=0,PS0=0 */
-  setReg8(TPM1SC, 0x00U);              /* Stop HW; disable overflow interrupt and set prescaler to 0 */ 
-  /* TPM1MOD: BIT15=0,BIT14=0,BIT13=0,BIT12=0,BIT11=0,BIT10=0,BIT9=0,BIT8=0,BIT7=0,BIT6=0,BIT5=0,BIT4=0,BIT3=0,BIT2=0,BIT1=0,BIT0=0 */
-  setReg16(TPM1MOD, 0x00U);            /* Clear modulo register: e.g. set free-running mode */ 
-  /* TPM1C0SC: CH0F=0,CH0IE=1,MS0B=0,MS0A=1,ELS0B=0,ELS0A=0,??=0,??=0 */
-  setReg8(TPM1C0SC, 0x50U);            /* Set output compare mode and enable compare interrupt */ 
-  TI2_SetCV(0x247BU);                  /* Initialize appropriate value to the compare/modulo/reload register */
-  /* TPM1CNTH: BIT15=0,BIT14=0,BIT13=0,BIT12=0,BIT11=0,BIT10=0,BIT9=0,BIT8=0 */
-  setReg8(TPM1CNTH, 0x00U);            /* Reset HW Counter */ 
-  /* TPM1SC: TOF=0,TOIE=0,CPWMS=0,CLKSB=0,CLKSA=1,PS2=1,PS1=0,PS0=1 */
-  setReg8(TPM1SC, 0x0DU);              /* Set prescaler */ 
+  /* TPM1C2SC: CH2F=0,CH2IE=0,MS2B=0,MS2A=1,ELS2B=0,ELS2A=0,??=0,??=0 */
+  setReg8(TPM1C2SC, 0x10U);            /* Set output compare mode and disable compare interrupt */ 
+  TI2_SetCV(0xCCCDU);                  /* Initialize appropriate value to the compare/modulo/reload register */
+  /* TPM1C2SC: CH2IE=1 */
+  setReg8Bits(TPM1C2SC, 0x40U);        /* Enable Compare interrupt */ 
 }
 
 
@@ -164,9 +158,9 @@ void TI2_Init(void)
 */
 ISR(TI2_Interrupt)
 {
-  /* TPM1C0SC: CH0F=0 */
-  clrReg8Bits(TPM1C0SC, 0x80U);        /* Reset compare interrupt request flag */ 
-  TPM1C0V += CmpVal;                   /* Set new value to the compare register */
+  /* TPM1C2SC: CH2F=0 */
+  clrReg8Bits(TPM1C2SC, 0x80U);        /* Reset compare interrupt request flag */ 
+  TPM1C2V += CmpVal;                   /* Set new value to the compare register */
   TI2_OnInterrupt();                   /* Invoke user event */
 }
 

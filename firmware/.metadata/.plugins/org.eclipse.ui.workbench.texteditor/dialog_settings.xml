@@ -13,11 +13,9 @@
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="false" key="wholeword"/>
-		<item value="Cap1_OnCapture" key="selection"/>
+		<item value="data" key="selection"/>
 		<list key="findhistory">
-			<item value="Cap1_OnCapture"/>
-			<item value="AD1_HWEnDi"/>
-			<item value="cap"/>
+			<item value="data"/>
 		</list>
 		<list key="replacehistory">
 		</list>
