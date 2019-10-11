@@ -13,7 +13,7 @@ import sys
 import serial
 import numpy as np
 
-qtCreatorFile = "solindar_lib/graph6.ui" # my Qt Designer file 
+qtCreatorFile = "solindar_lib/GUI/graph6.ui" # my Qt Designer file 
 
 Ui_MainWindow, QtBaseClass = uic.loadUiType(qtCreatorFile)
 
