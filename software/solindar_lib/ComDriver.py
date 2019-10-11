@@ -48,8 +48,8 @@ class ComDriver(serial.Serial):
         lidar[is_err] = 0
         #Update fifos
         self.position_fifo=np.vstack((position,self.position_fifo[:-self.n]))
-        self.sonar_fifo=np.vstack((position,self.position_fifo[:-self.n]))
-        self.lidar_fifo=np.vstack((position,self.position_fifo[:-self.n]))
+        self.sonar_fifo=np.vstack((sonar,self.sonar_fifo[:-self.n]))
+        self.lidar_fifo=np.vstack((lidar,self.lidar_fifo[:-self.n]))
 
     def set_fifo_len(self,len_fifo):  #Change fifo size
         self.len_fifo=len_fifo
