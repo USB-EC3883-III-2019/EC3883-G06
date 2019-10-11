@@ -57,9 +57,14 @@ dkms.conf
 
 # End of https://www.gitignore.io/api/c
 
+#Python
+*.pyc
+
 # CodeWarrior Files
 FLASH
 .SOLINDAR.g_c
 .SOLINDAR.g_x
 .cwGeneratedFileSetLog
 ReferencedRSESystems.xml
+
+reserve/*
