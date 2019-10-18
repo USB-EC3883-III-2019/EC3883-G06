@@ -43,6 +43,10 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
         #self.ax.set_xticklabels([]) #deletes labels from X-axes
         self.lines = self.ax.plot()
         self.set_grid=False
+        self.sonvarn2 = (1.47*(10**-3))**-2
+        self.lidvarn2 = (4.89*(10**-5))**-2
+        self.fusvar2 = ((self.sonvarn2) + (self.lidvarn2))**(-1)
+        self.fusion_fifo = np.zeros((self.con.len_fifo))
         plt.ion()
 
 
@@ -102,18 +106,23 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
         
         if self.Ch_state[0]:
             self.lines = self.ax.plot(self.con.position_fifo[:] * self.pos_conv,self.con.sonar_fifo[:],self.Ch_colors[0])
-            self.Ch_index.append(0)
         if self.Ch_state[1]:
             self.lines = self.ax.plot(self.con.position_fifo[:] * self.pos_conv,self.con.lidar_fifo[:],self.Ch_colors[1])
-            self.Ch_index.append(1) 
+        if self.Ch_state[2]:
+            self.fusion_fifo = self.fusvar2*(self.sonvarn2*self.con.sonar_fifo[:] + self.lidvarn2*self.con.lidar_fifo[:])
+            self.lines = self.ax.plot(self.con.position_fifo[:] * self.pos_conv, self.fusion_fifo[:])
+            
+
+
 
     def refresh_image(self):
-        #print('Refresh')
         self.ax.clear()
         if self.Ch_state[0]:
             self.lines = self.ax.plot(self.con.position_fifo[:] * self.pos_conv,self.con.sonar_fifo[:],self.Ch_colors[0])
         if self.Ch_state[1]:            
             self.lines = self.ax.plot(self.con.position_fifo[:] * self.pos_conv,self.con.lidar_fifo[:],self.Ch_colors[1])
-        # self.lines[0].set_ydata(self.con.sonar_fifo[:]) #Plot antiguo
-        # self.lines[1].set_ydata(self.con.lidar_fifo[:])
+        if self.Ch_state[2]:
+            self.fusion_fifo[:] = self.fusvar2*(self.sonvarn2*self.con.sonar_fifo[:] + self.lidvarn2*self.con.lidar_fifo[:])
+            self.lines = self.ax.plot(self.con.position_fifo[:] * self.pos_conv, self.fusion_fifo[:])
+        
     
