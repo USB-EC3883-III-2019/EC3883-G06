@@ -1,5 +1,5 @@
 import matplotlib
-matplotlib.use('Qt5Agg')
+matplotlib.use('Qt4Agg')
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas

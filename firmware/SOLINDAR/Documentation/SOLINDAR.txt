@@ -95,6 +95,11 @@ Module "FC321"     (component FreeCntr32)
    - FC321_GetTimeMS -This method returns the time (as a 16-bit unsigned integer) in milliseconds since the last resetting 
                 after the last reset.
 
+Module "Bit2"      (component BitIO)
+   - Bit2_GetVal -Returns the input/output value. If the direction is [input] then the input value of the pin is read and 
+                returned. If the direction is [output] then the last written value is returned (see <Safe mode> property for 
+                limitations). This method cannot be disabled if direction is [input].
+
 Module "Cpu"       (component MC9S08QE128_80)
    - Cpu_EnableInt -Enables maskable interrupts
    - Cpu_DisableInt -Disables maskable interrupts

@@ -11,7 +11,7 @@ class ComDriver(serial.Serial):
                          parity=serial.PARITY_NONE,
                          stopbits=serial.STOPBITS_ONE,
                          bytesize=serial.EIGHTBITS,
-                         timeout=1)
+                         timeout=10)
         #Port init
         self.close()
         self.open()

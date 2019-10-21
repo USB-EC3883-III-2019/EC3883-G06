@@ -7,7 +7,7 @@
 **     Version     : Component 01.003, Driver 01.40, CPU db: 3.00.067
 **     Datasheet   : MC9S08QE128RM Rev. 2 6/2007
 **     Compiler    : CodeWarrior HCS08 C Compiler
-**     Date/Time   : 2019-10-21, 14:42, # CodeGen: 64
+**     Date/Time   : 2019-10-21, 18:23, # CodeGen: 78
 **     Abstract    :
 **         This component "MC9S08QE128_80" contains initialization 
 **         of the CPU and provides basic methods and events for 
@@ -74,6 +74,7 @@
 #include "TI2.h"
 #include "Bit1.h"
 #include "FC321.h"
+#include "Bit2.h"
 #include "PE_Types.h"
 #include "PE_Error.h"
 #include "PE_Const.h"
@@ -230,10 +231,10 @@ void PE_low_level_init(void)
   setReg8Bits(PTDDD, 0xF0U);            
   /* PTAD: PTAD7=0 */
   clrReg8Bits(PTAD, 0x80U);             
-  /* PTAPE: PTAPE7=0 */
-  clrReg8Bits(PTAPE, 0x80U);            
-  /* PTADD: PTADD7=1 */
-  setReg8Bits(PTADD, 0x80U);            
+  /* PTAPE: PTAPE7=0,PTAPE2=1 */
+  clrSetReg8Bits(PTAPE, 0x80U, 0x04U);  
+  /* PTADD: PTADD7=1,PTADD2=0 */
+  clrSetReg8Bits(PTADD, 0x04U, 0x80U);  
   /* PTASE: PTASE7=0,PTASE6=0,PTASE4=0,PTASE3=0,PTASE2=0,PTASE1=0,PTASE0=0 */
   clrReg8Bits(PTASE, 0xDFU);            
   /* PTBSE: PTBSE7=0,PTBSE6=0,PTBSE5=0,PTBSE4=0,PTBSE3=0,PTBSE2=0,PTBSE1=0,PTBSE0=0 */
@@ -286,6 +287,7 @@ void PE_low_level_init(void)
   Shadow_PTA &= 0x7FU;                 /* Initialize pin shadow variable bit */
   /* ### Free running 8-bit counter "FC321" init code ... */
   FC321_Init();
+  /* ### BitIO "Bit2" init code ... */
   /* Common peripheral initialization - ENABLE */
   /* TPM1SC: CLKSB=0,CLKSA=1 */
   clrSetReg8Bits(TPM1SC, 0x10U, 0x08U); 

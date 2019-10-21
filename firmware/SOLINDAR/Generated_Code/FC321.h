@@ -6,7 +6,7 @@
 **     Component   : FreeCntr32
 **     Version     : Component 02.070, Driver 01.22, CPU db: 3.00.067
 **     Compiler    : CodeWarrior HCS08 C Compiler
-**     Date/Time   : 2019-10-21, 16:08, # CodeGen: 71
+**     Date/Time   : 2019-10-21, 17:43, # CodeGen: 76
 **     Abstract    :
 **         This device "FreeCntr32" implements 32-bit Free Running Counter
 **     Settings    :
@@ -15,8 +15,8 @@
 **         Counter shared              : Yes
 **
 **         High speed mode
-**             Prescaler               : divide-by-32
-**             Clock                   : 524288 Hz
+**             Prescaler               : divide-by-16
+**             Clock                   : 1048576 Hz
 **           Resolution of timer
 **             microseconds            : 10
 **             seconds (real)          : 0.000009536743

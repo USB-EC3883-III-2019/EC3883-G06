@@ -6,7 +6,7 @@
 **     Component   : FreeCntr32
 **     Version     : Component 02.070, Driver 01.22, CPU db: 3.00.067
 **     Compiler    : CodeWarrior HCS08 C Compiler
-**     Date/Time   : 2019-10-21, 16:08, # CodeGen: 71
+**     Date/Time   : 2019-10-21, 17:43, # CodeGen: 76
 **     Abstract    :
 **         This device "FreeCntr32" implements 32-bit Free Running Counter
 **     Settings    :
@@ -15,8 +15,8 @@
 **         Counter shared              : Yes
 **
 **         High speed mode
-**             Prescaler               : divide-by-32
-**             Clock                   : 524288 Hz
+**             Prescaler               : divide-by-16
+**             Clock                   : 1048576 Hz
 **           Resolution of timer
 **             microseconds            : 10
 **             seconds (real)          : 0.000009536743
@@ -347,7 +347,7 @@ void FC321_Init(void)
   EnUser = TRUE;                       /* Enable device */
   TTicks = 0U;                         /* Counter of timer ticks */
   TOvf = FALSE;                        /* Counter overflow flag */
-  FC321_SetCV(0x05U);                  /* Initialize appropriate value to the compare/modulo/reload register */
+  FC321_SetCV(0x0AU);                  /* Initialize appropriate value to the compare/modulo/reload register */
   HWEnDi();
 }
 

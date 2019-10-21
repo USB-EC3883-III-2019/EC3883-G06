@@ -38,6 +38,7 @@
 #include "TI2.h"
 #include "Bit1.h"
 #include "FC321.h"
+#include "Bit2.h"
 /* Include shared modules, which are used for whole project */
 #include "PE_Types.h"
 #include "PE_Error.h"
@@ -56,7 +57,7 @@ int sonar_mean = 0;
 unsigned short sonar_value = 0;
 int sonar_counter = 0;
 bool sonar_value_done = 0;
-unsigned short max_measures = 3; //number of measures to take at each point  
+unsigned short max_measures = 1; //number of measures to take at each point  
 
 void main(void)
 {
@@ -94,8 +95,8 @@ void main(void)
   //End of Sonar variables-------------------------------------------------------------  
   //Other variables--------------------------------------------------------------------
   int i = 0; //used in for statements
-  
-  
+  int filter_order=10; 
+  bool filter_en = 0;
   
   //End of other variables--------------------------------------------------------------------
   //Comunication variables--------------------------------------------------------------------
@@ -162,11 +163,15 @@ void main(void)
 	   lidar_mean=0;
 	   lidar_counter = 0;
 	   lidar_value_done=1;
-	 }        
+	 }
+	 
+	 //Change filter state
+ 	 if(!(Bit2_GetVal() > 0))
+ 		filter_en = !filter_en;
       
     }   
     //Comunication      
-    is_send = is_step_done;// && lidar_value_done && sonar_value_done;
+    is_send = is_step_done && lidar_value_done && sonar_value_done;
     if(is_send){      
       lidar_value_done =0;
       sonar_value_done=0;
@@ -177,6 +182,13 @@ void main(void)
       do
         err=AS1_SendBlock((byte*) &data,sizeof(data),&Sent);
       while(err!=ERR_OK);
+      
+ 	 //Avg or not 	 
+ 	 if(filter_en) 		 
+ 		 max_measures = filter_order;
+ 	 else
+ 		 max_measures = 1; 
+      
     }
 
   }

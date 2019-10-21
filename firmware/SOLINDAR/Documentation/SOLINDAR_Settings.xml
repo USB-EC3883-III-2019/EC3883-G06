@@ -1169,7 +1169,7 @@ autoselected pull
         <Interrupt v="Vtpm1ch2" />
         <Interrupt_priority v="medium priority" />
       </boolgroup>
-      <Interrupt_period v="124.998093 ms" />
+      <Interrupt_period v="40 ms" />
       <Same_period_in_modes v="yes" />
       <Component_uses_entire_timer v="no" />
       <group name="Initialization">
@@ -1283,6 +1283,43 @@ autoselected pull
       <Event_module_name v="Events" />
       <event name="BeforeNewSpeed" v="don&amp;apos;t generate code" />
       <event name="AfterNewSpeed" v="don&amp;apos;t generate code" />
+    </Events>
+  </Bean>
+  <Bean name="Bit2" type="BitIO">
+    <Enabled v="Y" />
+    <Properties>
+      <Component_name v="Bit2" />
+      <Pin_for_I_O v="PTA2_KBI1P2_SDA1_ADP2" />
+      <Pull_resistor v="pull up" />
+      <Open_drain sel_value="The settings is irrelevant for input direction">
+        
+push-pull
+
+        <EmptySection_DummyValue />
+      </Open_drain>
+      <Slew_rate_control_for_PTA2 v="no" />
+      <Drive_strength_for_PTA2 v="High" />
+      <Direction v="Input" />
+      <group name="Initialization">
+        <Init__direction v="Input" />
+        <Init__value v="0" />
+      </group>
+      <Safe_mode v="yes" />
+      <Optimization_for v="speed" />
+    </Properties>
+    <Methods>
+      <GetDir v="don&amp;apos;t generate code" />
+      <SetDir v="don&amp;apos;t generate code" />
+      <SetInput v="don&amp;apos;t generate code" />
+      <SetOutput v="don&amp;apos;t generate code" />
+      <GetVal v="generate code" />
+      <PutVal v="don&amp;apos;t generate code" />
+      <ClrVal v="don&amp;apos;t generate code" />
+      <SetVal v="don&amp;apos;t generate code" />
+      <NegVal v="don&amp;apos;t generate code" />
+    </Methods>
+    <Events>
+      <EmptySection_DummyValue />
     </Events>
   </Bean>
 </PE_PROJECT_SETTINGS_DOCUMENTATION>
