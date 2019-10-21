@@ -1,3 +1,5 @@
+import matplotlib
+matplotlib.use('Qt5Agg')
 import sys
 from PyQt4 import QtCore, QtGui, uic
 from solindar_lib import ComDriver, SolindarGUI, TestCom
