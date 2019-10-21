@@ -44,6 +44,8 @@ Module "Cap1"      (component Capture)
    - Cap1_GetCaptureValue -This method gets the last value captured by enabled timer (see implementation note in <General Info>)
                 . The method does not return valid value after initialization or after <Reset> until new capture event (even if 
                 the returned Error code is ERR_OK).
+   - Cap1_GetPinValue -The method reads the Capture pin value. The method is available only if it is possible to read the pin 
+                value (usually not available for internal signals).
 
 Module "Bits1"     (component BitsIO)
    - Bits1_GetDir -Return selected direction.

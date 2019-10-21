@@ -51,6 +51,7 @@
 //Externs
 bool tick_motor = 0;
 bool tick_sensors = 0;
+unsigned short sonar_measure = 0;     
 
 void main(void)
 {
@@ -82,7 +83,7 @@ void main(void)
   
   //End of Lidar variables-------------------------------------------------------------
   //Sonar variables--------------------------------------------------------------------  
-  unsigned short sonar_measure = 0;     
+  
   unsigned short sonar_value = 0;
   unsigned short sonar_UStimer = 0;
   
@@ -160,10 +161,7 @@ void main(void)
       }
       FC321_Disable();
       sonar_UStimer=0;
-      Bit1_PutVal(0);     
-      //Capture   
-      Cap1_Enable();
-      Cap1_Reset();   
+      Bit1_PutVal(0);       
       
     }   
     //Comunication      

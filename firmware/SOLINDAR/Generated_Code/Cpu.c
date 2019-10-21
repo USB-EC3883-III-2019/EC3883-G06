@@ -7,7 +7,7 @@
 **     Version     : Component 01.003, Driver 01.40, CPU db: 3.00.067
 **     Datasheet   : MC9S08QE128RM Rev. 2 6/2007
 **     Compiler    : CodeWarrior HCS08 C Compiler
-**     Date/Time   : 2019-10-16, 13:01, # CodeGen: 25
+**     Date/Time   : 2019-10-21, 14:42, # CodeGen: 64
 **     Abstract    :
 **         This component "MC9S08QE128_80" contains initialization 
 **         of the CPU and provides basic methods and events for 
@@ -161,8 +161,6 @@ void _EntryPoint(void)
   /* Common initialization of the write once registers */
   /* SOPT1: COPE=0,COPT=1,STOPE=0,??=0,??=0,RSTOPE=0,BKGDPE=1,RSTPE=0 */
   setReg8(SOPT1, 0x42U);                
-  /* SOPT2: COPCLKS=0,??=0,??=0,??=0,SPI1PS=0,ACIC2=0,IIC1PS=0,ACIC1=0 */
-  setReg8(SOPT2, 0x00U);                
   /* SPMSC1: LVDF=0,LVDACK=0,LVDIE=0,LVDRE=1,LVDSE=1,LVDE=1,??=0,BGBE=0 */
   setReg8(SPMSC1, 0x1CU);               
   /* SPMSC2: LPR=0,LPRS=0,LPWUI=0,??=0,PPDF=0,PPDACK=0,PPDE=1,PPDC=0 */
@@ -220,18 +218,22 @@ void PE_low_level_init(void)
   setReg8Bits(PTBD, 0x02U);             
   /* APCTL1: ADPC1=1 */
   setReg8Bits(APCTL1, 0x02U);           
-  /* PTAPE: PTAPE7=0,PTAPE0=0 */
-  clrReg8Bits(PTAPE, 0x81U);            
-  /* PTAD: PTAD7=0 */
-  clrReg8Bits(PTAD, 0x80U);             
-  /* PTADD: PTADD7=1,PTADD0=0 */
-  clrSetReg8Bits(PTADD, 0x01U, 0x80U);  
+  /* PTCPE: PTCPE0=0 */
+  clrReg8Bits(PTCPE, 0x01U);            
+  /* PTCDD: PTCDD0=0 */
+  clrReg8Bits(PTCDD, 0x01U);            
   /* PTDD: PTDD7=0,PTDD6=0,PTDD5=0,PTDD4=0 */
   clrReg8Bits(PTDD, 0xF0U);             
   /* PTDPE: PTDPE7=0,PTDPE6=0,PTDPE5=0,PTDPE4=0 */
   clrReg8Bits(PTDPE, 0xF0U);            
   /* PTDDD: PTDDD7=1,PTDDD6=1,PTDDD5=1,PTDDD4=1 */
   setReg8Bits(PTDDD, 0xF0U);            
+  /* PTAD: PTAD7=0 */
+  clrReg8Bits(PTAD, 0x80U);             
+  /* PTAPE: PTAPE7=0 */
+  clrReg8Bits(PTAPE, 0x80U);            
+  /* PTADD: PTADD7=1 */
+  setReg8Bits(PTADD, 0x80U);            
   /* PTASE: PTASE7=0,PTASE6=0,PTASE4=0,PTASE3=0,PTASE2=0,PTASE1=0,PTASE0=0 */
   clrReg8Bits(PTASE, 0xDFU);            
   /* PTBSE: PTBSE7=0,PTBSE6=0,PTBSE5=0,PTBSE4=0,PTBSE3=0,PTBSE2=0,PTBSE1=0,PTBSE0=0 */

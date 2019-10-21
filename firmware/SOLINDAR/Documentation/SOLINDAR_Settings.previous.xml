@@ -1053,22 +1053,22 @@ Autoselect
     <Enabled v="Y" />
     <Properties>
       <Component_name v="Cap1" />
-      <Capture_device v="TPM10" />
-      <Counter v="TPM1" />
-      <Capture_input_pin v="PTA0_KBI1P0_TPM1CH0_ADP0_ACMP1PLUS" />
+      <Capture_device v="TPM30" />
+      <Counter v="TPM3" />
+      <Capture_input_pin v="PTC0_TPM3CH0" />
       <Pull_resistor sel_value="no pull resistor">
         
 autoselected pull
 
         <EmptySection_DummyValue />
       </Pull_resistor>
-      <Edge v="rising edge" />
+      <Edge v="both edges" />
       <boolgroup name="Interrupt service/event" v="Enabled">
-        <Capture_interrupt v="Vtpm1ch0" />
+        <Capture_interrupt v="Vtpm3ch0" />
         <Capture_priority v="medium priority" />
         <boolgroup name="Overflow support" v="Disabled" />
       </boolgroup>
-      <Maximum_time_of_event v="15 ms" />
+      <Maximum_time_of_event v="500 ms" />
       <group name="Initialization">
         <Enabled_in_init__code v="yes" />
         <Events_enabled_in_init_ v="yes" />
@@ -1080,14 +1080,14 @@ autoselected pull
       </group>
     </Properties>
     <Methods>
-      <Enable v="don&amp;apos;t generate code" />
-      <Disable v="don&amp;apos;t generate code" />
+      <Enable v="generate code" />
+      <Disable v="generate code" />
       <EnableEvent v="don&amp;apos;t generate code" />
       <DisableEvent v="don&amp;apos;t generate code" />
       <Reset v="generate code" />
       <GetCaptureValue v="generate code" />
       <GetStatus v="don&amp;apos;t generate code" />
-      <GetPinValue v="don&amp;apos;t generate code" />
+      <GetPinValue v="generate code" />
     </Methods>
     <Events>
       <Event_module_name v="Events" />
@@ -1169,7 +1169,7 @@ autoselected pull
         <Interrupt v="Vtpm1ch2" />
         <Interrupt_priority v="medium priority" />
       </boolgroup>
-      <Interrupt_period v="40 ms" />
+      <Interrupt_period v="50 ms" />
       <Same_period_in_modes v="yes" />
       <Component_uses_entire_timer v="no" />
       <group name="Initialization">

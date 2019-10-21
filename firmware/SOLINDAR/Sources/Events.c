@@ -33,7 +33,7 @@
 
 /* User includes (#include below this line is not maintained by Processor Expert) */
 byte err;
-
+extern unsigned short sonar_measure;
 /*
 ** ===================================================================
 **     Event       :  AS1_OnError (module Events)
@@ -160,7 +160,7 @@ extern bool tick_sensors;
 void TI2_OnInterrupt(void)
 {
   tick_sensors=1;
-
+  
 }
 
 /*
@@ -177,14 +177,17 @@ void TI2_OnInterrupt(void)
 **     Returns     : Nothing
 ** ===================================================================
 */
-extern unsigned short sonar_measure;
+
+bool pin_value;
 void Cap1_OnCapture(void)
-{	
-	do
-	  err=Cap1_GetCaptureValue(&sonar_measure);    
-	while(err!=ERR_OK);	
-	Cap1_Disable();
-		
+{	pin_value = Cap1_GetPinValue();
+	if(!pin_value){
+		do
+		  err=Cap1_GetCaptureValue(&sonar_measure);    
+		while(err!=ERR_OK);	
+	}
+	Cap1_Reset();
+			
 }
 
 /* END Events */
