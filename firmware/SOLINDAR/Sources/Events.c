@@ -34,6 +34,11 @@
 /* User includes (#include below this line is not maintained by Processor Expert) */
 byte err;
 extern unsigned short sonar_measure;
+extern int sonar_mean;
+extern unsigned short sonar_value;
+extern int sonar_counter;
+extern bool sonar_value_done;
+extern unsigned short max_measures; //number of measures to take at each point  
 /*
 ** ===================================================================
 **     Event       :  AS1_OnError (module Events)
@@ -182,9 +187,20 @@ bool pin_value;
 void Cap1_OnCapture(void)
 {	pin_value = Cap1_GetPinValue();
 	if(!pin_value){
+		
 		do
 		  err=Cap1_GetCaptureValue(&sonar_measure);    
 		while(err!=ERR_OK);	
+		if(sonar_counter<max_measures){
+			   sonar_mean+=sonar_measure;
+			   sonar_counter++;
+		}
+		else{			 
+			   sonar_value = sonar_mean / max_measures;
+			   sonar_mean=0;
+			   sonar_counter = 0;
+			   sonar_value_done=1;
+		 }
 	}
 	Cap1_Reset();
 			

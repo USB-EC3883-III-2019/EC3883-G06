@@ -51,7 +51,12 @@
 //Externs
 bool tick_motor = 0;
 bool tick_sensors = 0;
-unsigned short sonar_measure = 0;     
+unsigned short sonar_measure = 0;
+int sonar_mean = 0;
+unsigned short sonar_value = 0;
+int sonar_counter = 0;
+bool sonar_value_done = 0;
+unsigned short max_measures = 3; //number of measures to take at each point  
 
 void main(void)
 {
@@ -83,15 +88,13 @@ void main(void)
   
   //End of Lidar variables-------------------------------------------------------------
   //Sonar variables--------------------------------------------------------------------  
-  
-  unsigned short sonar_value = 0;
   unsigned short sonar_UStimer = 0;
   
   
   //End of Sonar variables-------------------------------------------------------------  
   //Other variables--------------------------------------------------------------------
   int i = 0; //used in for statements
-  unsigned short max_measures = 1; //number of measures to take at each point  
+  
   
   
   //End of other variables--------------------------------------------------------------------
@@ -131,7 +134,21 @@ void main(void)
      
         
     if(tick_sensors){
-      tick_sensors=0;       
+      tick_sensors=0;
+      
+      //Sonar trigger 
+      Bit1_PutVal(1);
+      FC321_Enable();
+      FC321_Reset();
+      while(sonar_UStimer<15){
+      do
+        err=FC321_GetTimeUS(&sonar_UStimer);
+      while(err!=ERR_OK);
+      }
+      FC321_Disable();
+      sonar_UStimer=0;
+      Bit1_PutVal(0); 
+      
       //Lidar      
       AD1_MeasureChan(1,0); 
       AD1_GetChanValue(0,&lidar_measure);
@@ -145,32 +162,17 @@ void main(void)
 	   lidar_mean=0;
 	   lidar_counter = 0;
 	   lidar_value_done=1;
-	 }
-      
-      
-      //Sonar
-      
-      //trigger
-      Bit1_PutVal(1);
-      FC321_Enable();
-      FC321_Reset();
-      while(sonar_UStimer<15){
-      do
-        err=FC321_GetTimeUS(&sonar_UStimer);
-      while(err!=ERR_OK);
-      }
-      FC321_Disable();
-      sonar_UStimer=0;
-      Bit1_PutVal(0);       
+	 }        
       
     }   
     //Comunication      
-    is_send = lidar_value_done && is_step_done;
+    is_send = is_step_done;// && lidar_value_done && sonar_value_done;
     if(is_send){      
       lidar_value_done =0;
+      sonar_value_done=0;
       is_step_done = 0;
       //Make packet
-      make_packet(counter,sonar_measure,lidar_value,&data);
+      make_packet(counter,sonar_value,lidar_value,&data);
       //Send data
       do
         err=AS1_SendBlock((byte*) &data,sizeof(data),&Sent);

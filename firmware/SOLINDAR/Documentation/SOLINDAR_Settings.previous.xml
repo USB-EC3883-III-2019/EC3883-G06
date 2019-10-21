@@ -949,7 +949,7 @@ asm(BGND);
         <Interrupt v="Vrtc" />
         <Interrupt_priority v="medium priority" />
       </boolgroup>
-      <Interrupt_period v="100 ms" />
+      <Interrupt_period v="120 ms" />
       <Same_period_in_modes v="yes" />
       <Component_uses_entire_timer v="no" />
       <group name="Initialization">
@@ -1068,7 +1068,7 @@ autoselected pull
         <Capture_priority v="medium priority" />
         <boolgroup name="Overflow support" v="Disabled" />
       </boolgroup>
-      <Maximum_time_of_event v="500 ms" />
+      <Maximum_time_of_event v="8 sec" />
       <group name="Initialization">
         <Enabled_in_init__code v="yes" />
         <Events_enabled_in_init_ v="yes" />
@@ -1169,7 +1169,7 @@ autoselected pull
         <Interrupt v="Vtpm1ch2" />
         <Interrupt_priority v="medium priority" />
       </boolgroup>
-      <Interrupt_period v="50 ms" />
+      <Interrupt_period v="124.998093 ms" />
       <Same_period_in_modes v="yes" />
       <Component_uses_entire_timer v="no" />
       <group name="Initialization">
