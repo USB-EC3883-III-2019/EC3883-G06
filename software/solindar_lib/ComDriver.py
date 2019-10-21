@@ -30,7 +30,7 @@ class ComDriver(serial.Serial):
             if ro < 128:
                 break
         r=list(self.read(4*self.n-1))
-        data=[[ro,*r[:3]]]
+        data=[[ro,r[0],r[1],r[2]]]
         for i in range(self.n-1):
             data.append(r[3+4*i:3+4*(i+1)])        
         #Convert to np
