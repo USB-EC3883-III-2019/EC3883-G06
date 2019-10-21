@@ -129,7 +129,7 @@ void main(void)
     } 
      
         
-    if(tick_sensors && !lidar_value_done){
+    if(tick_sensors){
       tick_sensors=0;       
       //Lidar      
       AD1_MeasureChan(1,0); 
@@ -168,7 +168,7 @@ void main(void)
     }   
     //Comunication      
     is_send = lidar_value_done && is_step_done;
-    if(is_step_done){      
+    if(is_send){      
       lidar_value_done =0;
       is_step_done = 0;
       //Make packet
