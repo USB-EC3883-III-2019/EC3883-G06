@@ -1,3 +1,5 @@
+import matplotlib
+matplotlib.use('Qt5Agg')
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -7,8 +9,6 @@ import sys
 from ..TestCom import testCom
 from ..ComDriver import ComDriver
 from .canvas import Canvas
-import matplotlib
-matplotlib.use('Qt5Agg')
 import sys
 import serial
 import numpy as np
