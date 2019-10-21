@@ -67,4 +67,6 @@ FLASH
 .cwGeneratedFileSetLog
 ReferencedRSESystems.xml
 
+
 reserve/*
+firmwate/.metadata/*

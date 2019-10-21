@@ -6,7 +6,7 @@
 **     Component   : PE_Timer
 **     Version     : Driver 01.04
 **     Compiler    : CodeWarrior HCS08 C Compiler
-**     Date/Time   : 2019-10-09, 22:22, # CodeGen: 12
+**     Date/Time   : 2019-10-16, 13:09, # CodeGen: 29
 **     Abstract    :
 **         This module "PE_Timer" implements internal methods and definitions
 **         used by components working with timers.
@@ -76,10 +76,10 @@ void PE_Timer_LngMul(dword va1, dword va2, dlong *var);
 ** ===================================================================
 */
 
-bool PE_Timer_LngHi2(dword High, dword Low, word *Out);
+bool PE_Timer_LngHi3(dword High, dword Low, word *Out);
 /*
 ** ===================================================================
-**     Method      :  PE_Timer_LngHi2 (component PE_Timer)
+**     Method      :  PE_Timer_LngHi3 (component PE_Timer)
 **
 **     Description :
 **         The method transfers 64 bit result to 16 bit ratio value and 
@@ -88,10 +88,10 @@ bool PE_Timer_LngHi2(dword High, dword Low, word *Out);
 ** ===================================================================
 */
 
-bool PE_Timer_LngHi3(dword High, dword Low, word *Out);
+bool PE_Timer_LngHi4(dword High, dword Low, word *Out);
 /*
 ** ===================================================================
-**     Method      :  PE_Timer_LngHi3 (component PE_Timer)
+**     Method      :  PE_Timer_LngHi4 (component PE_Timer)
 **
 **     Description :
 **         The method transfers 64 bit result to 16 bit ratio value and 

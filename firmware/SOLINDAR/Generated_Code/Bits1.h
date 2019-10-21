@@ -6,30 +6,33 @@
 **     Component   : BitsIO
 **     Version     : Component 02.108, Driver 03.28, CPU db: 3.00.067
 **     Compiler    : CodeWarrior HCS08 C Compiler
-**     Date/Time   : 2019-10-09, 22:22, # CodeGen: 12
+**     Date/Time   : 2019-10-16, 13:01, # CodeGen: 25
 **     Abstract    :
 **         This component "BitsIO" implements a multi-bit input/output.
 **         It uses selected pins of one 1-bit to 8-bit port.
 **         Note: This component is set to work in Output direction only.
 **     Settings    :
-**         Port name                   : PTA
+**         Port name                   : PTD
 **
-**         Bit mask of the port        : $0002
-**         Number of bits/pins         : 1
-**         Single bit numbers          : 0 to 0
-**         Values range                : 0 to 1
+**         Bit mask of the port        : $00F0
+**         Number of bits/pins         : 4
+**         Single bit numbers          : 0 to 3
+**         Values range                : 0 to 15
 **
 **         Initial direction           : Output (direction cannot be changed)
 **         Initial output value        : 0 = 000H
 **         Initial pull option         : off
 **
-**         Port data register          : PTAD      [$0000]
-**         Port control register       : PTADD     [$0001]
+**         Port data register          : PTDD      [$0006]
+**         Port control register       : PTDDD     [$0007]
 **
 **             ----------------------------------------------------
 **                   Bit     |   Pin   |   Name
 **             ----------------------------------------------------
-**                    0      |    61   |   PTA1_KBI1P1_TPM2CH0_ADP1_ACMP1MINUS
+**                    0      |    56   |   PTD4_KBI2P4
+**                    1      |    28   |   PTD5_KBI2P5
+**                    2      |    27   |   PTD6_KBI2P6
+**                    3      |    26   |   PTD7_KBI2P7
 **             ----------------------------------------------------
 **
 **         Optimization for            : speed
@@ -97,7 +100,6 @@
 #include "PE_Error.h"
 #include "PE_Const.h"
 #include "IO_Map.h"
-#include "PE_Timer.h"
 #include "Cpu.h"
 
 
@@ -112,7 +114,7 @@
 **         Note: This component is set to work in Output direction only.
 **     Parameters  : None
 **     Returns     :
-**         ---        - Input value (0 to 1)
+**         ---        - Input value (0 to 15)
 ** ===================================================================
 */
 byte Bits1_GetVal(void);
@@ -124,7 +126,7 @@ byte Bits1_GetVal(void);
 **         This method writes the new output value.
 **     Parameters  :
 **         NAME       - DESCRIPTION
-**         Val        - Output value (0 to 1)
+**         Val        - Output value (0 to 15)
 **     Returns     : Nothing
 ** ===================================================================
 */
@@ -142,7 +144,7 @@ void Bits1_PutVal(byte Val);
 **         Note: This component is set to work in Output direction only.
 **     Parameters  :
 **         NAME       - DESCRIPTION
-**         Bit        - Number of the bit to read (0 to 0)
+**         Bit        - Number of the bit to read (0 to 3)
 **     Returns     :
 **         ---        - Value of the specified bit (FALSE or TRUE)
 **                      FALSE = "0" or "Low", TRUE = "1" or "High"
@@ -158,7 +160,7 @@ bool Bits1_GetBit(byte Bit);
 **         of the output value.
 **     Parameters  :
 **         NAME       - DESCRIPTION
-**         Bit        - Number of the bit (0 to 0)
+**         Bit        - Number of the bit (0 to 3)
 **         Val        - New value of the bit (FALSE or TRUE)
 **                      FALSE = "0" or "Low", TRUE = "1" or "High"
 **     Returns     : Nothing
@@ -175,7 +177,7 @@ void Bits1_PutBit(byte Bit, bool Val);
 **         [ It is the same as "PutBit(Bit,FALSE);" ]
 **     Parameters  :
 **         NAME       - DESCRIPTION
-**         Bit        - Number of the bit to clear (0 to 0)
+**         Bit        - Number of the bit to clear (0 to 3)
 **     Returns     : Nothing
 ** ===================================================================
 */
@@ -190,7 +192,7 @@ void Bits1_ClrBit(byte Bit);
 **         [ It is the same as "PutBit(Bit,TRUE);" ]
 **     Parameters  :
 **         NAME       - DESCRIPTION
-**         Bit        - Number of the bit to set (0 to 0)
+**         Bit        - Number of the bit to set (0 to 3)
 **     Returns     : Nothing
 ** ===================================================================
 */

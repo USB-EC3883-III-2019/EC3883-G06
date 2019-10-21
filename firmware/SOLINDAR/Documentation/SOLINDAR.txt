@@ -37,17 +37,13 @@ Module "AD1"       (component ADC)
                 16 bits. In addition, the user code dependency on <AD resolution> is eliminated.
 
 Module "Cap1"      (component Capture)
+   - Cap1_Enable -This method enables the component - it starts the capture. Events may be generated 
+                (<DisableEvent>/<EnableEvent>).
+   - Cap1_Disable -This method disables the component - it stops the capture. No events will be generated.
    - Cap1_Reset -This method resets the counter register (see implementation note in <General Info>).
    - Cap1_GetCaptureValue -This method gets the last value captured by enabled timer (see implementation note in <General Info>)
                 . The method does not return valid value after initialization or after <Reset> until new capture event (even if 
                 the returned Error code is ERR_OK).
-
-Module "FC81"      (component FreeCntr8)
-   - FC81_Reset -This method clears the counter.
-   - FC81_GetTimeUS -This method returns the time (as a 16-bit unsigned integer) in microseconds since the last resetting after 
-                the last reset.
-   - FC81_GetTimeMS -This method returns the time (as a 16-bit unsigned integer) in milliseconds since the last resetting after 
-                the last reset.
 
 Module "Bits1"     (component BitsIO)
    - Bits1_GetDir -Return selected direction.
@@ -87,6 +83,15 @@ Module "Bit1"      (component BitIO)
                 if the direction = _[output]_ or _[input/output]_.
    - Bit1_SetVal -Sets (to one) the output value. It is equivalent to the [PutVal(TRUE)]. This method is available only if the 
                 direction = _[output]_ or _[input/output]_.
+
+Module "FC321"     (component FreeCntr32)
+   - FC321_Enable -This method enables the component - the internal clocks are counted.
+   - FC321_Disable -This method disables the component - the internal clocks are not counted.
+   - FC321_Reset -This method clears the counter.
+   - FC321_GetTimeUS -This method returns the time (as a 16-bit unsigned integer) in microseconds since the last resetting 
+                after the last reset.
+   - FC321_GetTimeMS -This method returns the time (as a 16-bit unsigned integer) in milliseconds since the last resetting 
+                after the last reset.
 
 Module "Cpu"       (component MC9S08QE128_80)
    - Cpu_EnableInt -Enables maskable interrupts

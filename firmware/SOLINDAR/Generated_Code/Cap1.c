@@ -6,7 +6,7 @@
 **     Component   : Capture
 **     Version     : Component 02.223, Driver 01.30, CPU db: 3.00.067
 **     Compiler    : CodeWarrior HCS08 C Compiler
-**     Date/Time   : 2019-10-09, 22:40, # CodeGen: 16
+**     Date/Time   : 2019-10-16, 13:50, # CodeGen: 37
 **     Abstract    :
 **         This component "Capture" simply implements the capture function
 **         of timer. The counter counts the same way as in free run mode. On
@@ -58,6 +58,8 @@
 **         Pull option                 : off
 **
 **     Contents    :
+**         Enable          - byte Cap1_Enable(void);
+**         Disable         - byte Cap1_Disable(void);
 **         Reset           - byte Cap1_Reset(void);
 **         GetCaptureValue - byte Cap1_GetCaptureValue(Cap1_TCapturedValue *Value);
 **
@@ -113,8 +115,58 @@
 #include "Cap1.h"
 
 
+static bool EnUser;                    /* Enable/Disable device by user */
 volatile word Cap1_CntrState;          /* Content of counter */
 
+
+/*
+** ===================================================================
+**     Method      :  Cap1_Enable (component Capture)
+**     Description :
+**         This method enables the component - it starts the capture.
+**         Events may be generated (<DisableEvent>/<EnableEvent>).
+**     Parameters  : None
+**     Returns     :
+**         ---             - Error code, possible codes:
+**                           ERR_OK - OK
+**                           ERR_SPEED - This device does not work in
+**                           the active speed mode
+** ===================================================================
+*/
+byte Cap1_Enable(void)
+{
+  Cap1_CntrState = TPM1CNT;            /* Load content of counter register to variable CntrState */
+  if (!EnUser) {                       /* Is the device disabled by user? */
+    EnUser = TRUE;                     /* If yes then set the flag "device enabled" */
+    /* TPM1C0SC: CH0F=0,CH0IE=1,MS0B=0,MS0A=0,ELS0B=0,ELS0A=1,??=0,??=0 */
+    setReg8(TPM1C0SC, 0x44U);          /* Enable both interrupt and capture function */ 
+  }
+  return ERR_OK;                       /* OK */
+}
+
+/*
+** ===================================================================
+**     Method      :  Cap1_Disable (component Capture)
+**     Description :
+**         This method disables the component - it stops the capture.
+**         No events will be generated.
+**     Parameters  : None
+**     Returns     :
+**         ---             - Error code, possible codes:
+**                           ERR_OK - OK
+**                           ERR_SPEED - This device does not work in
+**                           the active speed mode
+** ===================================================================
+*/
+byte Cap1_Disable(void)
+{
+  if (EnUser) {                        /* Is the device enabled by user? */
+    EnUser = FALSE;                    /* If yes then set the flag "device disabled" */
+    /* TPM1C0SC: CH0F=0,CH0IE=0,MS0B=0,MS0A=0,ELS0B=0,ELS0A=0,??=0,??=0 */
+    setReg8(TPM1C0SC, 0x00U);          /* Disable capture function */ 
+  }
+  return ERR_OK;                       /* OK */
+}
 
 /*
 ** ===================================================================
@@ -182,6 +234,7 @@ void Cap1_Init(void)
   /* TPM1C0V: BIT15=0,BIT14=0,BIT13=0,BIT12=0,BIT11=0,BIT10=0,BIT9=0,BIT8=0,BIT7=0,BIT6=0,BIT5=0,BIT4=0,BIT3=0,BIT2=0,BIT1=0,BIT0=0 */
   setReg16(TPM1C0V, 0x00U);            /* Clear capture register */ 
   Cap1_CntrState = 0x00U;              /* Clear variable */
+  EnUser = TRUE;                       /* Enable device */
   /* TPM1SC: PS2=1,PS1=0,PS0=0 */
   clrSetReg8Bits(TPM1SC, 0x03U, 0x04U); /* Set prescaler register */ 
   /* TPM1C0SC: CH0F=0,CH0IE=1,MS0B=0,MS0A=0,ELS0B=0,ELS0A=1,??=0,??=0 */

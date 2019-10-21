@@ -1,0 +1,49 @@
+<CodeGenerationInfo>
+  <ToolchainSettings>
+    <option>
+      <name>PE_G_4PEx_ToolChain_Compiler_SearchUserPaths</name>
+      <values lines_count="2">
+        <Line>"${ProjDirPath}/Sources"</Line>
+        <Line>"${ProjDirPath}/Generated_Code"</Line>
+      </values>
+    </option>
+  </ToolchainSettings>
+  <GeneratedFilesList>
+    <GeneratedByPE>
+      <File Name="Generated_Code/TI2.h" FileDate="2019-10-14, 14:38:27" FileAge="1571080107077" FileType="45637" CompNumb="17" />
+      <File Name="Generated_Code/Bits1.h" FileDate="2019-10-14, 12:31:54" FileAge="1571072514452" FileType="45637" CompNumb="16" />
+      <File Name="Sources/main.c" FileDate="2019-10-14, 14:56:06" FileAge="1571081166092" FileType="128" />
+      <File Name="Generated_Code/AD1.c" FileDate="2019-10-14, 14:58:17" FileAge="1571081297091" FileType="45637" CompNumb="13" />
+      <File Name="Generated_Code/FC81.c" FileDate="2019-10-09, 22:23:54" FileAge="1570676034801" FileType="45637" CompNumb="15" />
+      <File Name="Generated_Code/TI2.c" FileDate="2019-10-14, 14:38:27" FileAge="1571080107106" FileType="45637" CompNumb="17" />
+      <File Name="Generated_Code/Bits1.c" FileDate="2019-10-14, 12:31:54" FileAge="1571072514481" FileType="45637" CompNumb="16" />
+      <File Name="Generated_Code/AS1.h" FileDate="2019-10-09, 20:31:21" FileAge="1570669281233" FileType="45637" CompNumb="8" />
+      <File Name="Generated_Code/Cap1.h" FileDate="2019-10-09, 22:40:08" FileAge="1570677008051" FileType="45637" CompNumb="14" />
+      <File Name="Generated_Code/PE_Timer.h" FileDate="2019-10-09, 22:22:16" FileAge="1570675936538" FileType="45637" />
+      <File Name="Generated_Code/AS1.c" FileDate="2019-10-09, 20:31:21" FileAge="1570669281250" FileType="45637" CompNumb="8" />
+      <File Name="Documentation/SOLINDAR_SIGNALS.txt" FileDate="2019-10-14, 14:58:17" FileAge="1571081297149" FileType="3072" />
+      <File Name="Generated_Code/Cap1.c" FileDate="2019-10-09, 22:40:08" FileAge="1570677008081" FileType="45637" CompNumb="14" />
+      <File Name="Sources/Events.h" FileDate="2019-10-14, 14:58:17" FileAge="1571081297123" FileType="131328" />
+      <File Name="Generated_Code/PE_Timer.c" FileDate="2019-10-09, 22:22:16" FileAge="1570675936533" FileType="45637" />
+      <File Name="Generated_Code/TI1.h" FileDate="2019-10-09, 20:42:19" FileAge="1570669939882" FileType="45637" CompNumb="9" />
+      <File Name="Generated_Code/PE_Const.h" FileDate="2019-10-09, 18:06:41" FileAge="1570660601371" FileType="45637" />
+      <File Name="Sources/Events.c" FileDate="2019-10-14, 14:58:17" FileAge="1571081297129" FileType="131328" />
+      <File Name="Generated_Code/TI1.c" FileDate="2019-10-09, 20:42:19" FileAge="1570669939905" FileType="45637" CompNumb="9" />
+      <File Name="Generated_Code/Vectors.c" FileDate="2019-10-14, 14:58:17" FileAge="1571081297106" FileType="45637" CompNumb="4" />
+      <File Name="Generated_Code/Cpu.h" FileDate="2019-10-09, 22:50:55" FileAge="1570677655974" FileType="45637" CompNumb="4" />
+      <File Name="Generated_Code/Bit1.h" FileDate="2019-10-09, 22:50:55" FileAge="1570677655908" FileType="45637" CompNumb="21" />
+      <File Name="Generated_Code/Cpu.c" FileDate="2019-10-14, 14:35:23" FileAge="1571079923321" FileType="45637" CompNumb="4" />
+      <File Name="Generated_Code/IO_Map.h" FileDate="2019-10-09, 18:06:41" FileAge="1570660601361" FileType="45637" />
+      <File Name="Generated_Code/PE_Types.h" FileDate="2019-10-09, 18:06:41" FileAge="1570660601381" FileType="45637" />
+      <File Name="Project_Settings/Linker_Files/ProcessorExpert.prm" FileDate="2019-10-09, 18:06:41" FileAge="1570660601286" FileType="8" CompNumb="4" />
+      <File Name="Generated_Code/Bit1.c" FileDate="2019-10-09, 22:50:55" FileAge="1570677655897" FileType="45637" CompNumb="21" />
+      <File Name="Documentation/SOLINDAR.txt" FileDate="2019-10-09, 22:50:56" FileAge="1570677656624" FileType="3072" />
+      <File Name="Generated_Code/IO_Map.c" FileDate="2019-10-09, 18:06:41" FileAge="1570660601342" FileType="45637" />
+      <File Name="Generated_Code/AD1.h" FileDate="2019-10-14, 14:58:17" FileAge="1571081297075" FileType="45637" CompNumb="13" />
+      <File Name="Generated_Code/FC81.h" FileDate="2019-10-09, 22:23:54" FileAge="1570676034740" FileType="45637" CompNumb="15" />
+      <File Name="Generated_Code/PE_Error.h" FileDate="2019-10-09, 18:06:41" FileAge="1570660601381" FileType="45637" />
+      <File Name="Documentation/SOLINDAR_Settings.xml" FileDate="2019-10-14, 14:58:17" FileAge="1571081297208" FileType="3072" />
+    </GeneratedByPE>
+  </GeneratedFilesList>
+  <CodeGenReference>24</CodeGenReference>
+</CodeGenerationInfo>

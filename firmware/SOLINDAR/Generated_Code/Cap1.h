@@ -6,7 +6,7 @@
 **     Component   : Capture
 **     Version     : Component 02.223, Driver 01.30, CPU db: 3.00.067
 **     Compiler    : CodeWarrior HCS08 C Compiler
-**     Date/Time   : 2019-10-09, 22:40, # CodeGen: 16
+**     Date/Time   : 2019-10-16, 13:50, # CodeGen: 37
 **     Abstract    :
 **         This component "Capture" simply implements the capture function
 **         of timer. The counter counts the same way as in free run mode. On
@@ -58,6 +58,8 @@
 **         Pull option                 : off
 **
 **     Contents    :
+**         Enable          - byte Cap1_Enable(void);
+**         Disable         - byte Cap1_Disable(void);
 **         Reset           - byte Cap1_Reset(void);
 **         GetCaptureValue - byte Cap1_GetCaptureValue(Cap1_TCapturedValue *Value);
 **
@@ -136,6 +138,38 @@
 
 extern volatile word Cap1_CntrState;   /* Content of counter */
 
+
+byte Cap1_Enable(void);
+/*
+** ===================================================================
+**     Method      :  Cap1_Enable (component Capture)
+**     Description :
+**         This method enables the component - it starts the capture.
+**         Events may be generated (<DisableEvent>/<EnableEvent>).
+**     Parameters  : None
+**     Returns     :
+**         ---             - Error code, possible codes:
+**                           ERR_OK - OK
+**                           ERR_SPEED - This device does not work in
+**                           the active speed mode
+** ===================================================================
+*/
+
+byte Cap1_Disable(void);
+/*
+** ===================================================================
+**     Method      :  Cap1_Disable (component Capture)
+**     Description :
+**         This method disables the component - it stops the capture.
+**         No events will be generated.
+**     Parameters  : None
+**     Returns     :
+**         ---             - Error code, possible codes:
+**                           ERR_OK - OK
+**                           ERR_SPEED - This device does not work in
+**                           the active speed mode
+** ===================================================================
+*/
 
 #define Cap1_Reset() \
   (Cap1_CntrState = TPM1CNT , (byte)ERR_OK)

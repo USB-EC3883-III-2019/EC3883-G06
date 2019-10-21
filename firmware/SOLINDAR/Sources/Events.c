@@ -141,14 +141,6 @@ void TI1_OnInterrupt(void){
 **     Returns     : Nothing
 ** ===================================================================
 */
-extern unsigned short lidar_measure;
-void AD1_OnEnd(void){
-	do		
-		err=AD1_GetChanValue(0,&lidar_measure);
-	while(err!=ERR_OK);
-}
-
-
 
 /*
 ** ===================================================================
@@ -185,9 +177,14 @@ void TI2_OnInterrupt(void)
 **     Returns     : Nothing
 ** ===================================================================
 */
+extern unsigned short sonar_measure;
 void Cap1_OnCapture(void)
-{
-  /* Write your code here ... */
+{	
+	do
+	  err=Cap1_GetCaptureValue(&sonar_measure);    
+	while(err!=ERR_OK);	
+	Cap1_Disable();
+		
 }
 
 /* END Events */

@@ -8,13 +8,13 @@ from solindar_lib import ComDriver
 Port = "COM3"
 len_fifo=10
 scale_factor=1
-n_block=5
+n_block=10
 
 con = ComDriver(Port,len_fifo,scale_factor,n_block)
 
 while True:
 	con.update_fifos()	
-	print('Position: ',con.position_fifo[0])
-	print('Lidar: ',con.lidar_fifo[0])
-	print('Sonar: ',con.sonar_fifo[0])
-	time.sleep(2)
+	print('Position: ',con.position_fifo)
+	print('Lidar: ',con.lidar_fifo)
+	print('Sonar: ',con.sonar_fifo)
+	time.sleep(1)

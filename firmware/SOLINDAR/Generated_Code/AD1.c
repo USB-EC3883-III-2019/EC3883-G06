@@ -6,7 +6,7 @@
 **     Component   : ADC
 **     Version     : Component 01.690, Driver 01.30, CPU db: 3.00.067
 **     Compiler    : CodeWarrior HCS08 C Compiler
-**     Date/Time   : 2019-10-09, 22:49, # CodeGen: 17
+**     Date/Time   : 2019-10-16, 12:47, # CodeGen: 24
 **     Abstract    :
 **         This device "ADC" implements an A/D converter,
 **         its control methods and interrupt/event handling procedure.
@@ -14,12 +14,10 @@
 **          Component name                                 : AD1
 **          A/D converter                                  : ADC
 **          Sharing                                        : Disabled
-**          Interrupt service/event                        : Enabled
-**            A/D interrupt                                : Vadc
-**            A/D interrupt priority                       : medium priority
+**          Interrupt service/event                        : Disabled
 **          A/D channels                                   : 1
 **            Channel0                                     : 
-**              A/D channel (pin)                          : PTF0_ADP10
+**              A/D channel (pin)                          : PTA1_KBI1P1_TPM2CH0_ADP1_ACMP1MINUS
 **              A/D channel (pin) signal                   : 
 **          A/D resolution                                 : Autoselect
 **          Conversion time                                : 5.75 µs
@@ -90,20 +88,30 @@
 
 /* MODULE AD1. */
 
-#include "Events.h"
 #include "AD1.h"
 
 #pragma MESSAGE DISABLE C5703          /* Disable warning C5703 "Parameter is not referenced" */
 
 
 
+static void AD1_MainMeasure(void);
+/*
+** ===================================================================
+**     Method      :  MainMeasure (component ADC)
+**
+**     Description :
+**         The method performs the conversion of the input channels in 
+**         the polling mode.
+**         This method is internal. It is used by Processor Expert only.
+** ===================================================================
+*/
 #define STOP            0x00U          /* STOP state           */
 #define MEASURE         0x01U          /* MESURE state         */
 #define CONTINUOUS      0x02U          /* CONTINUOS state      */
 #define SINGLE          0x03U          /* SINGLE state         */
 
 
-static const  byte Channels = 0x4AU;   /* Content for the device control register */
+static const  byte Channels = 0x01U;   /* Content for the device control register */
 
 static volatile bool OutFlg;           /* Measurement finish flag */
 static volatile byte ModeFlg;          /* Current state of device */
@@ -112,29 +120,34 @@ volatile word AD1_OutV;                /* Sum of measured values */
 
 
 
+bool WaitForRes;                       /* Wait for result flag */
 
 
 /*
 ** ===================================================================
-**     Method      :  AD1_Interrupt (component ADC)
+**     Method      :  MainMeasure (component ADC)
 **
 **     Description :
-**         The method services the interrupt of the selected peripheral(s)
-**         and eventually invokes event(s) of the component.
+**         The method performs the conversion of the input channels in 
+**         the polling mode.
 **         This method is internal. It is used by Processor Expert only.
 ** ===================================================================
 */
-ISR(AD1_Interrupt)
+static void AD1_MainMeasure(void)
 {
+
+  ADCSC1 = Channels;                   /* Start measurement of next channel */
+  if (!WaitForRes) {                   /* If doesn't wait for result */
+    return;                            /* then return */
+  }
+  while (ADCSC1_COCO == 0U) {}         /* Wait for AD conversion complete */
   /*lint -save  -e926 -e927 -e928 -e929 Disable MISRA rule (11.4) checking. */
-  ((TWREG volatile*)(&AD1_OutV))->b.high = ADCRH; /* Save measured value */
-  ((TWREG volatile*)(&AD1_OutV))->b.low = ADCRL; /* Save measured value */
+  ((TWREG*)(&AD1_OutV))->b.high = ADCRH; /* Save measured value */
+  ((TWREG*)(&AD1_OutV))->b.low = ADCRL; /* Save measured value */
   /*lint -restore Enable MISRA rule (11.4) checking. */
   OutFlg = TRUE;                       /* Measured value is available */
-  AD1_OnEnd();                         /* Invoke user event */
   ModeFlg = STOP;                      /* Set the device to the stop mode */
 }
-
 /*
 ** ===================================================================
 **     Method      :  AD1_HWEnDi (component ADC)
@@ -150,7 +163,7 @@ void AD1_HWEnDi(void)
 {
   if (ModeFlg) {                       /* Start or stop measurement? */
     OutFlg = FALSE;                    /* Output value isn't available */
-    ADCSC1 = Channels;                 /* If yes then start the conversion */
+    AD1_MainMeasure();
   }
 }
 
@@ -194,10 +207,8 @@ byte AD1_Measure(bool WaitForResult)
     return ERR_BUSY;                   /* If yes then error */
   }
   ModeFlg = MEASURE;                   /* Set state of device to the measure mode */
+  WaitForRes = WaitForResult;          /* Save Wait for result flag */
   AD1_HWEnDi();                        /* Enable the device */
-  if (WaitForResult) {                 /* Is WaitForResult TRUE? */
-    while (ModeFlg == MEASURE) {}      /* If yes then wait for end of measurement */
-  }
   return ERR_OK;                       /* OK */
 }
 
@@ -238,10 +249,8 @@ byte PE_AD1_MeasureChan(bool WaitForResult)
     return ERR_BUSY;                   /* If yes then error */
   }
   ModeFlg = SINGLE;                    /* Set state of device to the measure mode */
+  WaitForRes = WaitForResult;          /* Save Wait for result flag */
   AD1_HWEnDi();                        /* Enable the device */
-  if (WaitForResult) {                 /* Is WaitForResult TRUE? */
-    while (ModeFlg == SINGLE) {}       /* If yes then wait for end of measurement */
-  }
   return ERR_OK;                       /* OK */
 }
 
@@ -284,7 +293,18 @@ byte PE_AD1_MeasureChan(bool WaitForResult)
 byte AD1_GetChanValue(byte Channel,void* Value)
 {
   if (OutFlg == 0U) {                  /* Is output flag set? */
-    return ERR_NOTAVAIL;               /* If no then error */
+    if (ADCSC1_COCO) {
+      /*lint -save  -e926 -e927 -e928 -e929 Disable MISRA rule (11.4) checking. */
+      ((TWREG*)(&AD1_OutV))->b.high = ADCRH; /* Save measured value */
+      ((TWREG*)(&AD1_OutV))->b.low = ADCRL; /* Save measured value */
+      /*lint -restore Enable MISRA rule (11.4) checking. */
+      OutFlg = TRUE;                   /* Measured value is available */
+      ADCSC1 = 0x1FU;                  /* Stop the device */
+      ModeFlg = STOP;                  /* Set the device to the stop mode */
+    }
+    else {
+      return ERR_NOTAVAIL;             /* If no then error */
+    }
   }
   *(word*)Value = AD1_OutV;            /* Save measured values to the output buffer */
   return ERR_OK;                       /* OK */
@@ -321,7 +341,18 @@ byte AD1_GetChanValue(byte Channel,void* Value)
 byte AD1_GetValue16(word *Values)
 {
   if (OutFlg == 0U) {                  /* Is output flag set? */
-    return ERR_NOTAVAIL;               /* If no then error */
+    if (ADCSC1_COCO) {
+      /*lint -save  -e926 -e927 -e928 -e929 Disable MISRA rule (11.4) checking. */
+      ((TWREG*)(&AD1_OutV))->b.high = ADCRH; /* Save measured value */
+      ((TWREG*)(&AD1_OutV))->b.low = ADCRL; /* Save measured value */
+      /*lint -restore Enable MISRA rule (11.4) checking. */
+      OutFlg = TRUE;                   /* Measured value is available */
+      ADCSC1 = 0x1FU;                  /* Stop the device */
+      ModeFlg = STOP;                  /* Set the device to the stop mode */
+    }
+    else {
+      return ERR_NOTAVAIL;             /* If no then error */
+    }
   }
   *Values = (word)((AD1_OutV) << 4);   /* Save measured values to the output buffer */
   return ERR_OK;                       /* OK */

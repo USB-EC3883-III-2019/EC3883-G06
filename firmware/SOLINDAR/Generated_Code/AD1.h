@@ -6,7 +6,7 @@
 **     Component   : ADC
 **     Version     : Component 01.690, Driver 01.30, CPU db: 3.00.067
 **     Compiler    : CodeWarrior HCS08 C Compiler
-**     Date/Time   : 2019-10-09, 22:49, # CodeGen: 17
+**     Date/Time   : 2019-10-16, 12:47, # CodeGen: 24
 **     Abstract    :
 **         This device "ADC" implements an A/D converter,
 **         its control methods and interrupt/event handling procedure.
@@ -14,12 +14,10 @@
 **          Component name                                 : AD1
 **          A/D converter                                  : ADC
 **          Sharing                                        : Disabled
-**          Interrupt service/event                        : Enabled
-**            A/D interrupt                                : Vadc
-**            A/D interrupt priority                       : medium priority
+**          Interrupt service/event                        : Disabled
 **          A/D channels                                   : 1
 **            Channel0                                     : 
-**              A/D channel (pin)                          : PTF0_ADP10
+**              A/D channel (pin)                          : PTA1_KBI1P1_TPM2CH0_ADP1_ACMP1MINUS
 **              A/D channel (pin) signal                   : 
 **          A/D resolution                                 : Autoselect
 **          Conversion time                                : 5.75 µs
@@ -102,18 +100,6 @@
 
 
 
-
-__interrupt void AD1_Interrupt(void);
-/*
-** ===================================================================
-**     Method      :  AD1_Interrupt (component ADC)
-**
-**     Description :
-**         The method services the interrupt of the selected peripheral(s)
-**         and eventually invokes event(s) of the component.
-**         This method is internal. It is used by Processor Expert only.
-** ===================================================================
-*/
 
 void AD1_HWEnDi(void);
 /*

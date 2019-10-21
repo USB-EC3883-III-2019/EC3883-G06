@@ -34,10 +34,10 @@
 #include "TI1.h"
 #include "AD1.h"
 #include "Cap1.h"
-#include "FC81.h"
 #include "Bits1.h"
 #include "TI2.h"
 #include "Bit1.h"
+#include "FC321.h"
 /* Include shared modules, which are used for whole project */
 #include "PE_Types.h"
 #include "PE_Error.h"
@@ -69,11 +69,16 @@ void main(void)
                           {0,1,0,0},
                           {0,1,1,0},
                           {0,0,1,0}};
+  bool is_step_done = 0;
 
   //End of motor variables-------------------------------------------------------------
   //Lidar variables--------------------------------------------------------------------  
-  unsigned short lidar_measure = 0; 
+  unsigned short lidar_measure = 0;   
   unsigned short lidar_value = 0;
+  int lidar_mean = 0;
+  int lidar_counter = 0;
+  bool lidar_ADC_read_done = 0;
+  bool lidar_value_done = 0;
   
   //End of Lidar variables-------------------------------------------------------------
   //Sonar variables--------------------------------------------------------------------  
@@ -85,9 +90,7 @@ void main(void)
   //End of Sonar variables-------------------------------------------------------------  
   //Other variables--------------------------------------------------------------------
   int i = 0; //used in for statements
-  unsigned short max_measures = 10; //number of measures to take at each point
-  unsigned short counter_measures = 0;  //counter of measures done at a particular point
-   
+  unsigned short max_measures = 1; //number of measures to take at each point  
   
   
   //End of other variables--------------------------------------------------------------------
@@ -105,49 +108,71 @@ void main(void)
   /* Write your code here */
   while(1){
         if(tick_motor){
-          tick_motor=0;       
-          //Motor routine
-          seq_index=motor_run(&dir,&counter,&max); //Get motor index sequence
-          for(i=0;i<4;i++)
-            Bits1_PutBit(0,sequence[seq_index][i]);
-
-          //For testing comunications
-          is_send=1;
+          if(!is_step_done){
+			  tick_motor=0;       
+			  //Motor routine          
+			  if(dir)
+				counter++;
+			  else
+				counter--;
+			  if(counter>=max)
+				dir=0;
+			  if(counter==0)
+				dir=1;
+			  seq_index= counter%8;
+			  for(i=0;i<4;i++)
+				Bits1_PutBit(i,sequence[seq_index][i]);
+	
+			  //For testing comunications
+			  is_step_done=1;
+          }
     } 
-    
-    if(tick_sensors){
-      tick_sensors=0; 
+     
+        
+    if(tick_sensors && !lidar_value_done){
+      tick_sensors=0;       
+      //Lidar      
+      AD1_MeasureChan(1,0); 
+      AD1_GetChanValue(0,&lidar_measure);
       
-      if(counter_measures<max_measures)
-        counter_measures++;
-      else
-        counter_measures = 0;
+	 if(lidar_counter<max_measures){
+	   lidar_mean+=lidar_measure;
+	   lidar_counter++;
+	 }
+	 else{			 
+	   lidar_value = lidar_mean / max_measures;
+	   lidar_mean=0;
+	   lidar_counter = 0;
+	   lidar_value_done=1;
+	 }
       
-      //Lidar
-      AD1_MeasureChan(0,0);           
       
       //Sonar
       
       //trigger
       Bit1_PutVal(1);
-      FC81_Reset();
+      FC321_Enable();
+      FC321_Reset();
       while(sonar_UStimer<15){
       do
-        err=FC81_GetTimeUS(&sonar_UStimer);
+        err=FC321_GetTimeUS(&sonar_UStimer);
       while(err!=ERR_OK);
       }
+      FC321_Disable();
       sonar_UStimer=0;
       Bit1_PutVal(0);     
       //Capture   
+      Cap1_Enable();
       Cap1_Reset();   
       
     }   
     //Comunication      
-  
-    if(is_send){
-      is_send=0;
+    is_send = lidar_value_done && is_step_done;
+    if(is_step_done){      
+      lidar_value_done =0;
+      is_step_done = 0;
       //Make packet
-      make_packet(counter,sonar_value,lidar_value,&data);
+      make_packet(counter,sonar_measure,lidar_value,&data);
       //Send data
       do
         err=AS1_SendBlock((byte*) &data,sizeof(data),&Sent);
