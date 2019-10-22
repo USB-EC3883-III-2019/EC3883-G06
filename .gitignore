@@ -66,3 +66,7 @@ FLASH
 .SOLINDAR.g_x
 .cwGeneratedFileSetLog
 ReferencedRSESystems.xml
+
+
+reserve/*
+firmware/.metadata/*
