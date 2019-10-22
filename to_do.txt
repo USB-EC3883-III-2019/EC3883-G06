@@ -1,0 +1,10 @@
+To do
+
+- Acoplar con interfaz
+- Agregar en interfaz contador e indicar de filtro
+- Ajustar las varianzas de fusion
+- Arreglar tierras.
+- Caracterización *
+- Acondicionar en software *
+- Generar log. *
+- Ajustar el protocolo para enviar el bit de filtro.*
