@@ -6,7 +6,7 @@
 **     Component   : Capture
 **     Version     : Component 02.223, Driver 01.30, CPU db: 3.00.067
 **     Compiler    : CodeWarrior HCS08 C Compiler
-**     Date/Time   : 2019-10-21, 15:23, # CodeGen: 70
+**     Date/Time   : 2019-10-22, 13:37, # CodeGen: 81
 **     Abstract    :
 **         This component "Capture" simply implements the capture function
 **         of timer. The counter counts the same way as in free run mode. On
@@ -21,15 +21,15 @@
 **             Counter shared          : No
 **
 **         High speed mode
-**             Prescaler               : divide-by-2
+**             Prescaler               : divide-by-1
 **           Maximal time for capture register
-**             Xtal ticks              : 262144
-**             microseconds            : 8000000
-**             milliseconds            : 8000
-**             seconds                 : 8
-**             seconds (real)          : 8.0
+**             Xtal ticks              : 131072
+**             microseconds            : 4000000
+**             milliseconds            : 4000
+**             seconds                 : 4
+**             seconds (real)          : 4.0
 **           One tick of timer is
-**             microseconds            : 122.070312
+**             microseconds            : 61.035156
 **
 **         Initialization:
 **              Timer                  : Enabled
@@ -197,7 +197,7 @@ byte Cap1_Reset(word *Value)
 **     Description :
 **         This method gets the last value captured by enabled timer.
 **         Note: one tick of timer is
-**               122.070312 us in high speed mode
+**               61.035156 us in high speed mode
 **     Parameters  :
 **         NAME            - DESCRIPTION
 **       * Value           - A pointer to the content of the
@@ -257,8 +257,8 @@ void Cap1_Init(void)
   /* TPM3C0V: BIT15=0,BIT14=0,BIT13=0,BIT12=0,BIT11=0,BIT10=0,BIT9=0,BIT8=0,BIT7=0,BIT6=0,BIT5=0,BIT4=0,BIT3=0,BIT2=0,BIT1=0,BIT0=0 */
   setReg16(TPM3C0V, 0x00U);            /* Clear capture register */ 
   EnUser = TRUE;                       /* Enable device */
-  /* TPM3SC: PS2=0,PS1=0,PS0=1 */
-  clrSetReg8Bits(TPM3SC, 0x06U, 0x01U); /* Set prescaler register */ 
+  /* TPM3SC: PS2=0,PS1=0,PS0=0 */
+  clrReg8Bits(TPM3SC, 0x07U);          /* Set prescaler register */ 
   /* TPM3C0SC: CH0F=0,CH0IE=1,MS0B=0,MS0A=0,ELS0B=1,ELS0A=1,??=0,??=0 */
   setReg8(TPM3C0SC, 0x4CU);            /* Enable both interrupt and capture function */ 
   /* TPM3SC: CLKSB=1,CLKSA=0 */

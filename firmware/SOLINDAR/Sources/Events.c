@@ -192,6 +192,8 @@ void Cap1_OnCapture(void)
 		  err=Cap1_GetCaptureValue(&sonar_measure);    
 		while(err!=ERR_OK);	
 		if(sonar_counter<max_measures){
+			   if(sonar_measure>300)
+				   sonar_measure=300;
 			   sonar_mean+=sonar_measure;
 			   sonar_counter++;
 		}
