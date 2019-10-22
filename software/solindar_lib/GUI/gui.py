@@ -62,6 +62,7 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
         timer1.timeout.connect(self.con.update_fifos)
         timer1.timeout.connect(self.PosicionLcd)
         timer1.timeout.connect(self.logFun)
+        timer1.timeout.connect(self.filter)
         timer1.start(ts)
 
         #Timer 2
@@ -92,26 +93,29 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
         else:
             self.Ch_state[2] = False
 
-    def filter (self,state):
-        if state == QtCore.Qt.Checked:
-            pass                
+    def filter (self):
+        if int(self.con.filter_on[-1]):
+            self.filPro.setValue(100)
         else:
-            pass
+            self.filPro.setValue(0)
+
 
     def PosicionLcd(self):
-        self.posNum += 1
-        self.posLcd.display(self.posNum)
-        if self.filind == 0:
-            self.filind = 100
-        else:
-            self.filind = 0
-        self.filPro.setValue(self.filind)
+        self.posLcd.display(int(self.con.position_fifo[-1]*self.pos_conv*180//np.pi))
+        # self.posNum += 1
+        # self.posLcd.display(self.posNum)
+        # if self.filind == 0:
+        #     self.filind = 100
+        # else:
+        #     self.filind = 0
+        # self.filPro.setValue(self.filind)
 
     def logFun(self):
         self.log.info('Filter on: '+  str(self.con.filter_on[:self.con.n]))
         self.log.info('Position: '+ str(self.con.position_fifo[:self.con.n] * self.pos_conv))
         self.log.info('Lidar: '+  str(self.lidarproc[:self.con.n]))
         self.log.info('Sonar: '+  str(self.sonarproc[:self.con.n]))
+        
         
    # def Grid (self,state): #If Grid button is checked shows the Grid. Otherwise, it hides it
     #     if state == QtCore.Qt.Checked:
@@ -128,9 +132,9 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
         #     self.ax.grid()
         self.sonarproc,self.lidarproc = process_data(self.con.sonar_fifo,self.con.lidar_fifo)
         if self.Ch_state[0]:
-            self.lines = self.ax.plot(self.con.position_fifo[:] * self.pos_conv,self.con.sonarproc[:],self.Ch_colors[0])
+            self.lines = self.ax.plot(self.con.position_fifo[:] * self.pos_conv,self.sonarproc[:],self.Ch_colors[0])
         if self.Ch_state[1]:
-            self.lines = self.ax.plot(self.con.position_fifo[:] * self.pos_conv,self.con.lidarproc[:],self.Ch_colors[1])
+            self.lines = self.ax.plot(self.con.position_fifo[:] * self.pos_conv,self.lidarproc[:],self.Ch_colors[1])
         if self.Ch_state[2]:
             self.fusion_fifo = self.fusvar2*(self.sonvarn2*self.con.sonar_fifo[:] + self.lidvarn2*self.con.lidar_fifo[:])
             self.lines = self.ax.plot(self.con.position_fifo[:] * self.pos_conv, self.fusion_fifo[:])
