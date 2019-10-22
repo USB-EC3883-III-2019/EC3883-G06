@@ -7,10 +7,9 @@ from solindar_lib import ComDriver, process_data
 #Parameters
 Port = "COM3"
 len_fifo=10
-scale_factor=1
 n_block=10
 
-con = ComDriver(Port,len_fifo,scale_factor,n_block)
+con = ComDriver(Port,len_fifo,n_block)
 
 while True:
 	con.update_fifos()

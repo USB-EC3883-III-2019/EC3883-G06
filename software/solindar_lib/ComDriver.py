@@ -5,7 +5,7 @@ import numpy as np
 #This class allows receptions & decoding data from serial ports
 class ComDriver(serial.Serial):
 
-    def __init__(self,Port,len_fifo,scale_factor,n_block):
+    def __init__(self,Port,len_fifo,n_block):
         super().__init__(port=Port,
                          baudrate=115200,
                          parity=serial.PARITY_NONE,
