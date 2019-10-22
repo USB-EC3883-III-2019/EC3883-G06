@@ -70,3 +70,5 @@ ReferencedRSESystems.xml
 
 reserve/*
 firmware/.metadata/*
+
+*.log
