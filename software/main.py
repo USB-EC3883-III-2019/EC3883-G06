@@ -3,6 +3,7 @@ matplotlib.use('Qt5Agg')
 import sys
 from PyQt4 import QtCore, QtGui, uic
 from solindar_lib import ComDriver, SolindarGUI, TestCom
+import qdarkstyle
 
 #Implementation
 ts=100 #sampling time in ms
@@ -14,6 +15,7 @@ con = TestCom.testCom(len_fifo,n_block)
 #The following lines open the gui app
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
+    app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt())
     window = SolindarGUI(con,ts,refresh_time)
     window.show()
     sys.exit(app.exec_()) 

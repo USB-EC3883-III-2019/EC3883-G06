@@ -24,10 +24,10 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         self.navigation = NavigationToolbar(self.canvas, self)
         self.hlayout.addWidget(self.navigation)
-        self.gCheck.stateChanged.connect(self.Grid) #If grid button is checked executes Grid function
-        self.gCheck.setStatusTip("Colocar Grid en la grafica")
-        self.fCheck.stateChanged.connect(self.filter)
-        self.fCheck.setStatusTip("Activar el filtro")
+        # self.gCheck.stateChanged.connect(self.Grid) #If grid button is checked executes Grid function
+        # self.gCheck.setStatusTip("Colocar Grid en la grafica")
+        # self.fCheck.stateChanged.connect(self.filter)
+        # self.fCheck.setStatusTip("Activar el filtro")
         self.sonBox.stateChanged.connect(self.ChannelSon)
         self.sonBox.setStatusTip("Activar la Grafica del Sonar")
         self.lidBox.stateChanged.connect(self.ChannelLid)
@@ -47,12 +47,15 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
         self.lidvarn2 = (4.89*(10**-5))**-2
         self.fusvar2 = ((self.sonvarn2) + (self.lidvarn2))**(-1)
         self.fusion_fifo = np.zeros((self.con.len_fifo))
+        self.posNum = 0
+        self.filind = 0
         plt.ion()
 
 
         #Timer 1
         timer1=QtCore.QTimer(self)
         timer1.timeout.connect(self.con.update)
+        timer1.timeout.connect(self.PosicionLcd)
         timer1.start(ts)
 
         #Timer 2
@@ -89,20 +92,29 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
         else:
             pass
 
-
-    def Grid (self,state): #If Grid button is checked shows the Grid. Otherwise, it hides it
-        if state == QtCore.Qt.Checked:
-            self.set_grid=True                  
+    def PosicionLcd(self):
+        self.posNum += 1
+        self.posLcd.display(self.posNum)
+        if self.filind == 0:
+            self.filind = 100
         else:
-            self.set_grid=False            
-        self.plot_init()
+            self.filind = 0
+        self.filPro.setValue(self.filind)
+
+
+    # def Grid (self,state): #If Grid button is checked shows the Grid. Otherwise, it hides it
+    #     if state == QtCore.Qt.Checked:
+    #         self.set_grid=True                  
+    #     else:
+    #         self.set_grid=False            
+    #     self.plot_init()
 
     def plot_init(self):
         self.ax = self.canvas.figure.clear()
         self.ax = self.canvas.figure.add_subplot(111, projection='polar')
 
-        if self.set_grid:
-            self.ax.grid()
+        # if self.set_grid:
+        #     self.ax.grid()
         
         if self.Ch_state[0]:
             self.lines = self.ax.plot(self.con.position_fifo[:] * self.pos_conv,self.con.sonar_fifo[:],self.Ch_colors[0])
