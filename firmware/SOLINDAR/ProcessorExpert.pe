@@ -3,8 +3,8 @@
   <Header>
     <Name>SOLINDAR</Name>
     <SavedBy>JesusC</SavedBy>
-    <ModificationStamp>50</ModificationStamp>
-    <Date>2019-10-21</Date>
+    <ModificationStamp>52</ModificationStamp>
+    <Date>2019-10-22</Date>
     <IDE>Eclipse IDE</IDE>
     <PEversion>1.9.0.RT6_b1411-0406</PEversion>
   </Header>
@@ -29,7 +29,7 @@
     <UseExistingModules>true</UseExistingModules>
     <RenamePeripheries>false</RenamePeripheries>
     <Autodependency>true</Autodependency>
-    <ProjectCompNumb>40</ProjectCompNumb>
+    <ProjectCompNumb>43</ProjectCompNumb>
     <DelUnusedPreviouslyGenFiles>true</DelUnusedPreviouslyGenFiles>
     <GeneratedCodeFrozen>false</GeneratedCodeFrozen>
     <AssignInitComponentNameToPrph>true</AssignInitComponentNameToPrph>
@@ -12675,7 +12675,7 @@
         <ItemSymbol>Tmg</ItemSymbol>
         <ReadOnly>false</ReadOnly>
         <UserReadOnly>false</UserReadOnly>
-        <Value>8 sec</Value>
+        <Value>4 sec</Value>
         <RuntimeSetting>0</RuntimeSetting>
         <ReqDevPrescHigh>-1</ReqDevPrescHigh>
         <ReqDevPrescLow>-1</ReqDevPrescLow>
@@ -12701,7 +12701,7 @@
         <ReqSrcClkPrescSpeedMode5>-1</ReqSrcClkPrescSpeedMode5>
         <ReqSrcClkPrescSpeedMode6>-1</ReqSrcClkPrescSpeedMode6>
         <ReqSrcClkPrescSpeedMode7>-1</ReqSrcClkPrescSpeedMode7>
-        <InitValue>8 sec</InitValue>
+        <InitValue>4 sec</InitValue>
         <Precision>5.0</Precision>
         <PrecInProc>false</PrecInProc>
         <LowLimit />

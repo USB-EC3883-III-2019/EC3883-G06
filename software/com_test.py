@@ -2,7 +2,7 @@ import sys
 import serial
 import numpy as np
 import time
-from solindar_lib import ComDriver
+from solindar_lib import ComDriver, process_data
 
 #Parameters
 Port = "COM3"
@@ -13,8 +13,9 @@ n_block=10
 con = ComDriver(Port,len_fifo,scale_factor,n_block)
 
 while True:
-	con.update_fifos()	
+	con.update_fifos()
+	sonar,lidar = process_data(con.sonar_fifo,con.lidar_fifo)	
 	print('Position: ',con.position_fifo)
-	print('Lidar: ',con.lidar_fifo)
-	print('Sonar: ',con.sonar_fifo)
+	print('Lidar: ', lidar)
+	print('Sonar: ', sonar)
 	time.sleep(1)
