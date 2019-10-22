@@ -12,6 +12,7 @@ from .canvas import Canvas
 import sys
 import serial
 import numpy as np
+from ..process_data import process_data
 
 qtCreatorFile = "solindar_lib/GUI/graph6.ui" # my Qt Designer file 
 
@@ -37,7 +38,7 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
         self.con=con
         self.Ch_state=[False, False, False]
         self.Ch_index=[]
-        self.Ch_colors=['b','g','y','r']
+        self.Ch_colors=['bo','go','yo','ro']
         self.pos_conv = 2 * np.pi / 84
         self.ax = self.canvas.figure.add_subplot(111, projection = 'polar')
         #self.ax.set_xticklabels([]) #deletes labels from X-axes
@@ -49,12 +50,14 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
         self.fusion_fifo = np.zeros((self.con.len_fifo))
         self.posNum = 0
         self.filind = 0
+        self.sonarproc = np.zeros((self.con.len_fifo))
+        self.lidarproc = np.zeros((self.con.len_fifo))
         plt.ion()
 
 
         #Timer 1
         timer1=QtCore.QTimer(self)
-        timer1.timeout.connect(self.con.update)
+        timer1.timeout.connect(self.con.update_fifos)
         timer1.timeout.connect(self.PosicionLcd)
         timer1.start(ts)
 
@@ -115,7 +118,7 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
 
         # if self.set_grid:
         #     self.ax.grid()
-        
+        self.sonarproc,self.lidarproc = process_data(self.con.sonar_fifo,self.con.lidar_fifo)
         if self.Ch_state[0]:
             self.lines = self.ax.plot(self.con.position_fifo[:] * self.pos_conv,self.con.sonar_fifo[:],self.Ch_colors[0])
         if self.Ch_state[1]:
@@ -129,6 +132,7 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
 
     def refresh_image(self):
         self.ax.clear()
+        self.sonarproc,self.lidarproc = process_data(self.con.sonar_fifo,self.con.lidar_fifo)
         if self.Ch_state[0]:
             self.lines = self.ax.plot(self.con.position_fifo[:] * self.pos_conv,self.con.sonar_fifo[:],self.Ch_colors[0])
         if self.Ch_state[1]:            
