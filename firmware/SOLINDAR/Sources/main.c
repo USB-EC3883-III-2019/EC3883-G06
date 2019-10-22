@@ -177,7 +177,7 @@ void main(void)
       sonar_value_done=0;
       is_step_done = 0;
       //Make packet
-      make_packet(counter,sonar_value,lidar_value,&data);
+      make_packet(counter,sonar_value,lidar_value,filter_en,&data);
       //Send data
       do
         err=AS1_SendBlock((byte*) &data,sizeof(data),&Sent);

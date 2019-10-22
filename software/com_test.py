@@ -14,8 +14,9 @@ con = ComDriver(Port,len_fifo,scale_factor,n_block)
 
 while True:
 	con.update_fifos()
-	sonar,lidar = process_data(con.sonar_fifo,con.lidar_fifo)	
+	sonar,lidar = process_data(con.sonar_fifo,con.lidar_fifo)
+	print('Filter on: ', con.filter_on)	
 	print('Position: ',con.position_fifo)
 	print('Lidar: ', lidar)
-	print('Sonar: ', sonar)
+	print('Sonar: ', sonar)	
 	time.sleep(1)

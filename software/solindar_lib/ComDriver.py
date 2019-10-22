@@ -17,7 +17,8 @@ class ComDriver(serial.Serial):
         self.open()
         self.set_buffer_size(rx_size = 15000, tx_size = 0)
 
-        #Internal variables               
+        #Internal variables 
+        self.filter_on =  np.zeros(len_fifo, dtype=np.uint8) == 0            
         self.len_fifo=len_fifo
         self.n=n_block
         self.position_fifo = np.zeros(len_fifo, dtype=np.uint8)
@@ -36,8 +37,9 @@ class ComDriver(serial.Serial):
         #Convert to np
         data=np.array(data,dtype=np.uint16)     
         #Check for error        
-        is_err= ((data[:,0] & 0xC0) != 0) | ((data[:,1] & 0x80) == 0) | ((data[:,2] & 0x80) == 0) | ((data[:,3] & 0x80) == 0)
-        #Decode        
+        is_err= ((data[:,0] & 0x80) != 0) | ((data[:,1] & 0x80) == 0) | ((data[:,2] & 0x80) == 0) | ((data[:,3] & 0x80) == 0)
+        #Decode
+        filter_on = (0x40 & data[:,0]) > 0           
         position = 0x3F & data[:,0]
         sonar = ((0x7F & data[:,1]) << 2) | ((data[:,2] & 0x60) >> 5)
         lidar = ((0x1F & data[:,2]) << 7) | (data[:,3] & 0x7F)
@@ -45,7 +47,8 @@ class ComDriver(serial.Serial):
         position[is_err] = 0
         sonar[is_err] = 0
         lidar[is_err] = 0
-        #Update fifos       
+        #Update fifos
+        self.filter_on=np.hstack((filter_on,self.filter_on[:-self.n]))       
         self.position_fifo=np.hstack((position,self.position_fifo[:-self.n]))
         self.sonar_fifo=np.hstack((sonar,self.sonar_fifo[:-self.n]))
         self.lidar_fifo=np.hstack((lidar,self.lidar_fifo[:-self.n]))
