@@ -18,6 +18,9 @@ class ComDriver(serial.Serial):
         self.set_buffer_size(rx_size = 15000, tx_size = 0)
 
         #Internal variables 
+        self.currentPosition = 0
+        self.currentLidar = 0
+        self.currentSonar = 0
         self.filter_on =  np.zeros(len_fifo, dtype=np.uint8) == 0            
         self.len_fifo=len_fifo
         self.n=n_block
@@ -35,8 +38,7 @@ class ComDriver(serial.Serial):
         for i in range(self.n-1):
             data.append(r[3+4*i:3+4*(i+1)])        
         #Convert to np
-        data=np.array(data,dtype=np.uint16)
-        data = np.flip(data,axis=0)     
+        data=np.array(data,dtype=np.uint16)         
         #Check for error        
         is_err= ((data[:,0] & 0x80) != 0) | ((data[:,1] & 0x80) == 0) | ((data[:,2] & 0x80) == 0) | ((data[:,3] & 0x80) == 0)
         #Decode
@@ -51,19 +53,15 @@ class ComDriver(serial.Serial):
         #Update fifos
         indexes=np.searchsorted(self.position_fifo, position)
         bool_new_indexes = indexes == len(self.position_fifo)       
-        old_indexes = indexes[~bool_new_indexes]      
-       
-
+        old_indexes = indexes[~bool_new_indexes]
         self.filter_on[old_indexes] = filter_on[~bool_new_indexes]
         self.position_fifo[old_indexes] = position[~bool_new_indexes]
         self.sonar_fifo[old_indexes] = sonar[~bool_new_indexes]
         self.lidar_fifo[old_indexes] = lidar[~bool_new_indexes]
-        #Add new values
-        #n_new=len(filter_on[bool_new_indexes])
-        #self.filter_on=np.hstack((filter_on[bool_new_indexes],self.filter_on[:-n_new]))       
-        #self.position_fifo=np.hstack((position[bool_new_indexes],self.position_fifo[:-n_new]))
-        #self.sonar_fifo=np.hstack((sonar[bool_new_indexes],self.sonar_fifo[:-n_new]))
-        #self.lidar_fifo=np.hstack((lidar[bool_new_indexes],self.lidar_fifo[:-n_new]))
+        #Current vals
+        self.currentPosition = position[-1]
+        self.currentLidar = lidar[-1]
+        self.currentSonar = sonar[-1]
  
         
         
