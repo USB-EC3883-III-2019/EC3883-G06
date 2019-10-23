@@ -20,7 +20,7 @@ qtCreatorFile = "solindar_lib/GUI/graph6.ui" # my Qt Designer file
 Ui_MainWindow, QtBaseClass = uic.loadUiType(qtCreatorFile)
 
 class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
-    def __init__(self,con,ts,refresh_time):
+    def __init__(self,con,ts):
         QtGui.QMainWindow.__init__(self)
         Ui_MainWindow.__init__(self)
         self.setupUi(self)
@@ -56,22 +56,15 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
         self.log = logger()
         plt.ion()
 
-
-        #Timer 1
-        timer1=QtCore.QTimer(self)
-        timer1.timeout.connect(self.con.update_fifos)
-        timer1.timeout.connect(self.PosicionLcd)
-        timer1.timeout.connect(self.logFun)
-        timer1.timeout.connect(self.filter)
-        timer1.start(ts)
-
-        #Timer 2
+        #Timer
         timer2=QtCore.QTimer(self)
-        timer2.timeout.connect(self.refresh_image)
-        timer2.start(refresh_time)
+        timer2.timeout.connect(self.run)
+        timer2.start(ts)
 
-
-        self.plot_init();
+        #Start graph
+        self.ax = self.canvas.figure.clear()
+        self.ax = self.canvas.figure.add_subplot(111, projection='polar')
+        self.make_graph()
 
     def ChannelSon (self,state):
         if state == QtCore.Qt.Checked:
@@ -97,16 +90,8 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
         else:
             self.filPro.setValue(0)
 
-
     def PosicionLcd(self):
-        self.posLcd.display(int(self.con.position_fifo[-1]*self.pos_conv*180//np.pi))
-        # self.posNum += 1
-        # self.posLcd.display(self.posNum)
-        # if self.filind == 0:
-        #     self.filind = 100
-        # else:
-        #     self.filind = 0
-        # self.filPro.setValue(self.filind)
+        self.posLcd.display(int(self.con.position_fifo[-1]*self.pos_conv*(180/np.pi)))
 
     def logFun(self):
         self.log.info('Filter on: '+  str(self.con.filter_on[:self.con.n]))
@@ -122,31 +107,21 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
     #         self.set_grid=False
     #     self.plot_init()
 
-    def plot_init(self):
-        self.ax = self.canvas.figure.clear()
-        self.ax = self.canvas.figure.add_subplot(111, projection='polar')
-
-        # if self.set_grid:
-        #     self.ax.grid()
+    def make_graph(self):
         self.sonarproc,self.lidarproc = process_data(self.con.sonar_fifo,self.con.lidar_fifo)
         if self.Ch_state[0]:
-            self.lines = self.ax.plot(self.con.position_fifo[:] * self.pos_conv,self.sonarproc[:],self.Ch_colors[0])
+            self.lines = self.ax.plot(self.con.position_fifo * self.pos_conv,self.sonarproc,self.Ch_colors[0])
         if self.Ch_state[1]:
-            self.lines = self.ax.plot(self.con.position_fifo[:] * self.pos_conv,self.lidarproc[:],self.Ch_colors[1])
+            self.lines = self.ax.plot(self.con.position_fifo * self.pos_conv,self.lidarproc,self.Ch_colors[1])
         if self.Ch_state[2]:
-            self.fusion_fifo = self.fusvar2*(self.sonvarn2*self.con.sonar_fifo[:] + self.lidvarn2*self.con.lidar_fifo[:])
-            self.lines = self.ax.plot(self.con.position_fifo[:] * self.pos_conv, self.fusion_fifo[:])
+            self.fusion_fifo = self.fusvar2*(self.sonvarn2*self.con.sonar_fifo + self.lidvarn2*self.con.lidar_fifo)
+            self.lines = self.ax.plot(self.con.position_fifo * self.pos_conv, self.fusion_fifo)
 
-
-
-
-    def refresh_image(self):
+    #Repeat all over again
+    def run(self):
+        self.con.update_fifos() #Update fifo
         self.ax.clear()
-        self.sonarproc,self.lidarproc = process_data(self.con.sonar_fifo,self.con.lidar_fifo)
-        if self.Ch_state[0]:
-            self.lines = self.ax.plot(self.con.position_fifo[:] * self.pos_conv,self.sonarproc[:],self.Ch_colors[0])
-        if self.Ch_state[1]:
-            self.lines = self.ax.plot(self.con.position_fifo[:] * self.pos_conv,self.lidarproc[:],self.Ch_colors[1])
-        if self.Ch_state[2]:
-            self.fusion_fifo[:] = self.fusvar2*(self.sonvarn2*self.con.sonar_fifo[:] + self.lidvarn2*self.con.lidar_fifo[:])
-            self.lines = self.ax.plot(self.con.position_fifo[:] * self.pos_conv, self.fusion_fifo[:])
+        self.make_graph() #Graph
+        self.filter() #Check filter flag
+        self.PosicionLcd() #Print motor position
+        self.logFun()  #Log

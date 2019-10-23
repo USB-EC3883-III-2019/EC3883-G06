@@ -1,4 +1,4 @@
-import numpy as np 
+import numpy as np
 import random
 i=0
 
@@ -11,9 +11,10 @@ class testCom():
         self.sonar_fifo=np.asarray(self.sonar)
         self.lidar_fifo=np.asarray(self.lidar)
         self.len_fifo = len_fifo
-        self.n_block = n_block
-    
-    def update(self):
+        self.filter_on =  np.zeros(len_fifo, dtype=np.uint8) == 0
+        self.n = n_block
+
+    def update_fifos(self):
         global i
         #print('Update')
         for y in range (0,self.n_block,1):
@@ -24,5 +25,3 @@ class testCom():
             i += 1
             if i == self.len_fifo:
                 i = 0
-
-
