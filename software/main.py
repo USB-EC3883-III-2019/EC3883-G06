@@ -2,13 +2,13 @@ import matplotlib
 matplotlib.use('Qt5Agg')
 import sys
 from PyQt4 import QtCore, QtGui, uic
-from solindar_lib import ComDriver, SolindarGUI
+from solindar_lib import ComDriver, SolindarGUI, testCom
 import qdarkstyle
 
 #Implementation
-ts=1000 #sampling time in ms
+ts=300 #sampling time in ms
 len_fifo = 63
-n_block = 10
+n_block = 3
 Port = "COM3"
 # con = TestCom.testCom(len_fifo,n_block)
 con = ComDriver(Port,len_fifo,n_block)

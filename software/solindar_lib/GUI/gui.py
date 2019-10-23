@@ -80,17 +80,17 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
             self.Ch_state[2] = False
 
     def filter (self):
-        if int(self.con.filter_on[-1]):
+        if int(self.con.filter_on[0]):
             self.filPro.setValue(100)
         else:
             self.filPro.setValue(0)
 
     def PosicionLcd(self):
-        self.posLcd.display(int(self.con.position_fifo[-1]*self.pos_conv*(180/np.pi)))
+        self.posLcd.display(int(self.con.position_fifo[0]*self.pos_conv*(180/np.pi)))
 
     def logFun(self):
         self.log.info('Filter on: '+  str(self.con.filter_on[:self.con.n]))
-        self.log.info('Position: '+ str(self.con.position_fifo[:self.con.n] * self.pos_conv))
+        self.log.info('Position: '+ str(self.con.position_fifo[:self.con.n] * self.pos_conv*(180/np.pi)))
         self.log.info('Lidar: '+  str(self.lidarproc[:self.con.n]))
         self.log.info('Sonar: '+  str(self.sonarproc[:self.con.n]))
 
