@@ -16,7 +16,7 @@ from ..process_data import process_data
 from ..logger import logger
 from ..process_fusion import process_fusion
 
-qtCreatorFile = "solindar_lib/GUI/graph6.ui" # my Qt Designer file
+qtCreatorFile = "solindar_lib/GUI/graph7.ui" # my Qt Designer file
 
 Ui_MainWindow, QtBaseClass = uic.loadUiType(qtCreatorFile)
 
@@ -104,7 +104,7 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
         if self.Ch_state[1]:
             self.lines = self.ax.plot(currentPosition,self.lidarproc,self.Ch_colors[1])
         if self.Ch_state[2]:
-            self.lines = self.ax.plot(currentPosition, self.fusion_fifo)
+            self.lines = self.ax.plot(currentPosition, self.fusion_fifo,self.Ch_colors[2])
 
     #Repeat all over again
     def run(self):
