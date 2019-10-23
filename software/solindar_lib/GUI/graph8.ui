@@ -111,7 +111,7 @@
      </font>
     </property>
     <property name="text">
-     <string>Posicion</string>
+     <string>Posicion (º)</string>
     </property>
    </widget>
    <widget class="QLCDNumber" name="posLcd">
@@ -119,7 +119,7 @@
      <rect>
       <x>370</x>
       <y>900</y>
-      <width>141</width>
+      <width>181</width>
       <height>71</height>
      </rect>
     </property>
@@ -128,7 +128,7 @@
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>910</y>
+      <y>900</y>
       <width>91</width>
       <height>21</height>
      </rect>
@@ -149,7 +149,7 @@
     <property name="geometry">
      <rect>
       <x>120</x>
-      <y>910</y>
+      <y>900</y>
       <width>201</width>
       <height>23</height>
      </rect>
@@ -159,6 +159,172 @@
     </property>
     <property name="textVisible">
      <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_4">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>930</y>
+      <width>91</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Ejes</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="axesCom">
+    <property name="geometry">
+     <rect>
+      <x>120</x>
+      <y>930</y>
+      <width>201</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="editable">
+     <bool>false</bool>
+    </property>
+    <item>
+     <property name="text">
+      <string>MaxDistance = 80cm</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>MaxDistance = 300cm</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QLCDNumber" name="sonLcd">
+    <property name="geometry">
+     <rect>
+      <x>620</x>
+      <y>870</y>
+      <width>191</width>
+      <height>101</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLCDNumber" name="lidLcd">
+    <property name="geometry">
+     <rect>
+      <x>900</x>
+      <y>870</y>
+      <width>191</width>
+      <height>101</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLCDNumber" name="fusLcd">
+    <property name="geometry">
+     <rect>
+      <x>1190</x>
+      <y>870</y>
+      <width>191</width>
+      <height>101</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_5">
+    <property name="geometry">
+     <rect>
+      <x>700</x>
+      <y>800</y>
+      <width>601</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Distancias (cm)</string>
+    </property>
+    <property name="textFormat">
+     <enum>Qt::RichText</enum>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_6">
+    <property name="geometry">
+     <rect>
+      <x>650</x>
+      <y>840</y>
+      <width>141</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+      <italic>false</italic>
+     </font>
+    </property>
+    <property name="text">
+     <string>Sonar</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_7">
+    <property name="geometry">
+     <rect>
+      <x>930</x>
+      <y>840</y>
+      <width>141</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+      <italic>false</italic>
+     </font>
+    </property>
+    <property name="text">
+     <string>Lidar</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_8">
+    <property name="geometry">
+     <rect>
+      <x>1220</x>
+      <y>840</y>
+      <width>141</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+      <italic>false</italic>
+     </font>
+    </property>
+    <property name="text">
+     <string>Fusion</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
   </widget>

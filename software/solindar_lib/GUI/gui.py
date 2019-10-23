@@ -16,7 +16,7 @@ from ..process_data import process_data
 from ..logger import logger
 from ..process_fusion import process_fusion
 
-qtCreatorFile = "solindar_lib/GUI/graph7.ui" # my Qt Designer file
+qtCreatorFile = "solindar_lib/GUI/graph8.ui" # my Qt Designer file
 
 Ui_MainWindow, QtBaseClass = uic.loadUiType(qtCreatorFile)
 
@@ -39,6 +39,9 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
         self.Ch_colors=['bo','go','yo','ro','co','mo','wo']
         self.pos_conv = 2 * np.pi / 84
         self.ax = self.canvas.figure.add_subplot(111, projection = 'polar')
+        self.axesCom.activated[str].connect(self.changeDistanceScale)
+        self.axesCom.setStatusTip("Cambiar la escala de distancia")
+        self.axeslim = 80
         #self.ax.set_xticklabels([]) #deletes labels from X-axes
         self.lines = self.ax.plot()
         self.set_grid=False
@@ -87,6 +90,15 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
 
     def PosicionLcd(self):
         self.posLcd.display(int(self.con.position_fifo[0]*self.pos_conv*(180/np.pi)))
+    
+    def SonarLcd(self):
+        self.sonLcd.display(int(self.sonarproc[0]))
+
+    def LidarLcd(self):
+        self.lidLcd.display(int(self.lidarproc[0]))
+
+    def FusionLcd(self):
+        self.fusLcd.display(int(self.fusion_fifo[0]))
 
     def logFun(self):
         self.log.info('Filter on: '+  str(self.con.filter_on[:self.con.n]))
@@ -96,11 +108,10 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
 
 
     def make_graph(self):
-        self.ax.clear()
-        self.ax = self.canvas.figure.add_subplot(111, projection='polar')
         self.sonarproc,self.lidarproc = process_data(self.con.sonar_fifo,self.con.lidar_fifo)
         self.fusion_fifo = process_fusion(self.sonarproc,self.lidarproc)
         currentPosition = self.con.position_fifo * self.pos_conv
+        self.lines = self.ax.plot([currentPosition[0],currentPosition[0]],[0,300],'b',alpha=0.35)
         if self.Ch_state[0]:
             self.lines = self.ax.plot(currentPosition[1:],self.sonarproc[1:],self.Ch_colors[0])            
             self.lines = self.ax.plot(currentPosition[0],self.sonarproc[0],self.Ch_colors[4])            
@@ -109,7 +120,8 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
             self.lines = self.ax.plot(currentPosition[0],self.lidarproc[0],self.Ch_colors[5])
         if self.Ch_state[2]:
             self.lines = self.ax.plot(currentPosition[1:], self.fusion_fifo[1:],self.Ch_colors[2])
-            self.lines = self.ax.plot(currentPosition[0], self.fusion_fifo[0],self.Ch_colors[6])
+            self.lines = self.ax.plot(currentPosition[0], self.fusion_fifo[0],self.Ch_colors[1])
+        self.ax.set_rlim(bottom=0,top=self.axeslim)
 
     #Repeat all over again
     def run(self):
@@ -119,3 +131,16 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
         self.filter() #Check filter flag
         self.PosicionLcd() #Print motor position
         self.logFun()  #Log
+        self.SonarLcd()
+        self.LidarLcd()
+        self.FusionLcd()
+
+    def changeDistanceScale(self,text):
+        if text == "MaxDistance = 80cm":
+            print("MaxDistance = 80cm") #Colocar cambio de escala
+            self.ax.set_rlim(bottom=0,top=80)
+            self.axeslim = 80
+        else: 
+            print("MaxDistance = 300cm") #Colocar cambio de escala
+            self.ax.set_rlim(bottom=0,top=300)
+            self.axeslim = 300
