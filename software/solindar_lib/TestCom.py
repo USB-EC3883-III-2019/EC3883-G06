@@ -11,13 +11,13 @@ class testCom():
         self.sonar_fifo=np.asarray(self.sonar)
         self.lidar_fifo=np.asarray(self.lidar)
         self.len_fifo = len_fifo
-        self.filter_on =  np.zeros(len_fifo, dtype=np.uint8) == 0
+        self.filter_on =  np.zeros(len_fifo, dtype=np.uint8) != 0
         self.n = n_block
 
     def update_fifos(self):
         global i
         #print('Update')
-        for y in range (0,self.n_block,1):
+        for y in range (0,self.n,1):
             self.sonar[i] = random.randrange(10,80)
             self.sonar_fifo = np.asarray(self.sonar) #np.array([random.randrange(10,80)])
             #print(self.sonar_fifo)

@@ -14,6 +14,7 @@ import serial
 import numpy as np
 from ..process_data import process_data
 from ..logger import logger
+from ..process_fusion import process_fusion
 
 qtCreatorFile = "solindar_lib/GUI/graph6.ui" # my Qt Designer file
 
@@ -26,10 +27,6 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         self.navigation = NavigationToolbar(self.canvas, self)
         self.hlayout.addWidget(self.navigation)
-        # self.gCheck.stateChanged.connect(self.Grid) #If grid button is checked executes Grid function
-        # self.gCheck.setStatusTip("Colocar Grid en la grafica")
-        # self.fCheck.stateChanged.connect(self.filter)
-        # self.fCheck.setStatusTip("Activar el filtro")
         self.sonBox.stateChanged.connect(self.ChannelSon)
         self.sonBox.setStatusTip("Activar la Grafica del Sonar")
         self.lidBox.stateChanged.connect(self.ChannelLid)
@@ -45,15 +42,13 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
         #self.ax.set_xticklabels([]) #deletes labels from X-axes
         self.lines = self.ax.plot()
         self.set_grid=False
-        self.sonvarn2 = (1.47*(10**-3))**-2
-        self.lidvarn2 = (4.89*(10**-5))**-2
-        self.fusvar2 = ((self.sonvarn2) + (self.lidvarn2))**(-1)
+        #Fifos
         self.fusion_fifo = np.zeros((self.con.len_fifo))
-        self.posNum = 0
-        self.filind = 0
         self.sonarproc = np.zeros((self.con.len_fifo))
         self.lidarproc = np.zeros((self.con.len_fifo))
+        #Logger
         self.log = logger()
+        #Plot
         plt.ion()
 
         #Timer
@@ -100,22 +95,16 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
         self.log.info('Sonar: '+  str(self.sonarproc[:self.con.n]))
 
 
-   # def Grid (self,state): #If Grid button is checked shows the Grid. Otherwise, it hides it
-    #     if state == QtCore.Qt.Checked:
-    #         self.set_grid=True
-    #     else:
-    #         self.set_grid=False
-    #     self.plot_init()
-
     def make_graph(self):
         self.sonarproc,self.lidarproc = process_data(self.con.sonar_fifo,self.con.lidar_fifo)
+        self.fusion_fifo = process_fusion(self.sonarproc,self.lidarproc)
+        currentPosition = self.con.position_fifo * self.pos_conv
         if self.Ch_state[0]:
-            self.lines = self.ax.plot(self.con.position_fifo * self.pos_conv,self.sonarproc,self.Ch_colors[0])
+            self.lines = self.ax.plot(currentPosition,self.sonarproc,self.Ch_colors[0])
         if self.Ch_state[1]:
-            self.lines = self.ax.plot(self.con.position_fifo * self.pos_conv,self.lidarproc,self.Ch_colors[1])
+            self.lines = self.ax.plot(currentPosition,self.lidarproc,self.Ch_colors[1])
         if self.Ch_state[2]:
-            self.fusion_fifo = self.fusvar2*(self.sonvarn2*self.con.sonar_fifo + self.lidvarn2*self.con.lidar_fifo)
-            self.lines = self.ax.plot(self.con.position_fifo * self.pos_conv, self.fusion_fifo)
+            self.lines = self.ax.plot(currentPosition, self.fusion_fifo)
 
     #Repeat all over again
     def run(self):
