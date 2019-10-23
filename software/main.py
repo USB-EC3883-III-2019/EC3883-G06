@@ -8,7 +8,7 @@ import qdarkstyle
 #Implementation
 ts=300 #sampling time in ms
 len_fifo = 63
-n_block = 3
+n_block = 5
 Port = "COM3"
 # con = TestCom.testCom(len_fifo,n_block)
 con = ComDriver(Port,len_fifo,n_block)
