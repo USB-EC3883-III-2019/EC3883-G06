@@ -89,16 +89,16 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
             self.filPro.setValue(0)
 
     def PosicionLcd(self):
-        self.posLcd.display(int(self.con.position_fifo[0]*self.pos_conv*(180/np.pi)))
+        self.posLcd.display(int((self.con.currentPosition*self.pos_conv*(180/np.pi))))
     
     def SonarLcd(self):
-        self.sonLcd.display(int(self.sonarproc[0]))
+        self.sonLcd.display(int(self.sonarproc[self.con.currentPosition]))
 
     def LidarLcd(self):
-        self.lidLcd.display(int(self.lidarproc[0]))
+        self.lidLcd.display(int(self.lidarproc[self.con.currentPosition]))
 
     def FusionLcd(self):
-        self.fusLcd.display(int(self.fusion_fifo[0]))
+        self.fusLcd.display(int(self.fusion_fifo[self.con.currentPosition]))
 
     def logFun(self):
         self.log.info('Filter on: '+  str(self.con.filter_on[:self.con.n]))
@@ -111,16 +111,17 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
         self.sonarproc,self.lidarproc = process_data(self.con.sonar_fifo,self.con.lidar_fifo)
         self.fusion_fifo = process_fusion(self.sonarproc,self.lidarproc)
         currentPosition = self.con.position_fifo * self.pos_conv
-        self.lines = self.ax.plot([currentPosition[0],currentPosition[0]],[0,300],'b',alpha=0.35)
+
+        self.lines = self.ax.plot([self.con.currentPosition*self.pos_conv,self.con.currentPosition*self.pos_conv],[0,300],'b',alpha=0.35)
         if self.Ch_state[0]:
-            self.lines = self.ax.plot(currentPosition[1:],self.sonarproc[1:],self.Ch_colors[0])            
-            self.lines = self.ax.plot(currentPosition[0],self.sonarproc[0],self.Ch_colors[4])            
+            self.lines = self.ax.plot(currentPosition[:],self.sonarproc[:],self.Ch_colors[0])            
+            self.lines = self.ax.plot(currentPosition[self.con.currentPosition],self.sonarproc[self.con.currentPosition],self.Ch_colors[4])            
         if self.Ch_state[1]:
-            self.lines = self.ax.plot(currentPosition[1:],self.lidarproc[1:],self.Ch_colors[3])
-            self.lines = self.ax.plot(currentPosition[0],self.lidarproc[0],self.Ch_colors[5])
+            self.lines = self.ax.plot(currentPosition[:],self.lidarproc[:],self.Ch_colors[3])
+            self.lines = self.ax.plot(currentPosition[self.con.currentPosition],self.lidarproc[self.con.currentPosition],self.Ch_colors[5])
         if self.Ch_state[2]:
-            self.lines = self.ax.plot(currentPosition[1:], self.fusion_fifo[1:],self.Ch_colors[2])
-            self.lines = self.ax.plot(currentPosition[0], self.fusion_fifo[0],self.Ch_colors[1])
+            self.lines = self.ax.plot(currentPosition[:], self.fusion_fifo[:],self.Ch_colors[2])
+            self.lines = self.ax.plot(currentPosition[self.con.currentPosition], self.fusion_fifo[self.con.currentPosition],self.Ch_colors[1])
         self.ax.set_rlim(bottom=0,top=self.axeslim)
 
     #Repeat all over again
