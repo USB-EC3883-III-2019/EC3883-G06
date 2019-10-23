@@ -36,7 +36,7 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
         self.con=con
         self.Ch_state=[False, False, False]
         self.Ch_index=[]
-        self.Ch_colors=['bo','go','yo','ro']
+        self.Ch_colors=['bo','go','yo','ro','co','mo','wo']
         self.pos_conv = 2 * np.pi / 84
         self.ax = self.canvas.figure.add_subplot(111, projection = 'polar')
         #self.ax.set_xticklabels([]) #deletes labels from X-axes
@@ -96,15 +96,20 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
 
 
     def make_graph(self):
+        self.ax.clear()
+        self.ax = self.canvas.figure.add_subplot(111, projection='polar')
         self.sonarproc,self.lidarproc = process_data(self.con.sonar_fifo,self.con.lidar_fifo)
         self.fusion_fifo = process_fusion(self.sonarproc,self.lidarproc)
         currentPosition = self.con.position_fifo * self.pos_conv
         if self.Ch_state[0]:
-            self.lines = self.ax.plot(currentPosition,self.sonarproc,self.Ch_colors[0])
+            self.lines = self.ax.plot(currentPosition[1:],self.sonarproc[1:],self.Ch_colors[0])            
+            self.lines = self.ax.plot(currentPosition[0],self.sonarproc[0],self.Ch_colors[4])            
         if self.Ch_state[1]:
-            self.lines = self.ax.plot(currentPosition,self.lidarproc,self.Ch_colors[1])
+            self.lines = self.ax.plot(currentPosition[1:],self.lidarproc[1:],self.Ch_colors[3])
+            self.lines = self.ax.plot(currentPosition[0],self.lidarproc[0],self.Ch_colors[5])
         if self.Ch_state[2]:
-            self.lines = self.ax.plot(currentPosition, self.fusion_fifo,self.Ch_colors[2])
+            self.lines = self.ax.plot(currentPosition[1:], self.fusion_fifo[1:],self.Ch_colors[2])
+            self.lines = self.ax.plot(currentPosition[0], self.fusion_fifo[0],self.Ch_colors[6])
 
     #Repeat all over again
     def run(self):
