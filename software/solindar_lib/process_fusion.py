@@ -12,8 +12,5 @@ def process_fusion(sonar,lidar):
 
     fusion = fusvar2*(sonvarn2*sonar + lidvarn2*lidar)
     fusion[lidar >= 80] = sonar[lidar >= 80]
-    # for i in range(0,len(fusion),1):
-    #     if lidar[i] >= 80:
-    #         fusion[i] = sonar[i]
 
     return fusion

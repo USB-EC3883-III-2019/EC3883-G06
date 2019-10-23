@@ -35,7 +35,8 @@ class ComDriver(serial.Serial):
         for i in range(self.n-1):
             data.append(r[3+4*i:3+4*(i+1)])        
         #Convert to np
-        data=np.array(data,dtype=np.uint16)     
+        data=np.array(data,dtype=np.uint16)
+        data = np.flip(data,axis=0)     
         #Check for error        
         is_err= ((data[:,0] & 0x80) != 0) | ((data[:,1] & 0x80) == 0) | ((data[:,2] & 0x80) == 0) | ((data[:,3] & 0x80) == 0)
         #Decode
@@ -46,7 +47,7 @@ class ComDriver(serial.Serial):
         #Mark errors
         position[is_err] = 0
         sonar[is_err] = 0
-        lidar[is_err] = 0
+        lidar[is_err] = 0        
         #Update fifos
         self.filter_on=np.hstack((filter_on,self.filter_on[:-self.n]))       
         self.position_fifo=np.hstack((position,self.position_fifo[:-self.n]))
