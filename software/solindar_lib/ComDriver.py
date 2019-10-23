@@ -21,7 +21,7 @@ class ComDriver(serial.Serial):
         self.filter_on =  np.zeros(len_fifo, dtype=np.uint8) == 0            
         self.len_fifo=len_fifo
         self.n=n_block
-        self.position_fifo = np.zeros(len_fifo, dtype=np.uint8)
+        self.position_fifo = np.array(range(len_fifo))
         self.sonar_fifo = np.zeros(len_fifo, dtype=np.uint16)
         self.lidar_fifo = np.zeros(len_fifo, dtype=np.uint16)
 
@@ -49,10 +49,22 @@ class ComDriver(serial.Serial):
         sonar[is_err] = 0
         lidar[is_err] = 0        
         #Update fifos
-        self.filter_on=np.hstack((filter_on,self.filter_on[:-self.n]))       
-        self.position_fifo=np.hstack((position,self.position_fifo[:-self.n]))
-        self.sonar_fifo=np.hstack((sonar,self.sonar_fifo[:-self.n]))
-        self.lidar_fifo=np.hstack((lidar,self.lidar_fifo[:-self.n]))
+        indexes=np.searchsorted(self.position_fifo, position)
+        bool_new_indexes = indexes == len(self.position_fifo)       
+        old_indexes = indexes[~bool_new_indexes]      
+       
+
+        self.filter_on[old_indexes] = filter_on[~bool_new_indexes]
+        self.position_fifo[old_indexes] = position[~bool_new_indexes]
+        self.sonar_fifo[old_indexes] = sonar[~bool_new_indexes]
+        self.lidar_fifo[old_indexes] = lidar[~bool_new_indexes]
+        #Add new values
+        #n_new=len(filter_on[bool_new_indexes])
+        #self.filter_on=np.hstack((filter_on[bool_new_indexes],self.filter_on[:-n_new]))       
+        #self.position_fifo=np.hstack((position[bool_new_indexes],self.position_fifo[:-n_new]))
+        #self.sonar_fifo=np.hstack((sonar[bool_new_indexes],self.sonar_fifo[:-n_new]))
+        #self.lidar_fifo=np.hstack((lidar[bool_new_indexes],self.lidar_fifo[:-n_new]))
+ 
         
         
     def set_fifo_len(self,len_fifo):  #Change fifo size
