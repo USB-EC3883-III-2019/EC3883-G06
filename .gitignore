@@ -72,3 +72,4 @@ reserve/*
 firmware/.metadata/*
 
 *.log
+software/logs/*
