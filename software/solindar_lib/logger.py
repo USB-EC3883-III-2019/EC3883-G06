@@ -3,7 +3,7 @@ from logging.handlers import RotatingFileHandler
 
 class logger:
     #Setting up logger
-    formatter = logging.Formatter('%(msecs)d') #Log format
+    formatter = logging.Formatter('%(msecs)d:%(message)s') #Log format
     max_kbytes=2*1024
 
     def __init__(self):
