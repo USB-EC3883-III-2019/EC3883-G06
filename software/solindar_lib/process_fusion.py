@@ -8,7 +8,7 @@ def process_fusion(sonar,lidar):
     lidvarn2 = (4.89*(10**-5))**-2
     sonarMaxRange = 300
     fusvar2 = ((sonvarn2) + (lidvarn2))**(-1)
-    
+
 
     fusion = fusvar2*(sonvarn2*sonar + lidvarn2*lidar)
     fusion[lidar >= 80] = sonar[lidar >= 80]
