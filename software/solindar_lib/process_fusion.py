@@ -4,8 +4,8 @@ import numpy as np
 def process_fusion(sonar,lidar):
 
     #Fusion
-    sonvarn2 = 0.356860852
-    lidvarn2 = 1.717397544
+    sonvarn2 = 0.489256966
+    lidvarn2 = 0.0021*(lidar**2)-0.0958*lidar+0.9795
     sonarMaxRange = 300
     fusvar2 = ((sonvarn2) + (lidvarn2))**(-1)
 
