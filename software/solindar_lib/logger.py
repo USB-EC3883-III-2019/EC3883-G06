@@ -3,7 +3,7 @@ from logging.handlers import RotatingFileHandler
 
 class logger:
     #Setting up logger
-    formatter = logging.Formatter('%(asctime)s: %(message)s') #Log format
+    formatter = logging.Formatter('%(asctime)') #Log format
     max_kbytes=2*1024
 
     def __init__(self):
@@ -13,7 +13,7 @@ class logger:
             file_handler_info =  RotatingFileHandler(path + '/SOLIDAR_INFO.log', mode='a', maxBytes=self.max_kbytes*1024, backupCount=2, encoding=None, delay=0)
             file_handler_info.setFormatter(self.formatter)
             self.logger_info.addHandler(file_handler_info)
-            self.logger_info.info('Position,Filter,Lidar,Sonar')
+            self.logger_info.info('Date,Filter,Position,Lidar,Sonar')
 
     def info(self,log):
         return self.logger_info.info(log)
