@@ -83,7 +83,7 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
             self.Ch_state[2] = False
 
     def filter (self):
-        if int(self.con.filter_on[0]):
+        if int(self.con.filter_on[self.con.currentPosition]):
             self.filPro.setValue(100)
         else:
             self.filPro.setValue(0)
