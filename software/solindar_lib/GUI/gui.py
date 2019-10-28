@@ -90,7 +90,7 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
 
     def PosicionLcd(self):
         self.posLcd.display(int(((-1)*self.con.currentPosition*self.pos_conv*(180/np.pi))))
-    
+
     def SonarLcd(self):
         self.sonLcd.display(int(self.sonarproc[self.con.currentPosition]))
 
@@ -114,8 +114,8 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
 
         self.lines = self.ax.plot([(-1)*self.con.currentPosition*self.pos_conv,(-1)*self.con.currentPosition*self.pos_conv],[0,300],'b',alpha=0.35)
         if self.Ch_state[0]:
-            self.lines = self.ax.plot(currentPosition[:],self.sonarproc[:],self.Ch_colors[0])            
-            self.lines = self.ax.plot(currentPosition[self.con.currentPosition],self.sonarproc[self.con.currentPosition],self.Ch_colors[4])            
+            self.lines = self.ax.plot(currentPosition[:],self.sonarproc[:],self.Ch_colors[0])
+            self.lines = self.ax.plot(currentPosition[self.con.currentPosition],self.sonarproc[self.con.currentPosition],self.Ch_colors[4])
         if self.Ch_state[1]:
             self.lines = self.ax.plot(currentPosition[:],self.lidarproc[:],self.Ch_colors[3])
             self.lines = self.ax.plot(currentPosition[self.con.currentPosition],self.lidarproc[self.con.currentPosition],self.Ch_colors[5])
@@ -141,7 +141,7 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
             print("MaxDistance = 80cm") #Colocar cambio de escala
             self.ax.set_rlim(bottom=0,top=80)
             self.axeslim = 80
-        else: 
+        else:
             print("MaxDistance = 300cm") #Colocar cambio de escala
             self.ax.set_rlim(bottom=0,top=300)
             self.axeslim = 300
