@@ -102,10 +102,14 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
 
     def logFun(self):
         for i in range(self.con.n):
-            self.log.info(str(self.con.filter_on[self.con.currentPosition+i]) + ',' + \
-            str((-1)*self.con.position_fifo[self.con.currentPosition+i] * self.pos_conv*(180/np.pi)) + ','  +\
-            str(self.lidarproc[self.con.currentPosition+i]) + ',' + \
-            str(self.sonarproc[self.con.currentPosition+i]) + ',')
+            if self.con.currentPosition+i >= self.con.len_fifo:
+                n= 2*self.con.len_fifo - self.con.currentPosition - i -1
+            else:
+                n= self.con.currentPosition+i
+            self.log.info(str(self.con.filter_on[n]) + ',' + \
+            str((-1)*self.con.position_fifo[n] * self.pos_conv*(180/np.pi)) + ','  +\
+            str(self.lidarproc[n]) + ',' + \
+            str(self.sonarproc[n]) + ',')
 
     def make_graph(self):
         self.sonarproc,self.lidarproc = process_data(self.con.sonar_fifo,self.con.lidar_fifo)
