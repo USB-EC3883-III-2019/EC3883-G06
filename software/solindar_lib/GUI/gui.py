@@ -101,10 +101,10 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
         self.fusLcd.display(int(self.fusion_fifo[self.con.currentPosition]))
 
     def logFun(self):
-        self.log.info('Filter on: '+  str(self.con.filter_on[:self.con.n]))
-        self.log.info('Position: '+ str((-1)*self.con.position_fifo[:self.con.n] * self.pos_conv*(180/np.pi)))
-        self.log.info('Lidar: '+  str(self.lidarproc[:self.con.n]))
-        self.log.info('Sonar: '+  str(self.sonarproc[:self.con.n]))
+        self.log.info('Filter on: '+  str(self.con.filter_on[self.con.currentPosition:self.con.currentPosition+self.con.n]))
+        self.log.info('Position: '+ str((-1)*self.con.position_fifo[self.con.currentPosition:self.con.currentPosition+self.con.n] * self.pos_conv*(180/np.pi)))
+        self.log.info('Lidar: '+  str(self.lidarproc[self.con.currentPosition:self.con.currentPosition+self.con.n]))
+        self.log.info('Sonar: '+  str(self.sonarproc[self.con.currentPosition:self.con.currentPosition+self.con.n]))
 
 
     def make_graph(self):
