@@ -89,7 +89,7 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
             self.filPro.setValue(0)
 
     def PosicionLcd(self):
-        self.posLcd.display(int((self.con.currentPosition*self.pos_conv*(180/np.pi))))
+        self.posLcd.display(int(((-1)*self.con.currentPosition*self.pos_conv*(180/np.pi))))
     
     def SonarLcd(self):
         self.sonLcd.display(int(self.sonarproc[self.con.currentPosition]))
@@ -102,7 +102,7 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
 
     def logFun(self):
         self.log.info('Filter on: '+  str(self.con.filter_on[:self.con.n]))
-        self.log.info('Position: '+ str(self.con.position_fifo[:self.con.n] * self.pos_conv*(180/np.pi)))
+        self.log.info('Position: '+ str((-1)*self.con.position_fifo[:self.con.n] * self.pos_conv*(180/np.pi)))
         self.log.info('Lidar: '+  str(self.lidarproc[:self.con.n]))
         self.log.info('Sonar: '+  str(self.sonarproc[:self.con.n]))
 
@@ -110,9 +110,9 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
     def make_graph(self):
         self.sonarproc,self.lidarproc = process_data(self.con.sonar_fifo,self.con.lidar_fifo)
         self.fusion_fifo = process_fusion(self.sonarproc,self.lidarproc)
-        currentPosition = self.con.position_fifo * self.pos_conv
+        currentPosition = (-1)*self.con.position_fifo * self.pos_conv
 
-        self.lines = self.ax.plot([self.con.currentPosition*self.pos_conv,self.con.currentPosition*self.pos_conv],[0,300],'b',alpha=0.35)
+        self.lines = self.ax.plot([(-1)*self.con.currentPosition*self.pos_conv,(-1)*self.con.currentPosition*self.pos_conv],[0,300],'b',alpha=0.35)
         if self.Ch_state[0]:
             self.lines = self.ax.plot(currentPosition[:],self.sonarproc[:],self.Ch_colors[0])            
             self.lines = self.ax.plot(currentPosition[self.con.currentPosition],self.sonarproc[self.con.currentPosition],self.Ch_colors[4])            
