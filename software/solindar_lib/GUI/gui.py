@@ -100,9 +100,9 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
     def FusionLcd(self):
         self.fusLcd.display(int(self.fusion_fifo[self.con.currentPosition]))
 
-    def logFun(self):
+    def logFun(self):       
         for i in self.con.position:
-            self.log.info(str(self.con.filter_on[i]) + ',' + \
+            self.log.info(','+str(self.con.filter_on[i]) + ',' + \
             str((-1)*i * self.pos_conv*(180/np.pi)) + ','  +\
             str(self.lidarproc[i]) + ',' + \
             str(self.sonarproc[i]) + ',')
