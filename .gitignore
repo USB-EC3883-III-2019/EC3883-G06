@@ -73,3 +73,4 @@ firmware/.metadata/*
 
 *.log
 software/logs/*
+*.vscode/*
