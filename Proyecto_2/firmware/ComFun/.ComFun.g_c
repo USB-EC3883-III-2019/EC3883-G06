@@ -86,7 +86,7 @@
     </GenFiles>
     <SignalListFile>Documentation\ComFun_SIGNALS.txt</SignalListFile>
     <DestinationCompiler>MetrowerksHCS08CC</DestinationCompiler>
-    <ProjectModificationStamp>53</ProjectModificationStamp>
+    <ProjectModificationStamp>54</ProjectModificationStamp>
   </Options>
   <CpuID_2>
     <Generated>false</Generated>
