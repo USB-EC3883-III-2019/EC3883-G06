@@ -6,7 +6,7 @@
 **     Component   : FreeCntr32
 **     Version     : Component 02.070, Driver 01.22, CPU db: 3.00.067
 **     Compiler    : CodeWarrior HCS08 C Compiler
-**     Date/Time   : 2019-10-21, 17:43, # CodeGen: 76
+**     Date/Time   : 2019-11-11, 12:11, # CodeGen: 0
 **     Abstract    :
 **         This device "FreeCntr32" implements 32-bit Free Running Counter
 **     Settings    :

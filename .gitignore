@@ -69,8 +69,8 @@ ReferencedRSESystems.xml
 
 
 reserve/*
-firmware/.metadata/*
+.metadata/
 
 *.log
 software/logs/*
-*.vscode/*
+.vscode/

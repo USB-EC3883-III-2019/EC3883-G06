@@ -6,7 +6,7 @@
 **     Component   : BitsIO
 **     Version     : Component 02.108, Driver 03.28, CPU db: 3.00.067
 **     Compiler    : CodeWarrior HCS08 C Compiler
-**     Date/Time   : 2019-10-16, 13:01, # CodeGen: 25
+**     Date/Time   : 2019-11-11, 12:11, # CodeGen: 0
 **     Abstract    :
 **         This component "BitsIO" implements a multi-bit input/output.
 **         It uses selected pins of one 1-bit to 8-bit port.
