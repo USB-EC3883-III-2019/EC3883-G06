@@ -53,11 +53,7 @@
 bool tick_motor = 0;
 bool tick_sensors = 0;
 unsigned short sonar_measure = 0;
-int sonar_mean = 0;
-unsigned short sonar_value = 0;
-int sonar_counter = 0;
 bool sonar_value_done = 0;
-unsigned short max_measures = 1; //number of measures to take at each point  
 
 void main(void)
 {
@@ -80,10 +76,7 @@ void main(void)
 
   //End of motor variables-------------------------------------------------------------
   //Lidar variables--------------------------------------------------------------------  
-  unsigned short lidar_measure = 0;   
-  unsigned short lidar_value = 0;
-  int lidar_mean = 0;
-  int lidar_counter = 0;
+  unsigned short lidar_measure = 0; 
   bool lidar_ADC_read_done = 0;
   bool lidar_value_done = 0;
   
@@ -97,9 +90,16 @@ void main(void)
   int i = 0; //used in for statements
   int filter_order=10; 
   bool filter_en = 0;
+  bool config_en = 0;
   
   //End of other variables--------------------------------------------------------------------
   //Comunication variables--------------------------------------------------------------------
+  //Bytes from PC
+   byte packet_PC[4] = {0};
+   //Info from PC
+   char msg_PC = 0;
+   bool is_master = 1;   
+   char zones[5] = {0}; 
    unsigned long data=0;
    word Sent; //data block sent
    byte err; 
@@ -112,84 +112,77 @@ void main(void)
 
   /* Write your code here */
   while(1){
-        if(tick_motor){
-          if(!is_step_done){
-			  tick_motor=0;       
-			  //Motor routine          
-			  if(dir)
-				counter++;
-			  else
-				counter--;
-			  if(counter>=max)
-				dir=0;
-			  if(counter==0)
-				dir=1;
-			  seq_index= counter%8;
-			  for(i=0;i<4;i++)
-				Bits1_PutBit(i,sequence[seq_index][i]);
-	
-			  //For testing comunications
-			  is_step_done=1;
-          }
-    } 
-     
+	  if(1){
+		 //Change config state
+		 if(!(Bit2_GetVal() > 0))
+			config_en = !config_en;
+	 }
+	  
+	  if(config_en){ //Read config from PC
+	    	//Receive
+	    	do {                                                   
+	    	    err = AS1_RecvChar(&packet_PC[0]);                             
+	    	  } while((err != ERR_OK) && ((packet_PC[0] & 0x80) == 0));    	
+	    	for(i=1;i<4;i++){
+	        	do {                                                   
+	        	    err = AS1_RecvChar(&packet_PC[i]);                             
+	        	  } while(err != ERR_OK);
+	    	}
+	    	//Decode
+	    	msg_PC = ((packet_PC[0] & 0x0F) << 4) | (packet_PC[1] & 0x0F);
+	    	is_master =  (packet_PC[0] & 0x10) > 0;
+	    	zones[0] = (packet_PC[1] & 0x70) >> 4;
+	    	zones[1] = (packet_PC[2] & 0x38) >> 3;
+	    	zones[2] = (packet_PC[2] & 0x07);
+	    	zones[3] = (packet_PC[3] & 0x38) >> 3;
+	    	zones[4] = (packet_PC[3] & 0x07);
+	  }
+	  else{ //Use config to actually do something. FSM implementation
+		  
+        if(0){ //tick_motor
+			  if(!is_step_done){
+				  tick_motor=0;       
+				  //Motor routine          
+				  if(dir)
+					counter++;
+				  else
+					counter--;
+				  if(counter>=max)
+					dir=0;
+				  if(counter==0)
+					dir=1;
+				  seq_index= counter%8;
+				  for(i=0;i<4;i++)
+					Bits1_PutBit(i,sequence[seq_index][i]);
+		
+				  //For testing comunications
+				  is_step_done=1;
+				}
+		}      
         
-    if(tick_sensors){
-      tick_sensors=0;
-      
-      //Sonar trigger 
-      Bit1_PutVal(1);
-      FC321_Enable();
-      FC321_Reset();
-      while(sonar_UStimer<15){
-      do
-        err=FC321_GetTimeUS(&sonar_UStimer);
-      while(err!=ERR_OK);
-      }
-      FC321_Disable();
-      sonar_UStimer=0;
-      Bit1_PutVal(0); 
-      
-      //Lidar      
-      AD1_MeasureChan(1,0); 
-      AD1_GetChanValue(0,&lidar_measure);
-      
-	 if(lidar_counter<max_measures){
-	   lidar_mean+=lidar_measure;
-	   lidar_counter++;
-	 }
-	 else{			 
-	   lidar_value = lidar_mean / max_measures;
-	   lidar_mean=0;
-	   lidar_counter = 0;
-	   lidar_value_done=1;
-	 }
+		if(0){ //tick_sensors
+		  tick_sensors=0;
+		  
+		  //Sonar trigger 
+		  Bit1_PutVal(1);
+		  FC321_Enable();
+		  FC321_Reset();
+		  while(sonar_UStimer<15){
+		  do
+			err=FC321_GetTimeUS(&sonar_UStimer);
+		  while(err!=ERR_OK);
+		  }
+		  FC321_Disable();
+		  sonar_UStimer=0;
+		  Bit1_PutVal(0); 
+		  
+		  //Lidar      
+		  AD1_MeasureChan(1,0); 
+		  AD1_GetChanValue(0,&lidar_measure);		  
 	 
-	 //Change filter state
- 	 if(!(Bit2_GetVal() > 0))
- 		filter_en = !filter_en;
-      
-    }   
-    //Comunication      
-    is_send = is_step_done && lidar_value_done && sonar_value_done;
-    if(is_send){      
-      lidar_value_done =0;
-      sonar_value_done=0;
-      is_step_done = 0;
-      //Make packet
-      make_packet(counter,sonar_value,lidar_value,filter_en,&data);
-      //Send data
-      do
-        err=AS1_SendBlock((byte*) &data,sizeof(data),&Sent);
-      while(err!=ERR_OK);
-      
- 	 //Avg or not 	 
- 	 if(filter_en) 		 
- 		 max_measures = filter_order;
- 	 else
- 		 max_measures = 1; 
-      
-    }
+		} 
+	}
+    
 
   }
   /* For example: for(;;) { } */

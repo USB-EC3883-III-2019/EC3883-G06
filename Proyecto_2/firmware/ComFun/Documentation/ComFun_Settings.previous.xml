@@ -839,7 +839,7 @@ asm(BGND);
         <Interrupt_TxD_priority v="medium priority" />
         <Interrupt_Error v="Vsci1err" />
         <Interrupt_Error_priority v="medium priority" />
-        <Input_buffer_size v="8" />
+        <Input_buffer_size v="0" />
         <Output_buffer_size v="8" />
         <group name="Handshake">
           <boolgroup name="CTS" v="Disabled" />
@@ -880,15 +880,15 @@ asm(BGND);
       </group>
     </Properties>
     <Methods>
-      <Enable v="generate code" />
+      <Enable v="don&amp;apos;t generate code" />
       <Disable v="don&amp;apos;t generate code" />
       <EnableEvent v="don&amp;apos;t generate code" />
       <DisableEvent v="don&amp;apos;t generate code" />
       <RecvChar v="generate code" />
       <SendChar v="generate code" />
-      <RecvBlock v="generate code" />
+      <RecvBlock v="don&amp;apos;t generate code" />
       <SendBlock v="generate code" />
-      <ClearRxBuf v="generate code" />
+      <ClearRxBuf v="don&amp;apos;t generate code" />
       <ClearTxBuf v="generate code" />
       <CharsInRxBuf v="don&amp;apos;t generate code" />
       <GetCharsInRxBuf v="generate code" />
@@ -928,10 +928,7 @@ asm(BGND);
         <Event_procedure_name v="AS1_OnTxChar" />
         <Priority v="same as interrupt" />
       </event>
-      <event name="OnFullRxBuf" v="generate code">
-        <Event_procedure_name v="AS1_OnFullRxBuf" />
-        <Priority v="same as interrupt" />
-      </event>
+      <event name="OnFullRxBuf" v="don&amp;apos;t generate code" />
       <event name="OnFreeTxBuf" v="generate code">
         <Event_procedure_name v="AS1_OnFreeTxBuf" />
         <Priority v="same as interrupt" />

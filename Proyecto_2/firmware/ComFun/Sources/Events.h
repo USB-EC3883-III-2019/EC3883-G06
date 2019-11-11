@@ -155,6 +155,21 @@ void Cap1_OnCapture(void);
 ** ===================================================================
 */
 
+void AS1_OnFullRxBuf(void);
+/*
+** ===================================================================
+**     Event       :  AS1_OnFullRxBuf (module Events)
+**
+**     Component   :  AS1 [AsynchroSerial]
+**     Description :
+**         This event is called when the input buffer is full;
+**         i.e. after reception of the last character 
+**         that was successfully placed into input buffer.
+**     Parameters  : None
+**     Returns     : Nothing
+** ===================================================================
+*/
+
 /* END Events */
 #endif /* __Events_H*/
 
