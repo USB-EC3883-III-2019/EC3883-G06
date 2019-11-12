@@ -46,8 +46,8 @@
 #include "IO_Map.h"
 
 /* User includes (#include below this line is not maintained by Processor Expert) */
-#include "ComDriver.h"
 #include "functions.h"
+
 
 //Externs
 bool tick_motor = 0;
@@ -59,7 +59,7 @@ void main(void)
 {
   /* Write your local variable definition here */
 
-  //Motor variables-------------------------------------------------------------
+  //Motor variables-------------------------------------------------------------	
   bool dir = 1;
   int counter = 0; //motor position as well
   int max = 63;
@@ -73,6 +73,9 @@ void main(void)
                           {0,1,1,0},
                           {0,0,1,0}};
   bool is_step_done = 0;
+  unsigned short ref_zone = 1; //Initial zone for motor reference
+  unsigned short set_zone = 2; // Desired zone for motor to move
+  unsigned short steps_per_zone = 10;
 
   //End of motor variables-------------------------------------------------------------
   //Lidar variables--------------------------------------------------------------------  
@@ -139,7 +142,37 @@ void main(void)
 	  }
 	  else{ //Use config to actually do something. FSM implementation
 		  
-        if(0){ //tick_motor
+		if(0){ //Set zone
+			max=set_zone-ref_zone;
+			dir = 1;
+			counter=0;
+			if(max<0)
+				max+=8;
+			if(max>4){
+				max=8-max;
+				dir=0;
+				counter=max;
+			}
+			max*= steps_per_zone;
+				
+			do{
+				if(dir)
+					counter++;
+				else
+					counter--;
+				seq_index= counter%8;
+				for(i=0;i<4;i++)
+					Bits1_PutBit(i,sequence[seq_index][i]);
+			 //Put some delays...100ms
+				//..
+			} while(counter>0 && counter<max);
+			
+			ref_zone = set_zone; //Update ref zone
+			
+			
+		}
+		  
+        if(0){ //Adjust motor detail...
 			  if(!is_step_done){
 				  tick_motor=0;       
 				  //Motor routine          
