@@ -31,6 +31,7 @@
 #include "Cpu.h"
 #include "Events.h"
 #include "AS1.h"
+#include "AS2.h"
 #include "TI1.h"
 #include "AD1.h"
 #include "Cap1.h"
@@ -38,7 +39,6 @@
 #include "TI2.h"
 #include "Bit1.h"
 #include "FC321.h"
-#include "Bit2.h"
 /* Include shared modules, which are used for whole project */
 #include "PE_Types.h"
 #include "PE_Error.h"
@@ -54,6 +54,7 @@ bool tick_motor = 0;
 bool tick_sensors = 0;
 unsigned short sonar_measure = 0;
 bool sonar_value_done = 0;
+bool config_en = 0; //Flag read from PC
 
 void main(void)
 {
@@ -76,6 +77,8 @@ void main(void)
   unsigned short ref_zone = 1; //Initial zone for motor reference
   unsigned short set_zone = 2; // Desired zone for motor to move
   unsigned short steps_per_zone = 10;
+  unsigned short adjust_steps = 0;
+  
 
   //End of motor variables-------------------------------------------------------------
   //Lidar variables--------------------------------------------------------------------  
@@ -90,57 +93,106 @@ void main(void)
   
   //End of Sonar variables-------------------------------------------------------------  
   //Other variables--------------------------------------------------------------------
-  int i = 0; //used in for statements
+  int i=0 ,j=0; //used in for statements
   int filter_order=10; 
   bool filter_en = 0;
-  bool config_en = 0;
+  
   
   //End of other variables--------------------------------------------------------------------
   //Comunication variables--------------------------------------------------------------------
   //Bytes from PC
-   byte packet_PC[4] = {0};
+   byte packet[4] = {0}; //packet from IR
+   byte packet_PC[4] = {0}; //packet from PC
    //Info from PC
-   char msg_PC = 0;
-   bool is_master = 1;   
+   char msg = 0; //msg sent/received from IR   
+   char msg_PC = 0; //msg received from PC   
+   bool is_master = 0;   
    char zones[5] = {0}; 
+   char zones_PC[5] = {0};
    unsigned long data=0;
    word Sent; //data block sent
    byte err; 
    bool is_send = 0;
   //End of Comunication variables-------------------------------------------------------------
+  //FSM variables
+   const unsigned short IDLE_state = 0;
+   const unsigned short ReadConfigPC_state = 1;
+   const unsigned short SetZone_state = 2;
+   const unsigned short AdjustZone_state = 3;
+   const unsigned short SensorsCheck_state = 4;
+   const unsigned short SendIR_state = 5;
+   const unsigned short ReceiveIR_state = 6;
+   const unsigned short SendMsgToPC_state = 7;
+
+   unsigned short current_state=0;
+
+  //End of FSM variables---------------------------------------------------------------------
 
   /*** Processor Expert internal initialization. DON'T REMOVE THIS CODE!!! ***/
   PE_low_level_init();
   /*** End of Processor Expert internal initialization.                    ***/
 
   /* Write your code here */
-  while(1){
-	  if(1){
-		 //Change config state
-		 if(!(Bit2_GetVal() > 0))
-			config_en = !config_en;
-	 }
+  while(1){  
 	  
-	  if(config_en){ //Read config from PC
-	    	//Receive
-	    	do {                                                   
-	    	    err = AS1_RecvChar(&packet_PC[0]);                             
-	    	  } while((err != ERR_OK) && ((packet_PC[0] & 0x80) == 0));    	
-	    	for(i=1;i<4;i++){
-	        	do {                                                   
-	        	    err = AS1_RecvChar(&packet_PC[i]);                             
-	        	  } while(err != ERR_OK);
-	    	}
-	    	//Decode
-	    	msg_PC = ((packet_PC[0] & 0x0F) << 4) | (packet_PC[1] & 0x0F);
-	    	is_master =  (packet_PC[0] & 0x10) > 0;
-	    	zones[0] = (packet_PC[1] & 0x70) >> 4;
-	    	zones[1] = (packet_PC[2] & 0x38) >> 3;
-	    	zones[2] = (packet_PC[2] & 0x07);
-	    	zones[3] = (packet_PC[3] & 0x38) >> 3;
-	    	zones[4] = (packet_PC[3] & 0x07);
-	  }
-	  else{ //Use config to actually do something. FSM implementation
+	  	if(0){ //Read config from PC
+			do {                                                   
+				err = AS1_RecvChar(&packet_PC[0]);                             
+			  } while((err != ERR_OK) && ((packet_PC[0] & 0x80) == 0));    	
+			for(i=1;i<4;i++){
+				do {                                                   
+					err = AS1_RecvChar(&packet_PC[i]);                             
+				  } while(err != ERR_OK);
+			}
+			//Decode
+			msg_PC = ((packet_PC[0] & 0x0F) << 4) | (packet_PC[1] & 0x0F);
+			is_master =  (packet_PC[0] & 0x10) > 0;
+			zones_PC[0] = (packet_PC[1] & 0x70) >> 4;
+			zones_PC[1] = (packet_PC[2] & 0x38) >> 3;
+			zones_PC[2] = (packet_PC[2] & 0x07);
+			zones_PC[3] = (packet_PC[3] & 0x38) >> 3;
+			zones_PC[4] = (packet_PC[3] & 0x07);
+			
+			config_en = 0;
+	  	 }
+
+  		if(0){ //Send msg to PC
+  			 for(i=0;i<100;i++){
+				 do
+					 err=AS1_SendChar(msg);
+				 while(err!=ERR_OK);
+			} 
+		}
+
+		if(0){ //Send IR			
+			 for(i=0;i<4;i++){
+				 do
+					 err=AS2_SendChar(packet[i]);
+				 while(err!=ERR_OK);
+			} 				 
+		}				
+
+		if(0){ //Receive IR
+			//Receive
+			do {                                                   
+				err = AS2_RecvChar(&packet[0]);                             
+			  } while((err != ERR_OK) && ((packet[0] & 0x80) == 0));    	
+			for(i=1;i<4;i++){
+				do {                                                   
+					err = AS2_RecvChar(&packet[i]);                             
+				  } while(err != ERR_OK);
+			}
+			//Decode
+			msg = ((packet[0] & 0x0F) << 4) | (packet[1] & 0x0F);
+			is_master =  (packet[0] & 0x10) > 0;
+			zones[0] = (packet[1] & 0x70) >> 4;
+			zones[1] = (packet[2] & 0x38) >> 3;
+			zones[2] = (packet[2] & 0x07);
+			zones[3] = (packet[3] & 0x38) >> 3;
+			zones[4] = (packet[3] & 0x07);
+
+		}
+	 
 		  
 		if(0){ //Set zone
 			max=set_zone-ref_zone;
@@ -167,33 +219,27 @@ void main(void)
 				//..
 			} while(counter>0 && counter<max);
 			
-			ref_zone = set_zone; //Update ref zone
-			
+			ref_zone = set_zone; //Update ref zone			
 			
 		}
 		  
-        if(0){ //Adjust motor detail...
-			  if(!is_step_done){
-				  tick_motor=0;       
-				  //Motor routine          
+        if(0){ //Adjust zone
+			  
+        	counter = 0;
+			  //Motor routine   
+        	  for(i=0;i<adjust_steps;i++){
 				  if(dir)
 					counter++;
 				  else
-					counter--;
-				  if(counter>=max)
-					dir=0;
-				  if(counter==0)
-					dir=1;
+					counter--;				
 				  seq_index= counter%8;
-				  for(i=0;i<4;i++)
-					Bits1_PutBit(i,sequence[seq_index][i]);
-		
-				  //For testing comunications
-				  is_step_done=1;
-				}
+				  for(j=0;j<4;j++)
+					Bits1_PutBit(i,sequence[seq_index][i]);	
+        	  }				  
+				
 		}      
         
-		if(0){ //tick_sensors
+		if(0){ //Sensors check
 		  tick_sensors=0;
 		  
 		  //Sonar trigger 
@@ -213,9 +259,10 @@ void main(void)
 		  AD1_MeasureChan(1,0); 
 		  AD1_GetChanValue(0,&lidar_measure);		  
 	 
-		} 
-	}
-    
+		}
+
+		//Define next state
+
 
   }
   /* For example: for(;;) { } */

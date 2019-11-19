@@ -6,7 +6,7 @@
 **     Component   : Capture
 **     Version     : Component 02.223, Driver 01.30, CPU db: 3.00.067
 **     Compiler    : CodeWarrior HCS08 C Compiler
-**     Date/Time   : 2019-11-11, 12:16, # CodeGen: 0
+**     Date/Time   : 2019-11-19, 12:34, # CodeGen: 8
 **     Abstract    :
 **         This component "Capture" simply implements the capture function
 **         of timer. The counter counts the same way as in free run mode. On
@@ -23,7 +23,7 @@
 **         High speed mode
 **             Prescaler               : divide-by-1
 **           Maximal time for capture register
-**             Xtal ticks              : 131072
+**             Xtal ticks              : 200000000
 **             microseconds            : 4000000
 **             milliseconds            : 4000
 **             seconds                 : 4

@@ -6,7 +6,7 @@
 **     Component   : TimerInt
 **     Version     : Component 02.161, Driver 01.23, CPU db: 3.00.067
 **     Compiler    : CodeWarrior HCS08 C Compiler
-**     Date/Time   : 2019-11-11, 12:16, # CodeGen: 0
+**     Date/Time   : 2019-11-19, 12:34, # CodeGen: 8
 **     Abstract    :
 **         This component "TimerInt" implements a periodic interrupt.
 **         When the component and its events are enabled, the "OnInterrupt"
@@ -23,7 +23,7 @@
 **             Prescaler               : divide-by-16
 **             Clock                   : 1048576 Hz
 **           Initial period/frequency
-**             Xtal ticks              : 1311
+**             Xtal ticks              : 1999998
 **             microseconds            : 40000
 **             milliseconds            : 40
 **             seconds (real)          : 0.039999961853
