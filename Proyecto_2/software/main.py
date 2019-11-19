@@ -6,17 +6,17 @@ from solindar_lib import ComDriver, SolindarGUI, testCom
 import qdarkstyle
 
 # #Implementation
-ts=300 #sampling time in ms
-# len_fifo = 64
-# n_block = 5
-# Port = "COM3"
-# # con = TestCom.testCom(len_fifo,n_block)
+#Parameters
+Port = "COM3"
+len_fifo=10
+n_block=10
+
 # con = ComDriver(Port,len_fifo,n_block)
-con = 1
+con=1
 #The following lines open the gui app
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
     app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt())
-    window = SolindarGUI(con,ts)
+    window = SolindarGUI(con)
     window.show()
     sys.exit(app.exec_())

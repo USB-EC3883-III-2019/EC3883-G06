@@ -21,7 +21,7 @@ qtCreatorFile = "solindar_lib/GUI/InfraredNetwork.ui" # my Qt Designer file
 Ui_MainWindow, QtBaseClass = uic.loadUiType(qtCreatorFile)
 
 class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
-    def __init__(self,con,ts):
+    def __init__(self,con):
         QtGui.QMainWindow.__init__(self)
         Ui_MainWindow.__init__(self)
         self.setupUi(self)
@@ -58,8 +58,14 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
         self.zona3 = 0
         self.zona4 = 0
         self.zona5 = 0
-        self.mode = 0 # 0 for slave, 1 for master
+        self.mode = False # 0 for slave, 1 for master
         self.messageSend = ''
+        self.dict_data = {
+            'msg': 0xA8,
+            'is_master':True,
+            'zones': [4,1,6,7,2]
+            }
+        self.textEditRecieve.setText("Recepcion")
 
         self.comboBoxMaster.activated[str].connect(self.OpMod)
         self.comboBoxZona1.activated[str].connect(self.SetZona1)
@@ -84,10 +90,10 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
     def OpMod(self,text):
         if text == "Master":
             print("Mode is set in Master")
-            self.mode = 1
+            self.mode = True
         elif text == "Slave":
             print("Mode is set in Slave")
-            self.mode = 0
+            self.mode = False
 
     def SetZona1(self,text):
         if text == "0":
@@ -192,6 +198,14 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
     def SendMessage(self):
         self.messageSend = self.textEditSend.toPlainText()
         print(self.messageSend)
+        self.dict_data = {
+            'msg' : ord(self.messageSend),
+            'is_master' : self.mode,
+            'zones' : [self.zona1,self.zona2,self.zona3,self.zona4,self.zona5]
+        }
+        con.send_data(dict_data)
+
+    
     # def ChannelSon (self,state):
     #     if state == QtCore.Qt.Checked:
     #         self.Ch_state[0] = True
