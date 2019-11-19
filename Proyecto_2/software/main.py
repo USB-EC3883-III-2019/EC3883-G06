@@ -11,8 +11,8 @@ Port = "COM3"
 len_fifo=10
 n_block=10
 
-# con = ComDriver(Port,len_fifo,n_block)
-con=1
+con = ComDriver(Port,len_fifo,n_block)
+# con=1
 #The following lines open the gui app
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)

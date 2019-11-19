@@ -18,7 +18,8 @@ class ComDriver(serial.Serial):
         self.set_buffer_size(rx_size = 15000, tx_size = 0)
         
         #Internal variables
-        self.rx_msg = 0        
+        self.rx_msg = 0
+        self.readList = []        
 
 
     def send_data(self,dict_data): #Sends data, returns True if correctly send, False otherwise
@@ -45,5 +46,10 @@ class ComDriver(serial.Serial):
             return False
 
     def get_msg(self):
-        return ord(self.read())
+        # print('Get message')
+        EleInput = self.in_waiting
+        if EleInput > 0:
+            self.read(EleInput-1)
+            return chr(ord(self.read()))
+        
   

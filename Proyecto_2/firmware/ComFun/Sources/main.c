@@ -157,6 +157,9 @@ void main(void)
 			zones_PC[4] = (packet_PC[3] & 0x07);
 			
 			config_en = 0;
+
+			packet_PC[0] = packet_PC[0] & 0xEF;
+			packet_PC[1] = packet_PC[1] & 0x8F;
 	  	 }
 
   		if(0){ //Send msg to PC
@@ -167,12 +170,23 @@ void main(void)
 			} 
 		}
 
-		if(0){ //Send IR			
-			 for(i=0;i<4;i++){
-				 do
-					 err=AS2_SendChar(packet[i]);
-				 while(err!=ERR_OK);
-			} 				 
+		if(0){ //Send IR
+			if (is_master == 1)	{		
+				for(i=0;i<4;i++){
+					do{
+						err=AS2_SendChar(packet_PC[i]);
+					}
+					while(err!=ERR_OK);
+				}
+			} 
+			if (is_master == 0)	{	
+				for(i=0;i<4;i++){
+					do{
+						err=AS2_SendChar(packet[i]);
+					}
+					while(err!=ERR_OK);
+				} 
+			}		 
 		}				
 
 		if(0){ //Receive IR
@@ -188,12 +202,27 @@ void main(void)
 			//Decode
 			msg = ((packet[0] & 0x0F) << 4) | (packet[1] & 0x0F);
 			is_master =  (packet[0] & 0x10) > 0;
-			zones[0] = (packet[1] & 0x70) >> 4;
 			zones[1] = (packet[2] & 0x38) >> 3;
 			zones[2] = (packet[2] & 0x07);
 			zones[3] = (packet[3] & 0x38) >> 3;
 			zones[4] = (packet[3] & 0x07);
 
+			if (zones[1] != 0){
+				set_zone = zones[1];
+				packet[2] = packet[2] & 0xC7;
+			}
+			else if (zones[2] != 0){
+				set_zone = zones[2];
+				packet[2] = packet[2] & 0xF8;
+			}
+			else if (zones[3] != 0){
+				set_zone = zones[3];
+				packet[3] = packet[3] & 0xC7;
+			}
+			else if (zones[4] != 0){
+				set_zone = zones[4];
+				packet[3] = packet[3] & 0xF8;
+			}
 		}
 	 
 		  
