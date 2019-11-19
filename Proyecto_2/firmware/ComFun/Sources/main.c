@@ -210,15 +210,15 @@ void main(void)
 			}
 			else if (zones[2] != 0){
 				set_zone = zones[2];
-				packet[3] = packet[2] & 0xF8;
+				packet[2] = packet[2] & 0xF8;
 			}
 			else if (zones[3] != 0){
 				set_zone = zones[3];
-				packet[2] = packet[3] & 0xC7;
+				packet[3] = packet[3] & 0xC7;
 			}
 			else if (zones[4] != 0){
 				set_zone = zones[4];
-				packet[2] = packet[3] & 0xF8;
+				packet[3] = packet[3] & 0xF8;
 			}
 		}
 	 
