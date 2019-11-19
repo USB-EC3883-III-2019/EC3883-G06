@@ -5,7 +5,7 @@
 **     Processor   : MC9S08QE128CLK
 **     Version     : Component 01.003, Driver 01.40, CPU db: 3.00.067
 **     Compiler    : CodeWarrior HCS08 C Compiler
-**     Date/Time   : 2019-11-11, 12:16, # CodeGen: 0
+**     Date/Time   : 2019-11-19, 12:24, # CodeGen: 7
 **     Abstract    :
 **         This component "MC9S08QE128_80" contains initialization 
 **         of the CPU and provides basic methods and events for 
@@ -60,6 +60,7 @@
 
 #include "Cpu.h"
 #include "AS1.h"
+#include "AS2.h"
 #include "TI1.h"
 #include "AD1.h"
 #include "Cap1.h"
@@ -67,7 +68,6 @@
 #include "TI2.h"
 #include "Bit1.h"
 #include "FC321.h"
-#include "Bit2.h"
 
 /*lint -save  -e950 Disable MISRA rule (1.1) checking. */
 static void (* near const _vect[])(void) @0xFFC0 = { /* Interrupt vector table */
@@ -80,9 +80,9 @@ static void (* near const _vect[])(void) @0xFFC0 = { /* Interrupt vector table *
          Cpu_Interrupt,                /* Int.no. 26 Vtpm3ch1 (at FFCA)              Unassigned */
          Cap1_Interrupt,               /* Int.no. 25 Vtpm3ch0 (at FFCC)              Used */
          TI1_Interrupt,                /* Int.no. 24 Vrtc (at FFCE)                  Used */
-         Cpu_Interrupt,                /* Int.no. 23 Vsci2tx (at FFD0)               Unassigned */
-         Cpu_Interrupt,                /* Int.no. 22 Vsci2rx (at FFD2)               Unassigned */
-         Cpu_Interrupt,                /* Int.no. 21 Vsci2err (at FFD4)              Unassigned */
+         AS2_InterruptTx,              /* Int.no. 23 Vsci2tx (at FFD0)               Used */
+         AS2_InterruptRx,              /* Int.no. 22 Vsci2rx (at FFD2)               Used */
+         AS2_InterruptError,           /* Int.no. 21 Vsci2err (at FFD4)              Used */
          Cpu_Interrupt,                /* Int.no. 20 Vacmpx (at FFD6)                Unassigned */
          Cpu_Interrupt,                /* Int.no. 19 Vadc (at FFD8)                  Unassigned */
          Cpu_Interrupt,                /* Int.no. 18 Vkeyboard (at FFDA)             Unassigned */

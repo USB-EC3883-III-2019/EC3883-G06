@@ -36,6 +36,7 @@
 #include "IO_Map.h"
 #include "PE_Timer.h"
 #include "AS1.h"
+#include "AS2.h"
 #include "TI1.h"
 #include "AD1.h"
 #include "Cap1.h"
@@ -43,7 +44,6 @@
 #include "TI2.h"
 #include "Bit1.h"
 #include "FC321.h"
-#include "Bit2.h"
 
 
 void AS1_OnError(void);
@@ -165,6 +165,82 @@ void AS1_OnFullRxBuf(void);
 **         This event is called when the input buffer is full;
 **         i.e. after reception of the last character 
 **         that was successfully placed into input buffer.
+**     Parameters  : None
+**     Returns     : Nothing
+** ===================================================================
+*/
+
+void AS2_OnError(void);
+/*
+** ===================================================================
+**     Event       :  AS2_OnError (module Events)
+**
+**     Component   :  AS2 [AsynchroSerial]
+**     Description :
+**         This event is called when a channel error (not the error
+**         returned by a given method) occurs. The errors can be read
+**         using <GetError> method.
+**         The event is available only when the <Interrupt
+**         service/event> property is enabled.
+**     Parameters  : None
+**     Returns     : Nothing
+** ===================================================================
+*/
+
+void AS2_OnRxChar(void);
+/*
+** ===================================================================
+**     Event       :  AS2_OnRxChar (module Events)
+**
+**     Component   :  AS2 [AsynchroSerial]
+**     Description :
+**         This event is called after a correct character is received.
+**         The event is available only when the <Interrupt
+**         service/event> property is enabled and either the <Receiver>
+**         property is enabled or the <SCI output mode> property (if
+**         supported) is set to Single-wire mode.
+**     Parameters  : None
+**     Returns     : Nothing
+** ===================================================================
+*/
+
+void AS2_OnTxChar(void);
+/*
+** ===================================================================
+**     Event       :  AS2_OnTxChar (module Events)
+**
+**     Component   :  AS2 [AsynchroSerial]
+**     Description :
+**         This event is called after a character is transmitted.
+**     Parameters  : None
+**     Returns     : Nothing
+** ===================================================================
+*/
+
+void AS2_OnFullRxBuf(void);
+/*
+** ===================================================================
+**     Event       :  AS2_OnFullRxBuf (module Events)
+**
+**     Component   :  AS2 [AsynchroSerial]
+**     Description :
+**         This event is called when the input buffer is full;
+**         i.e. after reception of the last character 
+**         that was successfully placed into input buffer.
+**     Parameters  : None
+**     Returns     : Nothing
+** ===================================================================
+*/
+
+void AS2_OnFreeTxBuf(void);
+/*
+** ===================================================================
+**     Event       :  AS2_OnFreeTxBuf (module Events)
+**
+**     Component   :  AS2 [AsynchroSerial]
+**     Description :
+**         This event is called after the last character in output
+**         buffer is transmitted.
 **     Parameters  : None
 **     Returns     : Nothing
 ** ===================================================================
