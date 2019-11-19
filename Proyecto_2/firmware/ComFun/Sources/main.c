@@ -76,8 +76,8 @@ void main(void)
   bool is_step_done = 0;
   unsigned short ref_zone = 1; //Initial zone for motor reference
   unsigned short set_zone = 2; // Desired zone for motor to move
-  unsigned short steps_per_zone = 10;
-  unsigned short adjust_steps = 0;
+  unsigned short steps_per_zone = 14;
+  unsigned short adjust_steps = 2;
   
 
   //End of motor variables-------------------------------------------------------------
@@ -85,17 +85,20 @@ void main(void)
   unsigned short lidar_measure = 0; 
   bool lidar_ADC_read_done = 0;
   bool lidar_value_done = 0;
+  int lidar_value = 0;  
   
   //End of Lidar variables-------------------------------------------------------------
   //Sonar variables--------------------------------------------------------------------  
   unsigned short sonar_UStimer = 0;
+  int sonar_value = 0;
   
   
   //End of Sonar variables-------------------------------------------------------------  
   //Other variables--------------------------------------------------------------------
-  int i=0 ,j=0; //used in for statements
+  int i=0 ,j=0, k=0; //used in for statements
   int filter_order=10; 
   bool filter_en = 0;
+  int distance_value = 0;
   
   
   //End of other variables--------------------------------------------------------------------
@@ -195,69 +198,101 @@ void main(void)
 	 
 		  
 		if(0){ //Set zone
+			
 			max=set_zone-ref_zone;
-			dir = 1;
-			counter=0;
+			dir = 1;			
 			if(max<0)
 				max+=8;
 			if(max>4){
 				max=8-max;
-				dir=0;
-				counter=max;
+				dir=0;				
 			}
 			max*= steps_per_zone;
-				
-			do{
+			FC321_Enable();	
+			for(j=0;j<max;j++){
 				if(dir)
 					counter++;
-				else
+				else 	
 					counter--;
+				if(counter<0)
+					counter=80;
 				seq_index= counter%8;
 				for(i=0;i<4;i++)
-					Bits1_PutBit(i,sequence[seq_index][i]);
-			 //Put some delays...100ms
-				//..
-			} while(counter>0 && counter<max);
-			
+					Bits1_PutBit(i,sequence[seq_index][i]);			 
+	 			
+				FC321_Reset();
+				while(sonar_UStimer<3000){
+				do
+					err=FC321_GetTimeUS(&sonar_UStimer);
+				while(err!=ERR_OK);
+				}		  
+		  		sonar_UStimer=0;
+
+			} 
+			FC321_Disable();			
 			ref_zone = set_zone; //Update ref zone			
 			
 		}
 		  
         if(0){ //Adjust zone
-			  
-        	counter = 0;
-			  //Motor routine   
-        	  for(i=0;i<adjust_steps;i++){
-				  if(dir)
+			          	
+		  	//Motor routine
+			FC321_Enable();   
+    	  	for(i=0;i<adjust_steps;i++){
+			  	if(dir)
 					counter++;
-				  else
-					counter--;				
-				  seq_index= counter%8;
-				  for(j=0;j<4;j++)
-					Bits1_PutBit(i,sequence[seq_index][i]);	
-        	  }				  
+			  	else
+					counter--;
+				if(counter<0)
+					counter=80;				
+			  	seq_index= counter%8;
+			  	for(j=0;j<4;j++)
+					Bits1_PutBit(i,sequence[seq_index][i]);
+			  	FC321_Reset();
+			 	 while(sonar_UStimer<3000){
+			  	do
+					err=FC321_GetTimeUS(&sonar_UStimer);
+			  	while(err!=ERR_OK);
+			  	}		  
+	  		  	sonar_UStimer=0;	
+    	  }	
+    	  FC321_Disable();				  
 				
 		}      
         
 		if(0){ //Sensors check
-		  tick_sensors=0;
-		  
-		  //Sonar trigger 
-		  Bit1_PutVal(1);
-		  FC321_Enable();
-		  FC321_Reset();
-		  while(sonar_UStimer<15){
-		  do
-			err=FC321_GetTimeUS(&sonar_UStimer);
-		  while(err!=ERR_OK);
-		  }
-		  FC321_Disable();
-		  sonar_UStimer=0;
-		  Bit1_PutVal(0); 
-		  
-		  //Lidar      
-		  AD1_MeasureChan(1,0); 
-		  AD1_GetChanValue(0,&lidar_measure);		  
+		  		  
+			 //Sonar trigger 
+			 Bit1_PutVal(1);
+			 FC321_Enable();
+			 FC321_Reset();
+			 while(sonar_UStimer<15){
+			 do
+				err=FC321_GetTimeUS(&sonar_UStimer);
+			 while(err!=ERR_OK);
+			 }
+			 
+			 sonar_UStimer=0;
+			 Bit1_PutVal(0); 
+			 //Wait until measure
+			 FC321_Reset();
+			 while(sonar_UStimer<1800){
+			 do
+				err=FC321_GetTimeUS(&sonar_UStimer);
+			 while(err!=ERR_OK);
+			 }		  
+			 sonar_UStimer=0;
+			 FC321_Disable();
+
+			 //Measure lidar       
+			 AD1_MeasureChan(1,0); 
+			 AD1_GetChanValue(0,&lidar_measure);
+
+			 //Make calculations
+			 lidar_value = 556320/lidar_measure -124;	
+			 sonar_value = (1047*sonar_measure)/1000;
+			 distance_value = (8*lidar_value + 2*sonar_value)/10;
+
 	 
 		}
 
