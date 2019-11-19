@@ -19,11 +19,11 @@
 ** @brief
 **         Main module.
 **         This module contains user's application code.
-*/         
+*/
 /*!
 **  @addtogroup main_module main module documentation
 **  @{
-*/         
+*/
 /* MODULE main */
 
 
@@ -60,7 +60,7 @@ void main(void)
 {
   /* Write your local variable definition here */
 
-  //Motor variables-------------------------------------------------------------	
+  //Motor variables-------------------------------------------------------------
   bool dir = 1;
   int counter = 0; //motor position as well
   int max = 63;
@@ -78,43 +78,45 @@ void main(void)
   unsigned short set_zone = 2; // Desired zone for motor to move
   unsigned short steps_per_zone = 14;
   unsigned short adjust_steps = 2;
-  
+
 
   //End of motor variables-------------------------------------------------------------
-  //Lidar variables--------------------------------------------------------------------  
-  unsigned short lidar_measure = 0; 
+  //Lidar variables--------------------------------------------------------------------
+  unsigned short lidar_measure = 0;
   bool lidar_ADC_read_done = 0;
   bool lidar_value_done = 0;
-  int lidar_value = 0;  
-  
+  int lidar_value = 0;
+
   //End of Lidar variables-------------------------------------------------------------
-  //Sonar variables--------------------------------------------------------------------  
+  //Sonar variables--------------------------------------------------------------------
   unsigned short sonar_UStimer = 0;
   int sonar_value = 0;
-  
-  
-  //End of Sonar variables-------------------------------------------------------------  
+
+
+  //End of Sonar variables-------------------------------------------------------------
   //Other variables--------------------------------------------------------------------
   int i=0 ,j=0, k=0; //used in for statements
-  int filter_order=10; 
+  int filter_order=10;
   bool filter_en = 0;
   int distance_value = 0;
-  
-  
+  int distance_previous = 0;
+  int distance_diff = 0;
+
+
   //End of other variables--------------------------------------------------------------------
   //Comunication variables--------------------------------------------------------------------
   //Bytes from PC
    byte packet[4] = {0}; //packet from IR
    byte packet_PC[4] = {0}; //packet from PC
    //Info from PC
-   char msg = 0; //msg sent/received from IR   
-   char msg_PC = 0; //msg received from PC   
-   bool is_master = 0;   
-   char zones[5] = {0}; 
+   char msg = 0; //msg sent/received from IR
+   char msg_PC = 0; //msg received from PC
+   bool is_master = 0;
+   char zones[5] = {0};
    char zones_PC[5] = {0};
    unsigned long data=0;
    word Sent; //data block sent
-   byte err; 
+   byte err;
    bool is_send = 0;
   //End of Comunication variables-------------------------------------------------------------
   //FSM variables
@@ -129,6 +131,9 @@ void main(void)
 
    unsigned short current_state=0;
 
+   //Other flags
+   bool is_adjust=0;
+
   //End of FSM variables---------------------------------------------------------------------
 
   /*** Processor Expert internal initialization. DON'T REMOVE THIS CODE!!! ***/
@@ -136,30 +141,30 @@ void main(void)
   /*** End of Processor Expert internal initialization.                    ***/
 
   /* Write your code here */
-  while(1){  
-	  
-	  	if(0){ //Read config from PC
-			do {                                                   
-				err = AS1_RecvChar(&packet_PC[0]);                             
-			  } while((err != ERR_OK) && ((packet_PC[0] & 0x80) == 0));    	
-			for(i=1;i<4;i++){
-				do {                                                   
-					err = AS1_RecvChar(&packet_PC[i]);                             
-				  } while(err != ERR_OK);
-			}
-			//Decode
-			msg_PC = ((packet_PC[0] & 0x0F) << 4) | (packet_PC[1] & 0x0F);
-			is_master =  (packet_PC[0] & 0x10) > 0;
-			zones_PC[0] = (packet_PC[1] & 0x70) >> 4;
-			zones_PC[1] = (packet_PC[2] & 0x38) >> 3;
-			zones_PC[2] = (packet_PC[2] & 0x07);
-			zones_PC[3] = (packet_PC[3] & 0x38) >> 3;
-			zones_PC[4] = (packet_PC[3] & 0x07);
-			
-			config_en = 0;
+  while(1){
 
-			packet_PC[0] = packet_PC[0] & 0xEF;
-			packet_PC[1] = packet_PC[1] & 0x8F;
+	  	if(0){ //Read config from PC
+  			do {
+  				err = AS1_RecvChar(&packet_PC[0]);
+  			  } while((err != ERR_OK) && ((packet_PC[0] & 0x80) == 0));
+  			for(i=1;i<4;i++){
+  				do {
+  					err = AS1_RecvChar(&packet_PC[i]);
+  				} while(err != ERR_OK);
+  			}
+  			//Decode
+  			msg_PC = ((packet_PC[0] & 0x0F) << 4) | (packet_PC[1] & 0x0F);
+  			is_master =  (packet_PC[0] & 0x10) > 0;
+  			zones_PC[0] = (packet_PC[1] & 0x70) >> 4;
+  			zones_PC[1] = (packet_PC[2] & 0x38) >> 3;
+  			zones_PC[2] = (packet_PC[2] & 0x07);
+  			zones_PC[3] = (packet_PC[3] & 0x38) >> 3;
+  			zones_PC[4] = (packet_PC[3] & 0x07);
+
+  			config_en = 0;
+
+  			packet_PC[0] = packet_PC[0] & 0xEF;
+  			packet_PC[1] = packet_PC[1] & 0x8F;
 	  	 }
 
   		if(0){ //Send msg to PC
@@ -167,36 +172,36 @@ void main(void)
 				 do
 					 err=AS1_SendChar(msg);
 				 while(err!=ERR_OK);
-			} 
+			   }
 		}
 
 		if(0){ //Send IR
-			if (is_master == 1)	{		
+			if (is_master){
 				for(i=0;i<4;i++){
 					do{
 						err=AS2_SendChar(packet_PC[i]);
 					}
 					while(err!=ERR_OK);
 				}
-			} 
-			if (is_master == 0)	{	
+			}
+			else{
 				for(i=0;i<4;i++){
 					do{
 						err=AS2_SendChar(packet[i]);
 					}
 					while(err!=ERR_OK);
-				} 
-			}		 
-		}				
+				}
+			}
+		}
 
 		if(0){ //Receive IR
 			//Receive
-			do {                                                   
-				err = AS2_RecvChar(&packet[0]);                             
-			  } while((err != ERR_OK) && ((packet[0] & 0x80) == 0));    	
+			do {
+				err = AS2_RecvChar(&packet[0]);
+			  } while((err != ERR_OK) && ((packet[0] & 0x80) == 0));
 			for(i=1;i<4;i++){
-				do {                                                   
-					err = AS2_RecvChar(&packet[i]);                             
+				do {
+					err = AS2_RecvChar(&packet[i]);
 				  } while(err != ERR_OK);
 			}
 			//Decode
@@ -224,74 +229,70 @@ void main(void)
 				packet[3] = packet[3] & 0xF8;
 			}
 		}
-	 
-		  
+
+
 		if(0){ //Set zone
-			
 			max=set_zone-ref_zone;
-			dir = 1;			
+			dir = 1;
 			if(max<0)
-				max+=8;
-			if(max>4){
-				max=8-max;
-				dir=0;				
+				max+=6;
+			if(max>3){
+				max=6-max;
+				dir=0;
 			}
 			max*= steps_per_zone;
-			FC321_Enable();	
+			FC321_Enable();
 			for(j=0;j<max;j++){
 				if(dir)
 					counter++;
-				else 	
+				else
 					counter--;
 				if(counter<0)
-					counter=80;
+					counter=79;
 				seq_index= counter%8;
 				for(i=0;i<4;i++)
-					Bits1_PutBit(i,sequence[seq_index][i]);			 
-	 			
+					Bits1_PutBit(i,sequence[seq_index][i]);
 				FC321_Reset();
 				while(sonar_UStimer<3000){
 				do
 					err=FC321_GetTimeUS(&sonar_UStimer);
 				while(err!=ERR_OK);
-				}		  
+				}
 		  		sonar_UStimer=0;
+			}
+			FC321_Disable();
+			ref_zone = set_zone; //Update ref zone
 
-			} 
-			FC321_Disable();			
-			ref_zone = set_zone; //Update ref zone			
-			
 		}
-		  
+
         if(0){ //Adjust zone
-			          	
-		  	//Motor routine
-			FC321_Enable();   
+
+			    FC321_Enable();
     	  	for(i=0;i<adjust_steps;i++){
-			  	if(dir)
-					counter++;
-			  	else
-					counter--;
-				if(counter<0)
-					counter=80;				
-			  	seq_index= counter%8;
-			  	for(j=0;j<4;j++)
-					Bits1_PutBit(i,sequence[seq_index][i]);
-			  	FC321_Reset();
-			 	 while(sonar_UStimer<3000){
-			  	do
-					err=FC321_GetTimeUS(&sonar_UStimer);
-			  	while(err!=ERR_OK);
-			  	}		  
-	  		  	sonar_UStimer=0;	
-    	  }	
-    	  FC321_Disable();				  
-				
-		}      
-        
+  			  	if(dir)
+  					     counter++;
+  			  	else
+  					     counter--;
+  				  if(counter<0)
+  					     counter=80;
+  			  	seq_index= counter%8;
+  			  	for(j=0;j<4;j++)
+  					     Bits1_PutBit(i,sequence[seq_index][i]);
+  			  	FC321_Reset();
+  			 	 while(sonar_UStimer<3000){
+  			  	do
+  					err=FC321_GetTimeUS(&sonar_UStimer);
+  			  	while(err!=ERR_OK);
+  			  	}
+  	  		  	sonar_UStimer=0;
+    	  }
+    	  FC321_Disable();
+
+		}
+
 		if(0){ //Sensors check
-		  		  
-			 //Sonar trigger 
+
+			 //Sonar trigger
 			 Bit1_PutVal(1);
 			 FC321_Enable();
 			 FC321_Reset();
@@ -300,29 +301,36 @@ void main(void)
 				err=FC321_GetTimeUS(&sonar_UStimer);
 			 while(err!=ERR_OK);
 			 }
-			 
+
 			 sonar_UStimer=0;
-			 Bit1_PutVal(0); 
+			 Bit1_PutVal(0);
 			 //Wait until measure
 			 FC321_Reset();
 			 while(sonar_UStimer<1800){
 			 do
 				err=FC321_GetTimeUS(&sonar_UStimer);
 			 while(err!=ERR_OK);
-			 }		  
+			 }
 			 sonar_UStimer=0;
 			 FC321_Disable();
 
-			 //Measure lidar       
-			 AD1_MeasureChan(1,0); 
+			 //Measure lidar
+			 AD1_MeasureChan(1,0);
 			 AD1_GetChanValue(0,&lidar_measure);
 
 			 //Make calculations
-			 lidar_value = 556320/lidar_measure -124;	
-			 sonar_value = (1047*sonar_measure)/1000;
-			 distance_value = (8*lidar_value + 2*sonar_value)/10;
+			 lidar_value = 556320/lidar_measure -124;
+			 sonar_value = (1047*sonar_measure)/100;
+       distance_previous = distance_value;
+			 distance_value = (8*lidar_value + 2*sonar_value)/10; //Distance in mm
+       distance_diff = distance_value - distance_previous;
+       if(distance_diff>0)
+        dir = !dir;
+        if(distance_diff<20)
+          is_adjust=0;
+        else
+          is_adjust=1;
 
-	 
 		}
 
 		//Define next state
