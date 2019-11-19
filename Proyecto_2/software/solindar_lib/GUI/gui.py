@@ -33,7 +33,7 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
         # self.lidBox.setStatusTip("Activar la Grafica del Lidar")
         # self.fusBox.stateChanged.connect(self.ChannelFus)
         # self.fusBox.setStatusTip("Activar la Grafica del Fusion")
-        # self.con=con
+        self.con=con
         # self.Ch_state=[False, False, False]
         # self.Ch_index=[]
         # self.Ch_colors=['bo','go','yo','ro','co','mo','wo']
@@ -65,7 +65,10 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
             'is_master':True,
             'zones': [4,1,6,7,2]
             }
-        self.textEditRecieve.setText("Recepcion")
+        self.text = '<h1>Recepcion</h1>'
+        self.textEditRecieve.setText(self.text)
+        self.messageRecieve = 'a'
+        # self.textEditSend.setFontWeight(100)
 
         self.comboBoxMaster.activated[str].connect(self.OpMod)
         self.comboBoxZona1.activated[str].connect(self.SetZona1)
@@ -76,15 +79,11 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
         self.pushButton.clicked.connect(self.SendMessage)
 
 
-        # #Timer
-        # timer2=QtCore.QTimer(self)
-        # timer2.timeout.connect(self.run)
-        # timer2.start(ts)
+        # Timer
+        timerRecieve=QtCore.QTimer(self)
+        timerRecieve.timeout.connect(self.RecieveMessage)
+        timerRecieve.start(100)
 
-        # #Start graph
-        # self.ax = self.canvas.figure.clear()
-        # self.ax = self.canvas.figure.add_subplot(111, projection='polar')
-        # self.make_graph()
 
 
     def OpMod(self,text):
@@ -205,7 +204,11 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
         }
         con.send_data(dict_data)
 
-    
+    def RecieveMessage(self):
+        self.messageRecieve = '<br><h1 align=center>' + self.con.get_msg() + '</h1>'
+        # print(self.messageRecieve)
+        self.textEditRecieve.setText(self.messageRecieve)
+
     # def ChannelSon (self,state):
     #     if state == QtCore.Qt.Checked:
     #         self.Ch_state[0] = True
