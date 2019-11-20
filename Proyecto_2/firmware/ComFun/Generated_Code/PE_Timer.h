@@ -6,7 +6,7 @@
 **     Component   : PE_Timer
 **     Version     : Driver 01.04
 **     Compiler    : CodeWarrior HCS08 C Compiler
-**     Date/Time   : 2019-11-11, 12:16, # CodeGen: 0
+**     Date/Time   : 2019-11-20, 13:39, # CodeGen: 10
 **     Abstract    :
 **         This module "PE_Timer" implements internal methods and definitions
 **         used by components working with timers.
@@ -72,6 +72,18 @@ void PE_Timer_LngMul(dword va1, dword va2, dlong *var);
 **     Description :
 **         The method multiplies two 32 bit values and returns pointer to 
 **         64 bit result.
+**         This method is internal. It is used by Processor Expert only.
+** ===================================================================
+*/
+
+bool PE_Timer_LngHi2(dword High, dword Low, word *Out);
+/*
+** ===================================================================
+**     Method      :  PE_Timer_LngHi2 (component PE_Timer)
+**
+**     Description :
+**         The method transfers 64 bit result to 16 bit ratio value and 
+**         returns overflow flag.
 **         This method is internal. It is used by Processor Expert only.
 ** ===================================================================
 */

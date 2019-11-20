@@ -7,7 +7,7 @@
 **     Version     : Component 01.003, Driver 01.40, CPU db: 3.00.067
 **     Datasheet   : MC9S08QE128RM Rev. 2 6/2007
 **     Compiler    : CodeWarrior HCS08 C Compiler
-**     Date/Time   : 2019-11-19, 12:34, # CodeGen: 8
+**     Date/Time   : 2019-11-20, 13:39, # CodeGen: 10
 **     Abstract    :
 **         This component "MC9S08QE128_80" contains initialization 
 **         of the CPU and provides basic methods and events for 
@@ -75,6 +75,7 @@
 #include "TI2.h"
 #include "Bit1.h"
 #include "FC321.h"
+#include "PWM1.h"
 #include "PE_Types.h"
 #include "PE_Error.h"
 #include "PE_Const.h"
@@ -221,8 +222,8 @@ void PE_low_level_init(void)
   clrSetReg8Bits(PTCDD, 0x41U, 0x80U);  
   /* PTCD: PTCD7=1 */
   setReg8Bits(PTCD, 0x80U);             
-  /* APCTL1: ADPC1=1 */
-  setReg8Bits(APCTL1, 0x02U);           
+  /* APCTL1: ADPC0=1 */
+  setReg8Bits(APCTL1, 0x01U);           
   /* PTCPE: PTCPE0=0 */
   clrReg8Bits(PTCPE, 0x01U);            
   /* PTDD: PTDD7=0,PTDD6=0,PTDD5=0,PTDD4=0 */
@@ -231,12 +232,12 @@ void PE_low_level_init(void)
   clrReg8Bits(PTDPE, 0xF0U);            
   /* PTDDD: PTDDD7=1,PTDDD6=1,PTDDD5=1,PTDDD4=1 */
   setReg8Bits(PTDDD, 0xF0U);            
-  /* PTAD: PTAD7=0 */
-  clrReg8Bits(PTAD, 0x80U);             
+  /* PTAD: PTAD7=0,PTAD1=0 */
+  clrReg8Bits(PTAD, 0x82U);             
   /* PTAPE: PTAPE7=0 */
   clrReg8Bits(PTAPE, 0x80U);            
-  /* PTADD: PTADD7=1 */
-  setReg8Bits(PTADD, 0x80U);            
+  /* PTADD: PTADD7=1,PTADD1=1 */
+  setReg8Bits(PTADD, 0x82U);            
   /* PTASE: PTASE7=0,PTASE6=0,PTASE4=0,PTASE3=0,PTASE2=0,PTASE1=0,PTASE0=0 */
   clrReg8Bits(PTASE, 0xDFU);            
   /* PTBSE: PTBSE7=0,PTBSE6=0,PTBSE5=0,PTBSE4=0,PTBSE3=0,PTBSE2=0,PTBSE1=0,PTBSE0=0 */
@@ -291,6 +292,8 @@ void PE_low_level_init(void)
   Shadow_PTA &= 0x7FU;                 /* Initialize pin shadow variable bit */
   /* ### Free running 8-bit counter "FC321" init code ... */
   FC321_Init();
+  /* ### Programable pulse generation "PWM1" init code ... */
+  PWM1_Init();
   /* Common peripheral initialization - ENABLE */
   /* TPM1SC: CLKSB=0,CLKSA=1 */
   clrSetReg8Bits(TPM1SC, 0x10U, 0x08U); 

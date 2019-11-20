@@ -44,6 +44,7 @@
 #include "TI2.h"
 #include "Bit1.h"
 #include "FC321.h"
+#include "PWM1.h"
 
 
 void AS1_OnError(void);

@@ -39,6 +39,7 @@
 #include "TI2.h"
 #include "Bit1.h"
 #include "FC321.h"
+#include "PWM1.h"
 /* Include shared modules, which are used for whole project */
 #include "PE_Types.h"
 #include "PE_Error.h"
@@ -106,7 +107,7 @@ void main(void)
   //End of other variables--------------------------------------------------------------------
   //Comunication variables--------------------------------------------------------------------
   //Bytes from PC
-   byte packet[4] = {0}; //packet from IR
+   byte packet[4] = {5,5,5,5}; //packet from IR
    byte packet_PC[4] = {0}; //packet from PC
    //Info from PC
    char msg = 0; //msg sent/received from IR
@@ -175,7 +176,7 @@ void main(void)
 			   }
 		}
 
-		if(0){ //Send IR
+		if(1){ //Send IR
 			if (is_master){
 				for(i=0;i<4;i++){
 					do{
