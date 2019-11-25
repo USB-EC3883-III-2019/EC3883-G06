@@ -144,7 +144,7 @@ void main(void)
   /* Write your code here */
   while(1){
 
-	  	if(0){ //Read config from PC
+	  	if(config_en){ //Read config from PC
   			do {
   				err = AS1_RecvChar(&packet_PC[0]);
   			  } while((err != ERR_OK) && ((packet_PC[0] & 0x80) == 0));
@@ -176,7 +176,7 @@ void main(void)
 			   }
 		}
 
-		if(1){ //Send IR
+		if(0){ //Send IR
 			if (is_master){
 				for(i=0;i<4;i++){
 					do{

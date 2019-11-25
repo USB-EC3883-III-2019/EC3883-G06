@@ -12,9 +12,9 @@ n_block=10
 con = ComDriver(Port,len_fifo,n_block)
 log = logger()
 dict_data = {
-			 'msg': 0xA8,
+			 'msg': 0xB9,
 			 'is_master':True,
-			 'zones': [4,1,6,7,2]
+			 'zones': [6,7,9,2,3]
 }
 
 packet = con.send_data(dict_data)

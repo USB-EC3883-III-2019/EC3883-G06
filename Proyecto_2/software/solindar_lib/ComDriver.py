@@ -36,8 +36,8 @@ class ComDriver(serial.Serial):
             packet |= (zones[i] & 0x7) << shift[i]
         if is_master:
             packet |= 0x10000000            
-        #send
-        packet = packet.to_bytes(4,'little')
+        #send        
+        packet = packet.to_bytes(4,'big')
         is_sent = self.write(packet)
 
         if is_sent > 0:
