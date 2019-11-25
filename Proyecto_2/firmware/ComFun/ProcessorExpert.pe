@@ -3,7 +3,7 @@
   <Header>
     <Name>ComFun</Name>
     <SavedBy>JesusC</SavedBy>
-    <ModificationStamp>61</ModificationStamp>
+    <ModificationStamp>65</ModificationStamp>
     <Date>2019-11-25</Date>
     <IDE>Eclipse IDE</IDE>
     <PEversion>1.9.0.RT6_b1411-0406</PEversion>
@@ -29,7 +29,7 @@
     <UseExistingModules>true</UseExistingModules>
     <RenamePeripheries>false</RenamePeripheries>
     <Autodependency>true</Autodependency>
-    <ProjectCompNumb>55</ProjectCompNumb>
+    <ProjectCompNumb>58</ProjectCompNumb>
     <DelUnusedPreviouslyGenFiles>true</DelUnusedPreviouslyGenFiles>
     <GeneratedCodeFrozen>false</GeneratedCodeFrozen>
     <AssignInitComponentNameToPrph>true</AssignInitComponentNameToPrph>
@@ -10352,8 +10352,8 @@
         <ReadOnly>false</ReadOnly>
         <UserReadOnly>false</UserReadOnly>
         <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
-        <Index>1</Index>
-        <EnumSymbVal>Not inverted</EnumSymbVal>
+        <Index>0</Index>
+        <EnumSymbVal>Inverted</EnumSymbVal>
       </ItemState>
       <ItemState>
         <ItemSymbol>HCS12grp1</ItemSymbol>

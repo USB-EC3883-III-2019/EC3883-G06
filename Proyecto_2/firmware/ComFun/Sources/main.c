@@ -56,6 +56,7 @@ bool tick_sensors = 0;
 unsigned short sonar_measure = 0;
 bool sonar_value_done = 0;
 bool config_en = 0; //Flag read from PC
+bool is_RX_IR=0;  //Flag read from IR
 
 void main(void)
 {
@@ -107,14 +108,14 @@ void main(void)
   //End of other variables--------------------------------------------------------------------
   //Comunication variables--------------------------------------------------------------------
   //Bytes from PC
-   byte packet[4] = {5,5,5,5}; //packet from IR
+   byte packet[4] = {0}; //packet from IR
    byte packet_PC[4] = {0}; //packet from PC
    //Info from PC
    char msg = 0; //msg sent/received from IR
-   char msg_PC = 0; //msg received from PC
-   bool is_master = 0;
+   char msg_PC = 105; //msg received from PC
+   bool is_master = 1;
    char zones[5] = {0};
-   char zones_PC[5] = {0};
+   char zones_PC[5] = {1,5,4,2,6};
    unsigned long data=0;
    word Sent; //data block sent
    byte err;
@@ -134,6 +135,7 @@ void main(void)
 
    //Other flags
    bool is_adjust=0;
+   bool is_set_motor = 0;
 
   //End of FSM variables---------------------------------------------------------------------
 
@@ -163,6 +165,8 @@ void main(void)
   			zones_PC[4] = (packet_PC[3] & 0x07);
 
   			config_en = 0;
+        is_set_motor = 1;
+        set_zone = zones_PC[0];
 
   			packet_PC[0] = packet_PC[0] & 0xEF;
   			packet_PC[1] = packet_PC[1] & 0x8F;
@@ -193,12 +197,17 @@ void main(void)
 					while(err!=ERR_OK);
 				}
 			}
+			tick_motor=0;
 		}
 
 		if(0){ //Receive IR
 			//Receive
+			i=0;
 			do {
 				err = AS2_RecvChar(&packet[0]);
+				i++;
+				if(i>4)
+					break;
 			  } while((err != ERR_OK) && ((packet[0] & 0x80) == 0));
 			for(i=1;i<4;i++){
 				do {
@@ -229,10 +238,11 @@ void main(void)
 				set_zone = zones[4];
 				packet[3] = packet[3] & 0xF8;
 			}
+      is_RX_IR = 0;
 		}
 
 
-		if(0){ //Set zone
+		if(is_set_motor){ //Set zone
 			max=set_zone-ref_zone;
 			dir = 1;
 			if(max<0)
@@ -254,7 +264,7 @@ void main(void)
 				for(i=0;i<4;i++)
 					Bits1_PutBit(i,sequence[seq_index][i]);
 				FC321_Reset();
-				while(sonar_UStimer<3000){
+				while(sonar_UStimer<20){
 				do
 					err=FC321_GetTimeUS(&sonar_UStimer);
 				while(err!=ERR_OK);
@@ -263,6 +273,8 @@ void main(void)
 			}
 			FC321_Disable();
 			ref_zone = set_zone; //Update ref zone
+      is_set_motor = 0;
+      is_adjust = 1;
 
 		}
 
@@ -280,7 +292,7 @@ void main(void)
   			  	for(j=0;j<4;j++)
   					     Bits1_PutBit(i,sequence[seq_index][i]);
   			  	FC321_Reset();
-  			 	 while(sonar_UStimer<3000){
+  			 	 while(sonar_UStimer<20){
   			  	do
   					err=FC321_GetTimeUS(&sonar_UStimer);
   			  	while(err!=ERR_OK);
@@ -291,7 +303,7 @@ void main(void)
 
 		}
 
-		if(0){ //Sensors check
+		if(is_adjust){ //Sensors check
 
 			 //Sonar trigger
 			 Bit1_PutVal(1);
@@ -307,7 +319,7 @@ void main(void)
 			 Bit1_PutVal(0);
 			 //Wait until measure
 			 FC321_Reset();
-			 while(sonar_UStimer<1800){
+			 while(sonar_UStimer<180){
 			 do
 				err=FC321_GetTimeUS(&sonar_UStimer);
 			 while(err!=ERR_OK);
@@ -323,11 +335,11 @@ void main(void)
 			 lidar_value = 556320/lidar_measure -124;
 			 sonar_value = (1047*sonar_measure)/100;
        distance_previous = distance_value;
-			 distance_value = (8*lidar_value + 2*sonar_value)/10; //Distance in mm
-       distance_diff = distance_value - distance_previous;
+			 distance_value = (10*lidar_value + 0*sonar_value)/10; //Distance in mm
+       distance_diff = distance_previous - distance_value;
        if(distance_diff>0)
         dir = !dir;
-        if(distance_diff<20)
+        if(distance_diff<10 && distance_diff>0)
           is_adjust=0;
         else
           is_adjust=1;

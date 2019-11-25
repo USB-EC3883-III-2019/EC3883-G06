@@ -245,9 +245,9 @@ void  AS2_OnError(void)
 **     Returns     : Nothing
 ** ===================================================================
 */
-void  AS2_OnRxChar(void)
-{
-  /* Write your code here ... */
+extern bool is_RX_IR;
+void  AS2_OnRxChar(void){
+  is_RX_IR = 1;
 }
 
 /*
