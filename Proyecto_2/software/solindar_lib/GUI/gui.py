@@ -53,11 +53,11 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
         # self.log = logger()
         # #Plot
         # plt.ion()
-        self.zona1 = 0
-        self.zona2 = 0
-        self.zona3 = 0
-        self.zona4 = 0
-        self.zona5 = 0
+        self.zona1 = 1
+        self.zona2 = 1
+        self.zona3 = 1
+        self.zona4 = 1
+        self.zona5 = 1
         self.mode = False # 0 for slave, 1 for master
         self.messageSend = ''
         self.dict_data = {
@@ -95,10 +95,7 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
             self.mode = False
 
     def SetZona1(self,text):
-        if text == "0":
-            print("Zona1 was set in 0")
-            self.zona1 = 0
-        elif text == "1":
+        if text == "1":
             print("Zona1 was set in 1")
             self.zona1 = 1
         elif text == "2":
@@ -113,12 +110,12 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
         elif text == "5":
             print("Zona1 was set in 5")
             self.zona1 = 5
+        elif text == "6":
+            print("Zona1 was set in 6")
+            self.zona1 = 6
 
     def SetZona2(self,text):
-        if text == "0":
-            print("Zona2 was set in 0")
-            self.zona2 = 0
-        elif text == "1":
+        if text == "1":
             print("Zona2 was set in 1")
             self.zona2 = 1
         elif text == "2":
@@ -133,12 +130,12 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
         elif text == "5":
             print("Zona2 was set in 5")
             self.zona2 = 5
+        elif text == "6":
+            print("Zona2 was set in 6")
+            self.zona2 = 6
 
     def SetZona3(self,text):
-        if text == "0":
-            print("Zona3 was set in 0")
-            self.zona3 = 0
-        elif text == "1":
+        if text == "1":
             print("Zona3 was set in 1")
             self.zona3 = 1
         elif text == "2":
@@ -153,12 +150,12 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
         elif text == "5":
             print("Zona3 was set in 5")
             self.zona3 = 5
+        elif text == "6":
+            print("Zona3 was set in 6")
+            self.zona3 = 6
         
     def SetZona4(self,text):
-        if text == "0":
-            print("Zona4 was set in 0")
-            self.zona4 = 0
-        elif text == "1":
+        if text == "1":
             print("Zona4 was set in 1")
             self.zona1 = 1
         elif text == "2":
@@ -173,12 +170,12 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
         elif text == "5":
             print("Zona4 was set in 5")
             self.zona4 = 5
+        elif text == "6":
+            print("Zona4 was set in 6")
+            self.zona4 = 6
 
     def SetZona5(self,text):
-        if text == "0":
-            print("Zona5 was set in 0")
-            self.zona5 = 0
-        elif text == "1":
+        if text == "1":
             print("Zona5 was set in 1")
             self.zona5 = 1
         elif text == "2":
@@ -193,6 +190,9 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
         elif text == "5":
             print("Zona5 was set in 5")
             self.zona5 = 5
+        elif text == "6":
+            print("Zona5 was set in 6")
+            self.zona5 = 6
 
     def SendMessage(self):
         self.messageSend = self.textEditSend.toPlainText()
