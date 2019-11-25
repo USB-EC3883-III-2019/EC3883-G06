@@ -80,9 +80,9 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
 
 
         # Timer
-        timerRecieve=QtCore.QTimer(self)
-        timerRecieve.timeout.connect(self.RecieveMessage)
-        timerRecieve.start(100)
+        # timerRecieve=QtCore.QTimer(self)
+        # timerRecieve.timeout.connect(self.RecieveMessage)
+        # timerRecieve.start(100)
 
 
 
@@ -196,18 +196,19 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
 
     def SendMessage(self):
         self.messageSend = self.textEditSend.toPlainText()
-        print(self.messageSend)
+        # print(type(self.messageSend[2]))
         self.dict_data = {
             'msg' : ord(self.messageSend),
             'is_master' : self.mode,
             'zones' : [self.zona1,self.zona2,self.zona3,self.zona4,self.zona5]
         }
-        con.send_data(dict_data)
+        self.con.send_data(self.dict_data)
 
     def RecieveMessage(self):
-        self.messageRecieve = '<br><h1 align=center>' + self.con.get_msg() + '</h1>'
-        # print(self.messageRecieve)
-        self.textEditRecieve.setText(self.messageRecieve)
+        if (type(self.con.msg()) == type('a')):
+            self.messageRecieve = '<br><h1 align=center>' + self.con.get_msg() + '</h1>'
+            # print(self.messageRecieve)
+            self.textEditRecieve.setText(self.messageRecieve)
 
     # def ChannelSon (self,state):
     #     if state == QtCore.Qt.Checked:
