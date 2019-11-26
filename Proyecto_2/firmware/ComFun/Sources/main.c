@@ -146,7 +146,36 @@ void main(void)
   /* Write your code here */
   while(1){
 
-	  	if(config_en){ //Read config from PC
+		if (config_en)
+			current_state = ReadConfigPC_state;
+		else if (is_RX_IR)
+			current_state = ReceiveIR_state;
+		else if (current_state == SendMsgToPC_state)
+			current_state = IDLE_state;
+		else if ((current_state == ReceiveIR_state) && (is_master == 0))
+			current_state = SetZone_state;
+		else if ((current_state == ReceiveIR_state) && (is_master == 1) && (msg_ok == 1))
+			current_state = SendMsgToPC_state;
+		else if (current_state == AdjustZone_state)
+			current_state = SensorsCheck_state;
+		else if ((current_state == SensorsCheck_state) && (is_adjust == 0))
+			current_state = AdjustZone_state;
+		else if ((current_state == SendIR_state) && (is_IR_send == 1))
+		    current_state = SendIR_state;
+		else if ((current_state == SensorsCheck_state) && (is_adjust == 1))
+			current_state = SendIR_state;
+		else if (current_state == SetZone_state)
+			current_state = SensorsCheck_state;
+	  	else if ((is_master == true) && (current_state == ReadConfigPC_state))
+				current_state = SetZone_state;
+		else if ((is_master == false) && (current_state == ReadConfigPC_state)) 
+			current_state = IDLE_state;
+		
+		
+
+
+
+	  	if(current_state == ReadConfigPC_state){ //Read config from PC
   			do {
   				err = AS1_RecvChar(&packet_PC[0]);
   			  } while((err != ERR_OK) && ((packet_PC[0] & 0x80) == 0));
@@ -165,14 +194,15 @@ void main(void)
   			zones_PC[4] = (packet_PC[3] & 0x07);
 
   			config_en = 0;
-        is_set_motor = 1;
-        set_zone = zones_PC[0];
+			is_set_motor = 1;
+			set_zone = zones_PC[0];
 
   			packet_PC[0] = packet_PC[0] & 0xEF;
   			packet_PC[1] = packet_PC[1] & 0x8F;
+
 	  	 }
 
-  		if(0){ //Send msg to PC
+  		if(current_state == SendMsgToPC_state){ //Send msg to PC
   			 for(i=0;i<100;i++){
 				 do
 					 err=AS1_SendChar(msg);
@@ -180,7 +210,7 @@ void main(void)
 			   }
 		}
 
-		if(0){ //Send IR
+		if(current_state == SendIR_state){ //Send IR
 			if (is_master){
 				for(i=0;i<4;i++){
 					do{
@@ -200,7 +230,7 @@ void main(void)
 			tick_motor=0;
 		}
 
-		if(0){ //Receive IR
+		if(current_state == ReceiveIR_state){ //Receive IR
 			//Receive
 			i=0;
 			do {
@@ -242,7 +272,7 @@ void main(void)
 		}
 
 
-		if(is_set_motor){ //Set zone
+		if(current_state == SetZone_state){ //Set zone
 			max=set_zone-ref_zone;
 			dir = 1;
 			if(max<0)
@@ -278,7 +308,7 @@ void main(void)
 
 		}
 
-        if(0){ //Adjust zone
+        if(current_state == AdjustZone_state){ //Adjust zone
 
 			    FC321_Enable();
     	  	for(i=0;i<adjust_steps;i++){
@@ -303,7 +333,7 @@ void main(void)
 
 		}
 
-		if(is_adjust){ //Sensors check
+		if(current_state == SensorsCheck_state){ //Sensors check
 
 			 //Sonar trigger
 			 Bit1_PutVal(1);
