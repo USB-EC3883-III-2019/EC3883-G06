@@ -51,8 +51,6 @@
 
 
 //Externs
-bool tick_motor = 0;
-bool tick_sensors = 0;
 unsigned short sonar_measure = 0;
 bool sonar_value_done = 0;
 bool config_en = 0; //Flag read from PC
@@ -79,7 +77,7 @@ void main(void)
   unsigned short ref_zone = 1; //Initial zone for motor reference
   unsigned short set_zone = 2; // Desired zone for motor to move
   unsigned short steps_per_zone = 14;
-  unsigned short adjust_steps = 2;
+  unsigned short adjust_steps = 3;
 
 
   //End of motor variables-------------------------------------------------------------
@@ -98,12 +96,9 @@ void main(void)
   //End of Sonar variables-------------------------------------------------------------
   //Other variables--------------------------------------------------------------------
   int i=0 ,j=0, k=0; //used in for statements
-  int filter_order=10;
-  bool filter_en = 0;
   int distance_value = 0;
   int distance_previous = 0;
   int distance_diff = 0;
-
 
   //End of other variables--------------------------------------------------------------------
   //Comunication variables--------------------------------------------------------------------
@@ -134,8 +129,12 @@ void main(void)
    unsigned short current_state=0;
 
    //Other flags
-   bool is_adjust=0;
-   bool is_set_motor = 0;
+   bool adjust_ok=0;
+   bool msg_ok = 0; //Received msg is ok
+   bool is_IR_send = 0; //send msg IR
+
+
+
 
   //End of FSM variables---------------------------------------------------------------------
 
@@ -146,33 +145,40 @@ void main(void)
   /* Write your code here */
   while(1){
 
-		if (config_en)
-			current_state = ReadConfigPC_state;
-		else if (is_RX_IR)
-			current_state = ReceiveIR_state;
-		else if (current_state == SendMsgToPC_state)
-			current_state = IDLE_state;
-		else if ((current_state == ReceiveIR_state) && (is_master == 0))
-			current_state = SetZone_state;
-		else if ((current_state == ReceiveIR_state) && (is_master == 1) && (msg_ok == 1))
-			current_state = SendMsgToPC_state;
-		else if (current_state == AdjustZone_state)
-			current_state = SensorsCheck_state;
-		else if ((current_state == SensorsCheck_state) && (is_adjust == 0))
-			current_state = AdjustZone_state;
-		else if ((current_state == SendIR_state) && (is_IR_send == 1))
-		    current_state = SendIR_state;
-		else if ((current_state == SensorsCheck_state) && (is_adjust == 1))
-			current_state = SendIR_state;
-		else if (current_state == SetZone_state)
-			current_state = SensorsCheck_state;
-	  	else if ((is_master == true) && (current_state == ReadConfigPC_state))
-				current_state = SetZone_state;
-		else if ((is_master == false) && (current_state == ReadConfigPC_state)) 
-			current_state = IDLE_state;
-		
-		
-
+  		if (config_en)
+  			current_state = ReadConfigPC_state;
+  		else if (is_RX_IR)
+  			current_state = ReceiveIR_state;
+  		else if (current_state == SendMsgToPC_state)
+  			current_state = IDLE_state;
+  		else if (current_state == ReceiveIR_state)
+        if(is_master){
+          if(msg_ok)
+  			     current_state = SendMsgToPC_state;
+          else
+            current_state = SendIR_state;
+        }
+        else
+          current_state = SetZone_state;
+  		else if (current_state == AdjustZone_state)
+  			current_state = SensorsCheck_state;
+  		else if (current_state == SensorsCheck_state)
+        if(adjust_ok)
+          current_state = SendIR_state;
+        else
+  			  current_state = AdjustZone_state;
+  		else if (current_state == SendIR_state)
+        if(is_IR_send)
+  		    current_state = SendIR_state;
+  		else if (current_state == SetZone_state)
+  			current_state = SensorsCheck_state;
+  	  else if (current_state == ReadConfigPC_state)
+        if(is_master)
+  				current_state = SetZone_state;
+        else
+  			   current_state = IDLE_state;
+      else
+        current_state = IDLE_state;
 
 
 	  	if(current_state == ReadConfigPC_state){ //Read config from PC
@@ -194,8 +200,7 @@ void main(void)
   			zones_PC[4] = (packet_PC[3] & 0x07);
 
   			config_en = 0;
-			is_set_motor = 1;
-			set_zone = zones_PC[0];
+			  set_zone = zones_PC[0];
 
   			packet_PC[0] = packet_PC[0] & 0xEF;
   			packet_PC[1] = packet_PC[1] & 0x8F;
@@ -203,14 +208,32 @@ void main(void)
 	  	 }
 
   		if(current_state == SendMsgToPC_state){ //Send msg to PC
+        FC321_Enable();
   			 for(i=0;i<100;i++){
+           FC321_Reset();
+           while(sonar_UStimer<15){
+             do
+             err=FC321_GetTimeUS(&sonar_UStimer);
+             while(err!=ERR_OK);
+           }
+           sonar_UStimer=0;
 				 do
 					 err=AS1_SendChar(msg);
 				 while(err!=ERR_OK);
-			   }
+			  }
+        FC321_Disable();
 		}
 
 		if(current_state == SendIR_state){ //Send IR
+      FC321_Enable();
+      FC321_Reset();
+      while(sonar_UStimer<20){
+        do
+        err=FC321_GetTimeUS(&sonar_UStimer);
+        while(err!=ERR_OK);
+      }
+      sonar_UStimer=0;
+
 			if (is_master){
 				for(i=0;i<4;i++){
 					do{
@@ -227,7 +250,6 @@ void main(void)
 					while(err!=ERR_OK);
 				}
 			}
-			tick_motor=0;
 		}
 
 		if(current_state == ReceiveIR_state){ //Receive IR
@@ -269,6 +291,10 @@ void main(void)
 				packet[3] = packet[3] & 0xF8;
 			}
       is_RX_IR = 0;
+
+      //Check msg is ok
+      msg_ok = msg == msg_PC;
+
 		}
 
 
@@ -303,33 +329,31 @@ void main(void)
 			}
 			FC321_Disable();
 			ref_zone = set_zone; //Update ref zone
-      is_set_motor = 0;
-      is_adjust = 1;
 
 		}
 
-        if(current_state == AdjustZone_state){ //Adjust zone
+    if(current_state == AdjustZone_state){ //Adjust zone
 
-			    FC321_Enable();
-    	  	for(i=0;i<adjust_steps;i++){
-  			  	if(dir)
-  					     counter++;
-  			  	else
-  					     counter--;
-  				  if(counter<0)
-  					     counter=80;
-  			  	seq_index= counter%8;
-  			  	for(j=0;j<4;j++)
-  					     Bits1_PutBit(i,sequence[seq_index][i]);
-  			  	FC321_Reset();
-  			 	 while(sonar_UStimer<20){
-  			  	do
-  					err=FC321_GetTimeUS(&sonar_UStimer);
-  			  	while(err!=ERR_OK);
-  			  	}
-  	  		  	sonar_UStimer=0;
-    	  }
-    	  FC321_Disable();
+	    FC321_Enable();
+	  	for(i=0;i<adjust_steps;i++){
+		  	if(dir)
+				     counter++;
+		  	else
+				     counter--;
+			  if(counter<0)
+				     counter=80;
+		  	seq_index= counter%8;
+		  	for(j=0;j<4;j++)
+				     Bits1_PutBit(i,sequence[seq_index][i]);
+		  	FC321_Reset();
+		 	 while(sonar_UStimer<20){
+		  	do
+				err=FC321_GetTimeUS(&sonar_UStimer);
+		  	while(err!=ERR_OK);
+		  	}
+  		  	sonar_UStimer=0;
+	  }
+	  FC321_Disable();
 
 		}
 
@@ -370,10 +394,9 @@ void main(void)
        if(distance_diff>0)
         dir = !dir;
         if(distance_diff<10 && distance_diff>0)
-          is_adjust=0;
+          adjust_ok=1;
         else
-          is_adjust=1;
-
+          adjust_ok=0;
 		}
 
 		//Define next state

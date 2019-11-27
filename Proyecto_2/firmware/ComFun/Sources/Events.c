@@ -20,11 +20,11 @@
 ** @brief
 **         This is user's event module.
 **         Put your event handler code here.
-*/         
+*/
 /*!
 **  @addtogroup Events_module Events module documentation
 **  @{
-*/         
+*/
 /* MODULE Events */
 
 
@@ -35,7 +35,7 @@
 byte err;
 extern unsigned short sonar_measure;
 extern bool sonar_value_done;
-extern unsigned short max_measures; //number of measures to take at each point  
+extern unsigned short max_measures; //number of measures to take at each point
 /*
 ** ===================================================================
 **     Event       :  AS1_OnError (module Events)
@@ -124,9 +124,8 @@ void  AS1_OnFreeTxBuf(void)
 **     Returns     : Nothing
 ** ===================================================================
 */
-extern bool tick_motor;
+
 void TI1_OnInterrupt(void){
-  tick_motor=1;
 
 }
 
@@ -159,11 +158,8 @@ void TI1_OnInterrupt(void){
 **     Returns     : Nothing
 ** ===================================================================
 */
-extern bool tick_sensors;
-void TI2_OnInterrupt(void)
-{
-  tick_sensors=1;
-  
+void TI2_OnInterrupt(void){
+
 }
 
 /*
@@ -184,12 +180,12 @@ void TI2_OnInterrupt(void)
 bool pin_value;
 void Cap1_OnCapture(void)
 {	pin_value = Cap1_GetPinValue();
-	if(!pin_value){		
+	if(!pin_value){
 		do
-		  err=Cap1_GetCaptureValue(&sonar_measure);    
-		while(err!=ERR_OK);	
+		  err=Cap1_GetCaptureValue(&sonar_measure);
+		while(err!=ERR_OK);
 	}
-	Cap1_Reset();			
+	Cap1_Reset();
 }
 
 /*
@@ -199,7 +195,7 @@ void Cap1_OnCapture(void)
 **     Component   :  AS1 [AsynchroSerial]
 **     Description :
 **         This event is called when the input buffer is full;
-**         i.e. after reception of the last character 
+**         i.e. after reception of the last character
 **         that was successfully placed into input buffer.
 **     Parameters  : None
 **     Returns     : Nothing
@@ -273,7 +269,7 @@ void  AS2_OnTxChar(void)
 **     Component   :  AS2 [AsynchroSerial]
 **     Description :
 **         This event is called when the input buffer is full;
-**         i.e. after reception of the last character 
+**         i.e. after reception of the last character
 **         that was successfully placed into input buffer.
 **     Parameters  : None
 **     Returns     : Nothing
