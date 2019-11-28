@@ -132,6 +132,7 @@ void main(void)
    bool adjust_ok=0;
    bool msg_ok = 0; //Received msg is ok
    bool is_IR_send = 0; //send msg IR
+   bool is_slave_end = 0; //Flag if msg is for me
 
 
 
@@ -158,8 +159,12 @@ void main(void)
           else
             current_state = SendIR_state;
         }
-        else
-          current_state = SetZone_state;
+        else{
+          if(is_slave_end)
+            current_state = SendMsgToPC_state;
+          else
+            current_state = SetZone_state;
+        }
   		else if (current_state == AdjustZone_state)
   			current_state = SensorsCheck_state;
   		else if (current_state == SensorsCheck_state)
@@ -170,6 +175,8 @@ void main(void)
   		else if (current_state == SendIR_state)
         if(is_IR_send)
   		    current_state = SendIR_state;
+        else
+          current_state = IDLE_state;
   		else if (current_state == SetZone_state)
   			current_state = SensorsCheck_state;
   	  else if (current_state == ReadConfigPC_state)
@@ -277,18 +284,22 @@ void main(void)
 			if (zones[1] != 0){
 				set_zone = zones[1];
 				packet[2] = packet[2] & 0xC7;
+        is_slave_end = 0;
 			}
 			else if (zones[2] != 0){
 				set_zone = zones[2];
 				packet[2] = packet[2] & 0xF8;
+        is_slave_end = 0;
 			}
 			else if (zones[3] != 0){
 				set_zone = zones[3];
 				packet[3] = packet[3] & 0xC7;
+        is_slave_end = 0;
 			}
 			else if (zones[4] != 0){
 				set_zone = zones[4];
 				packet[3] = packet[3] & 0xF8;
+        is_slave_end = 1;
 			}
       is_RX_IR = 0;
 
@@ -341,7 +352,7 @@ void main(void)
 		  	else
 				     counter--;
 			  if(counter<0)
-				     counter=80;
+				     counter=79;
 		  	seq_index= counter%8;
 		  	for(j=0;j<4;j++)
 				     Bits1_PutBit(i,sequence[seq_index][i]);
