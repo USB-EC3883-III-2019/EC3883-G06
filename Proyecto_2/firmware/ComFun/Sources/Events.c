@@ -125,10 +125,6 @@ void  AS1_OnFreeTxBuf(void)
 ** ===================================================================
 */
 
-void TI1_OnInterrupt(void){
-
-}
-
 /*
 ** ===================================================================
 **     Event       :  AD1_OnEnd (module Events)
@@ -143,24 +139,6 @@ void TI1_OnInterrupt(void){
 **     Returns     : Nothing
 ** ===================================================================
 */
-
-/*
-** ===================================================================
-**     Event       :  TI2_OnInterrupt (module Events)
-**
-**     Component   :  TI2 [TimerInt]
-**     Description :
-**         When a timer interrupt occurs this event is called (only
-**         when the component is enabled - <Enable> and the events are
-**         enabled - <EnableEvent>). This event is enabled only if a
-**         <interrupt service/event> is enabled.
-**     Parameters  : None
-**     Returns     : Nothing
-** ===================================================================
-*/
-void TI2_OnInterrupt(void){
-
-}
 
 /*
 ** ===================================================================

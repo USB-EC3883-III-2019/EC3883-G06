@@ -37,11 +37,9 @@
 #include "PE_Timer.h"
 #include "AS1.h"
 #include "AS2.h"
-#include "TI1.h"
 #include "AD1.h"
 #include "Cap1.h"
 #include "Bits1.h"
-#include "TI2.h"
 #include "Bit1.h"
 #include "FC321.h"
 #include "PWM1.h"
@@ -103,38 +101,6 @@ void AS1_OnFreeTxBuf(void);
 **     Description :
 **         This event is called after the last character in output
 **         buffer is transmitted.
-**     Parameters  : None
-**     Returns     : Nothing
-** ===================================================================
-*/
-
-void TI1_OnInterrupt(void);
-/*
-** ===================================================================
-**     Event       :  TI1_OnInterrupt (module Events)
-**
-**     Component   :  TI1 [TimerInt]
-**     Description :
-**         When a timer interrupt occurs this event is called (only
-**         when the component is enabled - <Enable> and the events are
-**         enabled - <EnableEvent>). This event is enabled only if a
-**         <interrupt service/event> is enabled.
-**     Parameters  : None
-**     Returns     : Nothing
-** ===================================================================
-*/
-
-void TI2_OnInterrupt(void);
-/*
-** ===================================================================
-**     Event       :  TI2_OnInterrupt (module Events)
-**
-**     Component   :  TI2 [TimerInt]
-**     Description :
-**         When a timer interrupt occurs this event is called (only
-**         when the component is enabled - <Enable> and the events are
-**         enabled - <EnableEvent>). This event is enabled only if a
-**         <interrupt service/event> is enabled.
 **     Parameters  : None
 **     Returns     : Nothing
 ** ===================================================================
