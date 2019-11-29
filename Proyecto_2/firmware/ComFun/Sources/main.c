@@ -142,16 +142,18 @@ void main(void)
   /*** End of Processor Expert internal initialization.                    ***/
 
   /* Write your code here */
+
   while(1){
 
   		if (config_en)  //This configuration allows to receive from IR and send it to PC
   			current_state = ReadConfigPC_state;
   		else if (is_RX_IR)
   			current_state = ReceiveIR_state;
-      else if (current_state == ReceiveIR_state)
-        current_state = SendMsgToPC_state;
-      else
-        current_state = IDLE_state;
+        else if (current_state == ReceiveIR_state)
+            current_state = SendMsgToPC_state;
+        else
+            current_state = IDLE_state;
+
 
 
 	  	if(current_state == ReadConfigPC_state){ //Read config from PC
@@ -181,45 +183,42 @@ void main(void)
 	  	 }
 
   		if(current_state == SendMsgToPC_state){ //Send msg to PC
-        FC321_Enable();
-  			 for(i=0;i<100;i++){
-           FC321_Reset();
-           while(sonar_UStimer<15){
-             do
-             err=FC321_GetTimeUS(&sonar_UStimer);
-             while(err!=ERR_OK);
-           }
-           sonar_UStimer=0;
-				 do
-					 err=AS1_SendChar(msg);
-				 while(err!=ERR_OK);
-			  }
-        FC321_Disable();
+            FC321_Enable();
+  			for(i=0;i<100;i++){
+                FC321_Reset();
+                while(sonar_UStimer<15){
+                    do
+                        err=FC321_GetTimeUS(&sonar_UStimer);
+                    while(err!=ERR_OK);
+                }
+                sonar_UStimer=0;
+				do
+					err=AS1_SendChar(msg);
+				while(err!=ERR_OK);
+			}
+            FC321_Disable();
 		}
 
 		if(current_state == SendIR_state){ //Send IR
-      FC321_Enable();
-      FC321_Reset();
-      while(sonar_UStimer<20){
-        do
-        err=FC321_GetTimeUS(&sonar_UStimer);
-        while(err!=ERR_OK);
-      }
-      sonar_UStimer=0;
-
+            FC321_Enable();
+            FC321_Reset();
+            while(sonar_UStimer<20){
+                do
+                    err=FC321_GetTimeUS(&sonar_UStimer);
+                while(err!=ERR_OK);
+            }
+            sonar_UStimer=0;
 			if (is_master){
 				for(i=0;i<4;i++){
-					do{
+					do
 						err=AS2_SendChar(packet_PC[i]);
-					}
 					while(err!=ERR_OK);
 				}
 			}
 			else{
 				for(i=0;i<4;i++){
-					do{
+					do
 						err=AS2_SendChar(packet[i]);
-					}
 					while(err!=ERR_OK);
 				}
 			}
@@ -234,47 +233,48 @@ void main(void)
 				if(i>4)
 					break;
 			  } while((err != ERR_OK) && ((packet[0] & 0x80) == 0));
-        if(i>4){
-			for(i=1;i<4;i++){
-				do {
-					err = AS2_RecvChar(&packet[i]);
-				  } while(err != ERR_OK);
-			}
-			//Decode
-			msg = ((packet[0] & 0x0F) << 4) | (packet[1] & 0x0F);
-			is_master =  (packet[0] & 0x10) > 0;
-			zones[1] = (packet[2] & 0x38) >> 3;
-			zones[2] = (packet[2] & 0x07);
-			zones[3] = (packet[3] & 0x38) >> 3;
-			zones[4] = (packet[3] & 0x07);
+            if(i>4){
 
-			if (zones[1] != 0){
-				set_zone = zones[1];
-				packet[2] = packet[2] & 0xC7;
-        is_slave_end = 0;
-			}
-			else if (zones[2] != 0){
-				set_zone = zones[2];
-				packet[2] = packet[2] & 0xF8;
-        is_slave_end = 0;
-			}
-			else if (zones[3] != 0){
-				set_zone = zones[3];
-				packet[3] = packet[3] & 0xC7;
-        is_slave_end = 0;
-			}
-			else if (zones[4] != 0){
-				set_zone = zones[4];
-				packet[3] = packet[3] & 0xF8;
-        is_slave_end = 1;
-			}
-      is_RX_IR = 0;
+    			for(i=1;i<4;i++){
+    				do
+    					err = AS2_RecvChar(&packet[i]);
+    				while(err != ERR_OK);
+    			}
+    			//Decode
+    			msg = ((packet[0] & 0x0F) << 4) | (packet[1] & 0x0F);
+    			is_master =  (packet[0] & 0x10) > 0;
+    			zones[1] = (packet[2] & 0x38) >> 3;
+    			zones[2] = (packet[2] & 0x07);
+    			zones[3] = (packet[3] & 0x38) >> 3;
+    			zones[4] = (packet[3] & 0x07);
 
-      //Check msg is ok
-      msg_ok = msg == msg_PC;
-    }
+    			if (zones[1] != 0){
+    				set_zone = zones[1];
+    				packet[2] = packet[2] & 0xC7;
+                    is_slave_end = 0;
+    			}
+    			else if (zones[2] != 0){
+    				set_zone = zones[2];
+    				packet[2] = packet[2] & 0xF8;
+                    is_slave_end = 0;
+    			}
+    			else if (zones[3] != 0){
+    				set_zone = zones[3];
+    				packet[3] = packet[3] & 0xC7;
+                    is_slave_end = 0;
+    			}
+    			else if (zones[4] != 0){
+    				set_zone = zones[4];
+    				packet[3] = packet[3] & 0xF8;
+                    is_slave_end = 1;
+    			}
+                //Check msg is ok
+                msg_ok = msg == msg_PC;
+            }
+            else
+                msg_ok = 0;
+            is_RX_IR = 0;
 		}
-
 
 		if(current_state == SetZone_state){ //Set zone
 			max=set_zone-ref_zone;
@@ -311,71 +311,67 @@ void main(void)
 		}
 
     if(current_state == AdjustZone_state){ //Adjust zone
-
 	    FC321_Enable();
 	  	for(i=0;i<adjust_steps;i++){
 		  	if(dir)
-				     counter++;
+			    counter++;
 		  	else
-				     counter--;
-			  if(counter<0)
-				     counter=79;
+			    counter--;
+            if(counter<0)
+				counter=79;
 		  	seq_index= counter%8;
 		  	for(j=0;j<4;j++)
-				     Bits1_PutBit(i,sequence[seq_index][i]);
+				Bits1_PutBit(i,sequence[seq_index][i]);
 		  	FC321_Reset();
-		 	 while(sonar_UStimer<20){
-		  	do
-				err=FC321_GetTimeUS(&sonar_UStimer);
-		  	while(err!=ERR_OK);
+		 	while(sonar_UStimer<20){
+    		  	do
+    				err=FC321_GetTimeUS(&sonar_UStimer);
+    		  	while(err!=ERR_OK);
 		  	}
   		  	sonar_UStimer=0;
-	  }
+	    }
 	  FC321_Disable();
+	}
 
+	if(current_state == SensorsCheck_state){ //Sensors check
+		 //Sonar trigger
+		Bit1_PutVal(1);
+		FC321_Enable();
+		FC321_Reset();
+		while(sonar_UStimer<15){
+    		do
+    		err=FC321_GetTimeUS(&sonar_UStimer);
+    		while(err!=ERR_OK);
 		}
+		sonar_UStimer=0;
+		Bit1_PutVal(0);
+		//Wait until measure
+		FC321_Reset();
+		while(sonar_UStimer<180){
+    		do
+    			err=FC321_GetTimeUS(&sonar_UStimer);
+    		while(err!=ERR_OK);
+		}
+		sonar_UStimer=0;
+		FC321_Disable();
 
-		if(current_state == SensorsCheck_state){ //Sensors check
+		 //Measure lidar
+		AD1_MeasureChan(1,0);
+		AD1_GetChanValue(0,&lidar_measure);
 
-			 //Sonar trigger
-			 Bit1_PutVal(1);
-			 FC321_Enable();
-			 FC321_Reset();
-			 while(sonar_UStimer<15){
-			 do
-				err=FC321_GetTimeUS(&sonar_UStimer);
-			 while(err!=ERR_OK);
-			 }
-
-			 sonar_UStimer=0;
-			 Bit1_PutVal(0);
-			 //Wait until measure
-			 FC321_Reset();
-			 while(sonar_UStimer<180){
-			 do
-				err=FC321_GetTimeUS(&sonar_UStimer);
-			 while(err!=ERR_OK);
-			 }
-			 sonar_UStimer=0;
-			 FC321_Disable();
-
-			 //Measure lidar
-			 AD1_MeasureChan(1,0);
-			 AD1_GetChanValue(0,&lidar_measure);
-
-			 //Make calculations
-			 lidar_value = 556320/lidar_measure -124;
-			 sonar_value = (1047*sonar_measure)/100;
-       distance_previous = distance_value;
-			 distance_value = (10*lidar_value + 0*sonar_value)/10; //Distance in mm
-       distance_diff = distance_previous - distance_value;
-       if(distance_diff>0)
-        dir = !dir;
+		 //Make calculations
+		lidar_value = 556320/lidar_measure -124;
+		sonar_value = (1047*sonar_measure)/100;
+        distance_previous = distance_value;
+		distance_value = (10*lidar_value + 0*sonar_value)/10; //Distance in mm
+        distance_diff = distance_previous - distance_value;
+        if(distance_diff>0)
+            dir = !dir;
         if(distance_diff<10 && distance_diff>0)
-          adjust_ok=1;
+            adjust_ok=1;
         else
-          adjust_ok=0;
-		}
+            adjust_ok=0;
+	}
 
 		//Define next state
 
