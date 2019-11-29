@@ -144,44 +144,12 @@ void main(void)
   /* Write your code here */
   while(1){
 
-  		if (config_en)
+  		if (config_en)  //This configuration allows to receive from IR and send it to PC 
   			current_state = ReadConfigPC_state;
   		else if (is_RX_IR)
   			current_state = ReceiveIR_state;
-  		else if (current_state == SendMsgToPC_state)
-  			current_state = IDLE_state;
-  		else if (current_state == ReceiveIR_state)
-        if(is_master){
-          if(msg_ok)
-  			     current_state = SendMsgToPC_state;
-          else
-            current_state = SendIR_state;
-        }
-        else{
-          if(is_slave_end)
-            current_state = SendMsgToPC_state;
-          else
-            current_state = SetZone_state;
-        }
-  		else if (current_state == AdjustZone_state)
-  			current_state = SensorsCheck_state;
-  		else if (current_state == SensorsCheck_state)
-        if(adjust_ok)
-          current_state = SendIR_state;
-        else
-  			  current_state = AdjustZone_state;
-  		else if (current_state == SendIR_state)
-        if(is_IR_send)
-  		    current_state = SendIR_state;
-        else
-          current_state = IDLE_state;
-  		else if (current_state == SetZone_state)
-  			current_state = SensorsCheck_state;
-  	  else if (current_state == ReadConfigPC_state)
-        if(is_master)
-  				current_state = SetZone_state;
-        else
-  			   current_state = IDLE_state;
+      else if (current_state == ReceiveIR_state)
+        current_state = SendMsgToPC_state;
       else
         current_state = IDLE_state;
 
