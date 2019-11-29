@@ -144,7 +144,7 @@ void main(void)
   /* Write your code here */
   while(1){
 
-  		if (config_en)  //This configuration allows to receive from IR and send it to PC 
+  		if (config_en)  //This configuration allows to receive from IR and send it to PC
   			current_state = ReadConfigPC_state;
   		else if (is_RX_IR)
   			current_state = ReceiveIR_state;
@@ -234,6 +234,7 @@ void main(void)
 				if(i>4)
 					break;
 			  } while((err != ERR_OK) && ((packet[0] & 0x80) == 0));
+        if(i>4){
 			for(i=1;i<4;i++){
 				do {
 					err = AS2_RecvChar(&packet[i]);
@@ -271,7 +272,7 @@ void main(void)
 
       //Check msg is ok
       msg_ok = msg == msg_PC;
-
+    }
 		}
 
 
