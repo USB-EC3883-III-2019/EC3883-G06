@@ -348,6 +348,13 @@ void main(void)
 
 	if(current_state == SensorsCheck_state){ //Sensors check
 
+        //Sonar trigger
+        Bit1_PutVal(1);
+        tick=0;
+        while(tick==0){}
+        tick=0;
+        Bit1_PutVal(0);
+
         //Wait 30ms
         for(i = 0; i < 30; i++){
             tick=0;
@@ -355,18 +362,14 @@ void main(void)
             tick=0;
         }
 
-		 //Measure lidar
-		AD1_MeasureChan(1,0);
-		AD1_GetChanValue(0,&lidar_measure);
-
-		 //Make calculations
-		lidar_value = 556320/lidar_measure -124;
+         //Make calculations
+        sonar_value = (1047*sonar_measure)/100;
         distance_previous = distance_value;
-		distance_value = lidar_value;  //Distance in mm
+        distance_value = sonar_value; //Distance in mm
         distance_diff = distance_previous - distance_value;
         if(distance_diff>0)
             dir = !dir;
-        if(distance_diff<10 && distance_diff>0)
+        if(distance_diff<50 && distance_diff>=0)
             adjust_ok=1;
         else
             adjust_ok=0;
