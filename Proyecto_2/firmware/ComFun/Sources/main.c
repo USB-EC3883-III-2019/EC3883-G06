@@ -187,7 +187,7 @@ void main(void)
   		if(current_state == SendMsgToPC_state){ //Send msg to PC 
 
   			for(i=0;i<100;i++){
-                for (i = 0; i < 30; i++){
+                for (j = 0; j < 10; j++){
                     tick=0;
                     while(tick==0){}
                     tick=0;
