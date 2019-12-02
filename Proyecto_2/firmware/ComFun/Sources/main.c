@@ -36,7 +36,6 @@
 #include "Cap1.h"
 #include "Bits1.h"
 #include "Bit1.h"
-#include "FC321.h"
 #include "PWM1.h"
 #include "TI1.h"
 /* Include shared modules, which are used for whole project */
@@ -76,7 +75,7 @@ void main(void)
   bool is_step_done = 0;
   unsigned short ref_zone = 1; //Initial zone for motor reference
   unsigned short set_zone = 2; // Desired zone for motor to move
-  unsigned short steps_per_zone = 14;
+  unsigned short steps_per_zone = 16;
   unsigned short adjust_steps = 3;
 
 
@@ -146,7 +145,7 @@ void main(void)
   /* Write your code here */
     while(1){
   		if (config_en)
-  			current_state = ReadConfigPC_state;
+  			current_state = ReadConfigPC_state;  		
   		else if (is_RX_IR)
   			current_state = ReceiveIR_state;
   		else if (current_state == SendMsgToPC_state)
@@ -177,7 +176,7 @@ void main(void)
             else
                 current_state = IDLE_state;
   		else if (current_state == SetZone_state)
-  			current_state = SensorsCheck_state;
+  			current_state = SensorsCheck_state;  		
   	    else if (current_state == ReadConfigPC_state)
             if(is_master)
       				current_state = SetZone_state;
@@ -213,32 +212,27 @@ void main(void)
 
 	  	 }
 
-  		if(current_state == SendMsgToPC_state){ //Send msg to PC
-            FC321_Enable();
+  		if(current_state == SendMsgToPC_state){ //Send msg to PC 
+
+            //Wait 1ms
+            tick=0;
+            while(tick==0){}
+            tick=0;
+
   			for(i=0;i<100;i++){
-                FC321_Reset();
-                while(sonar_UStimer<15){
-                    do
-                        err=FC321_GetTimeUS(&sonar_UStimer);
-                    while(err!=ERR_OK);
-                }
-                sonar_UStimer=0;
 				do
 					err=AS1_SendChar(msg);
 				while(err!=ERR_OK);
-			}
-            FC321_Disable();
+			}            
 		}
 
 		if(current_state == SendIR_state){ //Send IR
-            FC321_Enable();
-            FC321_Reset();
-            while(sonar_UStimer<20){
-                do
-                    err=FC321_GetTimeUS(&sonar_UStimer);
-                while(err!=ERR_OK);
-            }
-            sonar_UStimer=0;
+
+            //Wait 1ms
+            tick=0;
+            while(tick==0){}
+            tick=0;
+
 			if (is_master){
 				for(i=0;i<4;i++){
 					do
@@ -314,7 +308,7 @@ void main(void)
 				max=6-max;
 				dir=0;
 			}
-			max*= steps_per_zone;
+			max*= steps_per_zone;			
 			for(j=0;j<max;j++){
 				if(dir)
 					counter++;
@@ -325,15 +319,17 @@ void main(void)
 				seq_index= counter%8;
 				for(i=0;i<4;i++)
 					Bits1_PutBit(i,sequence[seq_index][i]);
-				while(tick!=0){}
-		  		tick=0;
+                for (i = 0; i < 10; i++){
+                    tick=0;
+                    while(tick==0){}
+                    tick=0;
+                }				
 			}
 			ref_zone = set_zone; //Update ref zone
 
 		}
 
-    if(current_state == AdjustZone_state){ //Adjust zone
-	    FC321_Enable();
+    if(current_state == AdjustZone_state){ //Adjust zone	   
 	  	for(i=0;i<adjust_steps;i++){
 		  	if(dir)
 			    counter++;
@@ -344,38 +340,20 @@ void main(void)
 		  	seq_index= counter%8;
 		  	for(j=0;j<4;j++)
 				Bits1_PutBit(i,sequence[seq_index][i]);
-		  	FC321_Reset();
-		 	while(sonar_UStimer<20){
-    		  	do
-    				err=FC321_GetTimeUS(&sonar_UStimer);
-    		  	while(err!=ERR_OK);
-		  	}
-  		  	sonar_UStimer=0;
-	    }
-	  FC321_Disable();
+            tick=0;
+            while(tick==0){}
+            tick=0;
+	    }	
 	}
 
 	if(current_state == SensorsCheck_state){ //Sensors check
-		 //Sonar trigger
-		Bit1_PutVal(1);
-		FC321_Enable();
-		FC321_Reset();
-		while(sonar_UStimer<15){
-    		do
-    		err=FC321_GetTimeUS(&sonar_UStimer);
-    		while(err!=ERR_OK);
-		}
-		sonar_UStimer=0;
-		Bit1_PutVal(0);
-		//Wait until measure
-		FC321_Reset();
-		while(sonar_UStimer<180){
-    		do
-    			err=FC321_GetTimeUS(&sonar_UStimer);
-    		while(err!=ERR_OK);
-		}
-		sonar_UStimer=0;
-		FC321_Disable();
+
+        //Wait 30ms
+        for(i = 0; i < 30; i++){
+            tick=0;
+            while(tick==0){}
+            tick=0;
+        }
 
 		 //Measure lidar
 		AD1_MeasureChan(1,0);
@@ -383,9 +361,8 @@ void main(void)
 
 		 //Make calculations
 		lidar_value = 556320/lidar_measure -124;
-		sonar_value = (1047*sonar_measure)/100;
         distance_previous = distance_value;
-		distance_value = (10*lidar_value + 0*sonar_value)/10; //Distance in mm
+		distance_value = lidar_value;  //Distance in mm
         distance_diff = distance_previous - distance_value;
         if(distance_diff>0)
             dir = !dir;
