@@ -58,7 +58,7 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
         self.zona3 = 1
         self.zona4 = 1
         self.zona5 = 1
-        self.mode = False # 0 for slave, 1 for master
+        self.mode = True # 0 for slave, 1 for master
         self.messageSend = ''
         self.dict_data = {
             'msg': 0xA8,
@@ -80,9 +80,9 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
 
 
         # Timer
-        # timerRecieve=QtCore.QTimer(self)
-        # timerRecieve.timeout.connect(self.RecieveMessage)
-        # timerRecieve.start(100)
+        timerRecieve=QtCore.QTimer(self)
+        timerRecieve.timeout.connect(self.RecieveMessage)
+        timerRecieve.start(100)
 
 
 
@@ -205,7 +205,7 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
         self.con.send_data(self.dict_data)
 
     def RecieveMessage(self):
-        if (type(self.con.msg()) == type('a')):
+        if (type(self.con.get_msg()) == type('a')):
             self.messageRecieve = '<br><h1 align=center>' + self.con.get_msg() + '</h1>'
             # print(self.messageRecieve)
             self.textEditRecieve.setText(self.messageRecieve)
