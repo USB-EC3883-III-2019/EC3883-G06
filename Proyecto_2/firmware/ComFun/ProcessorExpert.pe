@@ -3,8 +3,8 @@
   <Header>
     <Name>ComFun</Name>
     <SavedBy>JesusC</SavedBy>
-    <ModificationStamp>67</ModificationStamp>
-    <Date>2019-11-28</Date>
+    <ModificationStamp>68</ModificationStamp>
+    <Date>2019-12-02</Date>
     <IDE>Eclipse IDE</IDE>
     <PEversion>1.9.0.RT6_b1411-0406</PEversion>
   </Header>
@@ -15248,8 +15248,8 @@
         <ReadOnly>false</ReadOnly>
         <UserReadOnly>false</UserReadOnly>
         <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
-        <Index>0</Index>
-        <Value>true</Value>
+        <Index>1</Index>
+        <Value>false</Value>
       </ItemState>
       <ItemState>
         <ItemSymbol>HCS12Grp</ItemSymbol>
