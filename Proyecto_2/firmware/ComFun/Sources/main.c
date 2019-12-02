@@ -130,7 +130,7 @@ void main(void)
    //Other flags
    bool adjust_ok=0;
    bool msg_ok = 0; //Received msg is ok
-   bool is_IR_send = 0; //send msg IR
+   bool is_IR_send = 1; //send msg IR
    bool is_slave_end = 0; //Flag if msg is for me
 
 
@@ -228,10 +228,11 @@ void main(void)
 
 		if(current_state == SendIR_state){ //Send IR
 
-            //Wait 1ms
-            tick=0;
-            while(tick==0){}
-            tick=0;
+            for (i = 0; i < 30; i++){
+                tick=0;
+                while(tick==0){}
+                tick=0;
+            }
 
 			if (is_master){
 				for(i=0;i<4;i++){
