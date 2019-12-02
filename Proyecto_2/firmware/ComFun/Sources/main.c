@@ -190,6 +190,45 @@ void main(void)
             current_state = IDLE_state;
 
 
+        if(current_state == ReadConfigPC_state){ //Read config from PC
+            do {
+                err = AS1_RecvChar(&packet_PC[0]);
+              } while((err != ERR_OK) && ((packet_PC[0] & 0x80) == 0));
+            for(i=1;i<4;i++){
+                do {
+                    err = AS1_RecvChar(&packet_PC[i]);
+                } while(err != ERR_OK);
+            }
+            //Decode
+            msg_PC = ((packet_PC[0] & 0x0F) << 4) | (packet_PC[1] & 0x0F);
+            is_master =  (packet_PC[0] & 0x10) > 0;
+            zones_PC[0] = (packet_PC[1] & 0x70) >> 4;
+            zones_PC[1] = (packet_PC[2] & 0x38) >> 3;
+            zones_PC[2] = (packet_PC[2] & 0x07);
+            zones_PC[3] = (packet_PC[3] & 0x38) >> 3;
+            zones_PC[4] = (packet_PC[3] & 0x07);
+
+            config_en = 0;
+              set_zone = zones_PC[0];
+
+            packet_PC[0] = packet_PC[0] & 0xEF;
+            packet_PC[1] = packet_PC[1] & 0x8F;
+
+         }
+
+        if(current_state == SendMsgToPC_state){ //Send msg to PC 
+
+            for(i=0;i<100;i++){
+                for (j = 0; j < 10; j++){
+                    tick=0;
+                    while(tick==0){}
+                    tick=0;
+                }
+                do
+                    err=AS1_SendChar(msg);
+        
+
+
 	  	if(current_state == ReadConfigPC_state){ //Read config from PC
   			do {
   				err = AS1_RecvChar(&packet_PC[0]);
@@ -218,12 +257,12 @@ void main(void)
 
   		if(current_state == SendMsgToPC_state){ //Send msg to PC 
 
-            //Wait 1ms
-            tick=0;
-            while(tick==0){}
-            tick=0;
-
   			for(i=0;i<100;i++){
+                for (i = 0; i < 30; i++){
+                    tick=0;
+                    while(tick==0){}
+                    tick=0;
+                }
 				do
 					err=AS1_SendChar(msg);
 				while(err!=ERR_OK);
