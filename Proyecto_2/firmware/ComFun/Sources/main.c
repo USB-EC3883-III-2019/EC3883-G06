@@ -114,6 +114,7 @@ void main(void)
    word Sent; //data block sent
    byte err;
    bool is_send = 0;
+   int n_buffer = 0;
   //End of Comunication variables-------------------------------------------------------------
   //FSM variables
    const unsigned short IDLE_state = 0;
@@ -223,13 +224,16 @@ void main(void)
 		if(current_state == ReceiveIR_state){ //Receive IR
 			//Receive
 			i=0;
+			do
+				n_buffer = AS2_GetCharsInRxBuf();
+			while(n_buffer < 4);
 			do {
 				err = AS2_RecvChar(&packet[0]);
-				i++;
+				i++;				
 				if(i>4)
 					break;
 			  } while((err != ERR_OK) && ((packet[0] & 0x80) == 0));
-            if(i>4){
+            if((packet[0] & 0x80) != 0){
 
     			for(i=1;i<4;i++){
     				do
