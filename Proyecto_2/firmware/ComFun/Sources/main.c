@@ -152,40 +152,8 @@ void main(void)
             current_state = ReadConfigPC_state;         
         else if (is_RX_IR)
             current_state = ReceiveIR_state;
-        else if (current_state == SendMsgToPC_state)
-            current_state = IDLE_state;
         else if (current_state == ReceiveIR_state)
-            if(is_master){
-                if(msg_ok)
-                    current_state = SendMsgToPC_state;
-                else
-                    current_state = SendIR_state;
-            }
-            else{
-                if(is_slave_end)
-                    current_state = SendMsgToPC_state;
-                else
-                    current_state = SetZone_state;
-            }
-        else if (current_state == AdjustZone_state)
-            current_state = SensorsCheck_state;
-        else if (current_state == SensorsCheck_state)
-            if(adjust_ok)
-              current_state = SendIR_state;
-            else
-                current_state = AdjustZone_state;
-        else if (current_state == SendIR_state)
-            if(is_IR_send)
-                current_state = SendIR_state;
-            else
-                current_state = IDLE_state;
-        else if (current_state == SetZone_state)
-            current_state = SensorsCheck_state;         
-        else if (current_state == ReadConfigPC_state)
-            if(is_master)
-                    current_state = SetZone_state;
-            else
-                   current_state = IDLE_state;
+            current_state = SendMsgToPC_state; 
         else
             current_state = IDLE_state;
 
@@ -218,12 +186,12 @@ void main(void)
 
   		if(current_state == SendMsgToPC_state){ //Send msg to PC 
 
-            //Wait 1ms
-            tick=0;
-            while(tick==0){}
-            tick=0;
-
   			for(i=0;i<100;i++){
+                for (i = 0; i < 30; i++){
+                    tick=0;
+                    while(tick==0){}
+                    tick=0;
+                }
 				do
 					err=AS1_SendChar(msg);
 				while(err!=ERR_OK);
