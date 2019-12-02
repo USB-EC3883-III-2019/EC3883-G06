@@ -58,7 +58,7 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
         self.zona3 = 1
         self.zona4 = 1
         self.zona5 = 1
-        self.mode = False # 0 for slave, 1 for master
+        self.mode = True # 0 for slave, 1 for master
         self.messageSend = ''
         self.dict_data = {
             'msg': 0xA8,
