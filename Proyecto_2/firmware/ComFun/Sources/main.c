@@ -38,6 +38,7 @@
 #include "Bit1.h"
 #include "FC321.h"
 #include "PWM1.h"
+#include "TI1.h"
 /* Include shared modules, which are used for whole project */
 #include "PE_Types.h"
 #include "PE_Error.h"
@@ -53,6 +54,7 @@ unsigned short sonar_measure = 0;
 bool sonar_value_done = 0;
 bool config_en = 0; //Flag read from PC
 bool is_RX_IR=0;  //Flag read from IR
+bool tick = 0;
 
 void main(void)
 {
@@ -313,7 +315,6 @@ void main(void)
 				dir=0;
 			}
 			max*= steps_per_zone;
-			FC321_Enable();
 			for(j=0;j<max;j++){
 				if(dir)
 					counter++;
@@ -324,15 +325,9 @@ void main(void)
 				seq_index= counter%8;
 				for(i=0;i<4;i++)
 					Bits1_PutBit(i,sequence[seq_index][i]);
-				FC321_Reset();
-				while(sonar_UStimer<20){
-				do
-					err=FC321_GetTimeUS(&sonar_UStimer);
-				while(err!=ERR_OK);
-				}
-		  		sonar_UStimer=0;
+				while(tick!=0){}
+		  		tick=0;
 			}
-			FC321_Disable();
 			ref_zone = set_zone; //Update ref zone
 
 		}
