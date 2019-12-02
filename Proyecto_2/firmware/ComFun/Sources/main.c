@@ -114,6 +114,7 @@ void main(void)
    word Sent; //data block sent
    byte err;
    bool is_send = 0;
+   int n_buffer = 0;
   //End of Comunication variables-------------------------------------------------------------
   //FSM variables
    const unsigned short IDLE_state = 0;
@@ -143,45 +144,16 @@ void main(void)
   /*** End of Processor Expert internal initialization.                    ***/
 
   /* Write your code here */
-    while(1){
-  		if (config_en)
-  			current_state = ReadConfigPC_state;  		
+
+
+  while(1){
+
+  		if (config_en)  //This configuration allows to receive from IR and send it to PC
+  			current_state = ReadConfigPC_state;
   		else if (is_RX_IR)
   			current_state = ReceiveIR_state;
-  		else if (current_state == SendMsgToPC_state)
-  			current_state = IDLE_state;
-  		else if (current_state == ReceiveIR_state)
-            if(is_master){
-                if(msg_ok)
-      			    current_state = SendMsgToPC_state;
-                else
-                    current_state = SendIR_state;
-            }
-            else{
-                if(is_slave_end)
-                    current_state = SendMsgToPC_state;
-                else
-                    current_state = SetZone_state;
-            }
-  		else if (current_state == AdjustZone_state)
-  			current_state = SensorsCheck_state;
-  		else if (current_state == SensorsCheck_state)
-            if(adjust_ok)
-              current_state = SendIR_state;
-            else
-      			current_state = AdjustZone_state;
-  		else if (current_state == SendIR_state)
-            if(is_IR_send)
-      		    current_state = SendIR_state;
-            else
-                current_state = IDLE_state;
-  		else if (current_state == SetZone_state)
-  			current_state = SensorsCheck_state;  		
-  	    else if (current_state == ReadConfigPC_state)
-            if(is_master)
-      				current_state = SetZone_state;
-            else
-      			   current_state = IDLE_state;
+        else if (current_state == ReceiveIR_state)
+            current_state = SendMsgToPC_state;
         else
             current_state = IDLE_state;
 
@@ -253,52 +225,57 @@ void main(void)
 		if(current_state == ReceiveIR_state){ //Receive IR
 			//Receive
 			i=0;
+			do
+				n_buffer = AS2_GetCharsInRxBuf();
+			while(n_buffer < 4);
 			do {
 				err = AS2_RecvChar(&packet[0]);
-				i++;
+				i++;				
 				if(i>4)
 					break;
-            }   while((err != ERR_OK) && ((packet[0] & 0x80) == 0));
-			for(i=1;i<4;i++){
-				do
-					err = AS2_RecvChar(&packet[i]);
-				while(err != ERR_OK);
-			}
-			//Decode
-			msg = ((packet[0] & 0x0F) << 4) | (packet[1] & 0x0F);
-			is_master =  (packet[0] & 0x10) > 0;
-			zones[1] = (packet[2] & 0x38) >> 3;
-			zones[2] = (packet[2] & 0x07);
-			zones[3] = (packet[3] & 0x38) >> 3;
-			zones[4] = (packet[3] & 0x07);
+			  } while((err != ERR_OK) && ((packet[0] & 0x80) == 0));
+            if((packet[0] & 0x80) != 0){
 
-			if (zones[1] != 0){
-				set_zone = zones[1];
-				packet[2] = packet[2] & 0xC7;
-                is_slave_end = 0;
-			}
-			else if (zones[2] != 0){
-				set_zone = zones[2];
-				packet[2] = packet[2] & 0xF8;
-                is_slave_end = 0;
-			}
-			else if (zones[3] != 0){
-				set_zone = zones[3];
-				packet[3] = packet[3] & 0xC7;
-                is_slave_end = 0;
-			}
-			else if (zones[4] != 0){
-				set_zone = zones[4];
-				packet[3] = packet[3] & 0xF8;
-                is_slave_end = 1;
-			}
+    			for(i=1;i<4;i++){
+    				do
+    					err = AS2_RecvChar(&packet[i]);
+    				while(err != ERR_OK);
+    			}
+    			//Decode
+    			msg = ((packet[0] & 0x0F) << 4) | (packet[1] & 0x0F);
+    			is_master =  (packet[0] & 0x10) > 0;
+    			zones[1] = (packet[2] & 0x38) >> 3;
+    			zones[2] = (packet[2] & 0x07);
+    			zones[3] = (packet[3] & 0x38) >> 3;
+    			zones[4] = (packet[3] & 0x07);
+
+    			if (zones[1] != 0){
+    				set_zone = zones[1];
+    				packet[2] = packet[2] & 0xC7;
+                    is_slave_end = 0;
+    			}
+    			else if (zones[2] != 0){
+    				set_zone = zones[2];
+    				packet[2] = packet[2] & 0xF8;
+                    is_slave_end = 0;
+    			}
+    			else if (zones[3] != 0){
+    				set_zone = zones[3];
+    				packet[3] = packet[3] & 0xC7;
+                    is_slave_end = 0;
+    			}
+    			else if (zones[4] != 0){
+    				set_zone = zones[4];
+    				packet[3] = packet[3] & 0xF8;
+                    is_slave_end = 1;
+    			}
+                //Check msg is ok
+                msg_ok = msg == msg_PC;
+            }
+            else
+                msg_ok = 0;
             is_RX_IR = 0;
-
-            //Check msg is ok
-            msg_ok = msg == msg_PC;
-
 		}
-
 
 		if(current_state == SetZone_state){ //Set zone
 			max=set_zone-ref_zone;
