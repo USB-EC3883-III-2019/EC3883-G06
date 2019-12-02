@@ -43,6 +43,7 @@
 #include "Bit1.h"
 #include "FC321.h"
 #include "PWM1.h"
+#include "TI1.h"
 
 
 void AS1_OnError(void);
@@ -208,6 +209,22 @@ void AS2_OnFreeTxBuf(void);
 **     Description :
 **         This event is called after the last character in output
 **         buffer is transmitted.
+**     Parameters  : None
+**     Returns     : Nothing
+** ===================================================================
+*/
+
+void TI1_OnInterrupt(void);
+/*
+** ===================================================================
+**     Event       :  TI1_OnInterrupt (module Events)
+**
+**     Component   :  TI1 [TimerInt]
+**     Description :
+**         When a timer interrupt occurs this event is called (only
+**         when the component is enabled - <Enable> and the events are
+**         enabled - <EnableEvent>). This event is enabled only if a
+**         <interrupt service/event> is enabled.
 **     Parameters  : None
 **     Returns     : Nothing
 ** ===================================================================
