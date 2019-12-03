@@ -226,7 +226,9 @@ void main(void)
                 }
                 do
                     err=AS1_SendChar(msg);
-        
+                while(err!=ERR_OK);
+            }            
+        }
 
 
 	  	if(current_state == ReadConfigPC_state){ //Read config from PC
