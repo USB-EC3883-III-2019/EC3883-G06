@@ -132,9 +132,7 @@ void main(void)
    bool adjust_ok=0;
    bool msg_ok = 0; //Received msg is ok
    bool is_IR_send = 1; //send msg IR
-   bool is_slave_end = 0; //Flag if msg is for me
-
-
+   Bit1_ClrVal();
 
 
   //End of FSM variables---------------------------------------------------------------------
@@ -150,10 +148,14 @@ void main(void)
 
         if (config_en)
             current_state = ReadConfigPC_state;         
-        else if (is_RX_IR)
+        else if (is_RX_IR && (current_state == IDLE_state || current_state == SendIR_state ))
             current_state = ReceiveIR_state;
-        else if (current_state == SendMsgToPC_state)
-            current_state = IDLE_state;
+        else if (current_state == SendMsgToPC_state){
+            if(is_master)
+                current_state = IDLE_state;
+            else
+                current_state = SetZone_state;
+        }
         else if (current_state == ReceiveIR_state)
             if(is_master){
                 if(msg_ok)
@@ -161,12 +163,9 @@ void main(void)
                 else
                     current_state = SendIR_state;
             }
-            else{
-                if(is_slave_end)
-                    current_state = SendMsgToPC_state;
-                else
-                    current_state = SetZone_state;
-            }
+            else
+                current_state = SendMsgToPC_state;
+            
         else if (current_state == AdjustZone_state)
             current_state = SensorsCheck_state;
         else if (current_state == SensorsCheck_state)
@@ -175,10 +174,7 @@ void main(void)
             else
                 current_state = AdjustZone_state;
         else if (current_state == SendIR_state)
-            if(is_IR_send)
-                current_state = SendIR_state;
-            else
-                current_state = IDLE_state;
+            current_state = SendIR_state;
         else if (current_state == SetZone_state)
             current_state = SensorsCheck_state;         
         else if (current_state == ReadConfigPC_state)
@@ -305,7 +301,7 @@ void main(void)
 				i++;				
 				if(i>4)
 					break;
-			  } while((err != ERR_OK) && ((packet[0] & 0x80) == 0));
+			  } while((err != ERR_OK) || ((packet[0] & 0x80) == 0));
             if((packet[0] & 0x80) != 0){
 
     			for(i=1;i<4;i++){
@@ -323,23 +319,19 @@ void main(void)
 
     			if (zones[1] != 0){
     				set_zone = zones[1];
-    				packet[2] = packet[2] & 0xC7;
-                    is_slave_end = 0;
+    				packet[2] = packet[2] & 0xC7;                    
     			}
     			else if (zones[2] != 0){
     				set_zone = zones[2];
-    				packet[2] = packet[2] & 0xF8;
-                    is_slave_end = 0;
+    				packet[2] = packet[2] & 0xF8;                    
     			}
     			else if (zones[3] != 0){
     				set_zone = zones[3];
-    				packet[3] = packet[3] & 0xC7;
-                    is_slave_end = 0;
+    				packet[3] = packet[3] & 0xC7;                    
     			}
     			else if (zones[4] != 0){
     				set_zone = zones[4];
-    				packet[3] = packet[3] & 0xF8;
-                    is_slave_end = 1;
+    				packet[3] = packet[3] & 0xF8;                    
     			}
                 //Check msg is ok
                 msg_ok = msg == msg_PC;
@@ -399,14 +391,14 @@ void main(void)
 	if(current_state == SensorsCheck_state){ //Sensors check
 
         //Sonar trigger
-        Bit1_PutVal(1);
-        tick=0;
-        while(tick==0){}
-        tick=0;
-        Bit1_PutVal(0);
+        Bit1_SetVal();        
+		tick=0;
+		while(tick==0){}
+		tick=0;        
+        Bit1_ClrVal();      
 
         //Wait 30ms
-        for(i = 0; i < 30; i++){
+        for(i = 0; i < 40; i++){
             tick=0;
             while(tick==0){}
             tick=0;
@@ -419,15 +411,13 @@ void main(void)
         distance_diff = distance_previous - distance_value;
         if(distance_diff>0)
             dir = !dir;
-        if(distance_diff<50 && distance_diff>=0)
+        if(distance_diff<10 && distance_diff>=0)
             adjust_ok=1;
         else
             adjust_ok=0;
 	}
 
-		//Define next state
-
-
+		
   }
   /* For example: for(;;) { } */
 

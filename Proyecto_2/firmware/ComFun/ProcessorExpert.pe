@@ -3,7 +3,7 @@
   <Header>
     <Name>ComFun</Name>
     <SavedBy>JesusC</SavedBy>
-    <ModificationStamp>75</ModificationStamp>
+    <ModificationStamp>76</ModificationStamp>
     <Date>2019-12-04</Date>
     <IDE>Eclipse IDE</IDE>
     <PEversion>1.9.0.RT6_b1411-0406</PEversion>
@@ -29,7 +29,7 @@
     <UseExistingModules>true</UseExistingModules>
     <RenamePeripheries>false</RenamePeripheries>
     <Autodependency>true</Autodependency>
-    <ProjectCompNumb>71</ProjectCompNumb>
+    <ProjectCompNumb>74</ProjectCompNumb>
     <DelUnusedPreviouslyGenFiles>true</DelUnusedPreviouslyGenFiles>
     <GeneratedCodeFrozen>false</GeneratedCodeFrozen>
     <AssignInitComponentNameToPrph>true</AssignInitComponentNameToPrph>
