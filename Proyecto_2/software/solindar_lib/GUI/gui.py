@@ -205,7 +205,6 @@ class SolindarGUI(QtGui.QMainWindow, Ui_MainWindow):
         self.con.send_data(self.dict_data)
 
     def RecieveMessage(self):
-        print('Recepcion')
         if (type(self.con.get_msg()) == type('a')):
             self.messageRecieve = '<br><h1 align=center>' + self.con.get_msg() + '</h1>'
             # print(self.messageRecieve)

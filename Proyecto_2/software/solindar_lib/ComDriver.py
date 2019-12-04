@@ -20,7 +20,7 @@ class ComDriver(serial.Serial):
         #Internal variables
         self.rx_msg = 0
         self.readList = []        
-
+        self.message = 'No message'
 
     def send_data(self,dict_data): #Sends data, returns True if correctly send, False otherwise
         #Extract from dict
@@ -50,6 +50,7 @@ class ComDriver(serial.Serial):
         EleInput = self.in_waiting
         if EleInput > 0:
             self.read(EleInput-1)
-            return chr(ord(self.read()))
+            self.message = chr(ord(self.read()))
+        return self.message
         
   
