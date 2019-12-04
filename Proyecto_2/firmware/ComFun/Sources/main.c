@@ -224,15 +224,18 @@ void main(void)
                     while(tick==0){}
                     tick=0;
                 }
-                do
+                do{
                     err=AS1_SendChar(msg);
+                }while(err != ERR_OK);
+            }
+        }
         
 
 
 	  	if(current_state == ReadConfigPC_state){ //Read config from PC
   			do {
   				err = AS1_RecvChar(&packet_PC[0]);
-  			  } while((err != ERR_OK) && ((packet_PC[0] & 0x80) == 0));
+  			  } while((err != ERR_OK) || ((packet_PC[0] & 0x80) == 0));
   			for(i=1;i<4;i++){
   				do {
   					err = AS1_RecvChar(&packet_PC[i]);
@@ -257,7 +260,7 @@ void main(void)
 
   		if(current_state == SendMsgToPC_state){ //Send msg to PC 
 
-  			for(i=0;i<100;i++){
+  			for(i=0;i<30;i++){
                 for (i = 0; i < 30; i++){
                     tick=0;
                     while(tick==0){}
